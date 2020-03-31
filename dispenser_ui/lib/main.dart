@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/home/homePageManager.dart';
 import 'package:flutter/material.dart';
 import 'loginregister/loginManager.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: LogIn(  () {  print("heelo"); }  ),
+      home: Home(),
     );
   }
 }
