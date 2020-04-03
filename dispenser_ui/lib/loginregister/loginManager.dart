@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'registerManager.dart';
+
 /*import 'package:frontend_maratona/MarathonApi.dart';
 import 'forgotPassword.dart';
 import '../styles/textStyles.dart';
 */
 class LogIn extends StatefulWidget {
-  final Function clearLogIn;
-
-  LogIn(this.clearLogIn);
+  LogIn();
 
   @override
   State<StatefulWidget> createState() {
-    return _LogInState(clearLogIn);
+    return _LogInState();
   }
 }
 
@@ -24,14 +23,9 @@ class _LogInState extends State<LogIn> {
   final GlobalKey<FormState> _loginFormKey =
       GlobalKey<FormState>(debugLabel: '_loginScreenkey');
 
-  bool _autoValidate = false;
-  bool _error = false;
+  _LogInState();
 
-  Function clearLogIn;
-
-  _LogInState(this.clearLogIn);
-
- /* void loadHomePage(BuildContext context) async {
+  /* void loadHomePage(BuildContext context) async {
     if (_loginFormKey.currentState.validate()) {
       var json =
           await Requests.login(_emailController.text, _passwordController.text);
@@ -70,7 +64,6 @@ class _LogInState extends State<LogIn> {
         focusNode: _emailNode,
         controller: _emailController,
         textInputAction: TextInputAction.next,
-        autovalidate: _autoValidate,
         validator: (value) {
           Pattern pattern =
               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -101,7 +94,6 @@ class _LogInState extends State<LogIn> {
         focusNode: _passNode,
         textInputAction: TextInputAction.done,
         controller: _passwordController,
-        autovalidate: _autoValidate,
         validator: (value) {
           if (value.length < 6) {
             return 'Password must be at least 6 characters long';
@@ -155,7 +147,7 @@ class _LogInState extends State<LogIn> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-       //   loadRegisterPage(context);
+          //   loadRegisterPage(context);
         },
         child: Text(
           "Register",
@@ -170,7 +162,7 @@ class _LogInState extends State<LogIn> {
     return InkWell(
       child: Container(child: Text("Esqueci-me da password.")),
       hoverColor: Colors.red,
-     // onTap: () => loadForgotPasswordPage(context),
+      // onTap: () => loadForgotPasswordPage(context),
     );
   }
 
@@ -219,14 +211,6 @@ class _LogInState extends State<LogIn> {
                 centeredWidget(context, emailInput(context)),
                 Container(height: MediaQuery.of(context).size.height * 0.02),
                 centeredWidget(context, passwordInput(context)),
-                (_error)
-                    ? Center(
-                      child: Container( width: MediaQuery.of(context).size.width * 0.6,
-                                            child: Text(
-                            "Email ou Password não estão validos"),
-                      ),
-                    )
-                    : Container(height: MediaQuery.of(context).size.height * 0.025),
                 Container(height: MediaQuery.of(context).size.height * 0.025),
                 centeredWidget(context, loginButton(context)),
                 Container(height: MediaQuery.of(context).size.height * 0.02),
