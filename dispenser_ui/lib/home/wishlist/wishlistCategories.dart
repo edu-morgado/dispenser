@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 
-class WishList extends StatefulWidget {
+class WishListCategories extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return WishListState();
   }
 }
 
-class WishListState extends State<WishList> {
-
-
+class WishListState extends State<WishListCategories> {
   List<String> titles = ["Meat", "Dengue", "Coockies"];
   static List<bool> isChecked = [false, false, false, false, false, false];
+
+  void loadRegisterPage(BuildContext context) {
+    var route = new MaterialPageRoute(
+        builder: (BuildContext context) => WishListItems());
+    Navigator.of(context).push(route);
+  }
 
   List<List<Widget>> foodtypes() {
     return [meat(), dengue(), coockies()];
@@ -55,6 +60,15 @@ class WishListState extends State<WishList> {
         title: Text("WishList Page"),
         centerTitle: true,
         elevation: 9.0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.playlist_add,
+              color: Colors.white,
+            ),
+            onPressed: () => loadRegisterPage(context),
+          )
+        ],
       ),
       body: ListView.builder(
         itemCount: types.length,

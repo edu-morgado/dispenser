@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
-import 'package:dispenser_ui/home/wishlist/wishlist.dart';
+import 'package:dispenser_ui/home/profile/profileManager.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,7 +21,8 @@ class TabBarPage extends State<Home> {
   TabBarPage() {
     tabs = [
       Inventory(),
-      WishList(),
+      WishListCategories(),
+      Profile(), 
     ];
   }
   @override
