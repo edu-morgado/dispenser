@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
 
 class Inventory extends StatefulWidget {
@@ -33,8 +34,7 @@ class InventoryState extends State<Inventory> {
             InkWell(
               onTap: () =>  Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                  IPSSelement(manager.ipsss.getIPSS(i))))
-              ,
+                  InventoryItem())),
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 width: MediaQuery.of(context).size.width * 0.95,
