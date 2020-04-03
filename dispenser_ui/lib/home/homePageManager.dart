@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
-import 'package:dispenser_ui/home/profile/profileManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
 
 class Home extends StatefulWidget {
@@ -28,7 +27,7 @@ class TabBarPage extends State<Home> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: 0,
+      initialIndex: 1,
       child: Scaffold(
         body: TabBarView(children: tabs),
         bottomNavigationBar: Container(

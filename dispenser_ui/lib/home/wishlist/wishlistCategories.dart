@@ -10,58 +10,21 @@ class WishListCategories extends StatefulWidget {
 }
 
 class WishListState extends State<WishListCategories> {
-  List<String> titles = ["Meat", "Dengue", "Coockies"];
-  static List<bool> isChecked = [false, false, false, false, false, false];
+    
+      void loadWishlistItemsPage(BuildContext context) {
 
-  void loadWishlistItemsPage(BuildContext context) {
     var route = new MaterialPageRoute(
         builder: (BuildContext context) => WishListItems());
     Navigator.of(context).push(route);
   }
-
-  void loadcloudlist(BuildContext context) {
+  
+void loadcloudlist(BuildContext context) {
     var route = new MaterialPageRoute(
         builder: (BuildContext context) => RemoteWishlist());
     Navigator.of(context).push(route);
   }
-
-  List<List<Widget>> foodtypes() {
-    return [meat(), dengue(), coockies()];
-  }
-
-  List<Widget> meat() {
-    return [
-      ListTile(
-        leading: Text("1 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[0],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[0] = value;
-              });
-            }),
-      ),
-      ListTile(leading: Text("2 ITEM")),
-    ];
-  }
-
-  List<Widget> dengue() {
-    return [
-      ListTile(leading: Text("3 ITEM")),
-      ListTile(leading: Text("4 ITEM")),
-    ];
-  }
-
-  List<Widget> coockies() {
-    return [
-      ListTile(leading: Text("5 ITEM")),
-      ListTile(leading: Text("6 ITEM")),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<List<Widget>> types = foodtypes();
     return Scaffold(
       appBar: AppBar(
         title: Text("WishList Page"),
@@ -84,25 +47,68 @@ class WishListState extends State<WishListCategories> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: types.length,
-        itemBuilder: (context, i) => Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
-              child: Container(
-                  height: 46,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(child: Text(titles[i]))),
-              color: Color.fromRGBO(75, 133, 149, 1),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 2,
             ),
-            Column(
-              children: types[i],
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8 + 20,
+                    alignment: Alignment.center,
+                    color: Colors.red,
+                    child: Text('Grid Item $index'),
+                  ),
+                );
+              },
+              childCount: 1,
             ),
-          ],
-        ),
+          ),
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1.0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    alignment: Alignment.center,
+                    color: Colors.teal[100 * (index % 9)],
+                    child: Text('Grid Item $index'),
+                  ),
+                );
+              },
+              childCount: 20,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+/*
+
+      GridView.builder(
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemCount: categories,
+          itemBuilder: (context, i) {
+            return Card(
+              elevation: 10.0,
+              child: Text("Category Card"),
+            );
+          }),
+          */
