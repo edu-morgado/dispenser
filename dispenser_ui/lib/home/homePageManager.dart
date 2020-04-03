@@ -22,7 +22,6 @@ class TabBarPage extends State<Home> {
     tabs = [
       Inventory(),
       WishListCategories(),
-      Profile(), 
     ];
   }
   @override

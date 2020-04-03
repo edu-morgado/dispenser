@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 
@@ -12,9 +13,15 @@ class WishListState extends State<WishListCategories> {
   List<String> titles = ["Meat", "Dengue", "Coockies"];
   static List<bool> isChecked = [false, false, false, false, false, false];
 
-  void loadRegisterPage(BuildContext context) {
+  void loadWishlistItemsPage(BuildContext context) {
     var route = new MaterialPageRoute(
         builder: (BuildContext context) => WishListItems());
+    Navigator.of(context).push(route);
+  }
+
+  void loadcloudlist(BuildContext context) {
+    var route = new MaterialPageRoute(
+        builder: (BuildContext context) => RemoteWishlist());
     Navigator.of(context).push(route);
   }
 
@@ -66,8 +73,15 @@ class WishListState extends State<WishListCategories> {
               Icons.playlist_add,
               color: Colors.white,
             ),
-            onPressed: () => loadRegisterPage(context),
-          )
+            onPressed: () => loadWishlistItemsPage(context),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.cloud_download,
+              color: Colors.white,
+            ),
+            onPressed: () => loadcloudlist(context),
+          ),
         ],
       ),
       body: ListView.builder(
