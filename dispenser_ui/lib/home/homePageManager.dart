@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
+import 'package:dispenser_ui/home/notes/notesManager.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,12 +14,14 @@ class TabBarPage extends State<Home> {
   List<Widget> tabs;
 
   List<Tab> _bottomBarItems = [
+    Tab(icon: Icon(Icons.note , size: 40)),
     Tab(icon: Icon(Icons.home, size: 40)),
     Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
   ];
 
   TabBarPage() {
     tabs = [
+      Notes(),
       Inventory(),
       WishListCategories(),
     ];
@@ -26,7 +29,7 @@ class TabBarPage extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       initialIndex: 1,
       child: Scaffold(
         body: TabBarView(children: tabs),
