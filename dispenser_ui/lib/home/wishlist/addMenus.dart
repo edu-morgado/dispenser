@@ -9,8 +9,7 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  num _counter = 0;
-  num _defaultValue = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +32,63 @@ class AddCategory extends StatefulWidget {
 }
 
 class _AddCategoryState extends State<AddCategory> {
-  num _counter = 0;
-  num _defaultValue = 0;
+
+  final TextEditingController _passwordController = TextEditingController();
+
+  final FocusNode _passNode = FocusNode();
+
+
+  Widget loginButton(BuildContext context) {
+    return Material(
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff01A0C7),
+      child: MaterialButton(
+        minWidth: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          //loadHomePage(context);
+        },
+        child: Text(
+          "Login",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+        ),
+      ),
+    );
+  }
+
+  Widget passwordInput(context) {
+    return Theme(
+      data: Theme.of(context).copyWith(primaryColor: Colors.black),
+      child: TextFormField(
+        obscureText: true,
+        focusNode: _passNode,
+        textInputAction: TextInputAction.done,
+        controller: _passwordController,
+        validator: (value) {
+          if (value.length < 6) {
+            return 'Password must be at least 6 characters long';
+          }
+          return null;
+        },
+        onEditingComplete: () {
+          FocusScope.of(context).unfocus();
+          //loadHomePage(context);
+        },
+        decoration: new InputDecoration(
+          labelText: 'Password',
+          focusColor: Colors.grey[300],
+        ),
+        keyboardType: TextInputType.text,
+        style: new TextStyle(
+          fontFamily: "Poppins",
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,27 +103,8 @@ class _AddCategoryState extends State<AddCategory> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Container(child: Icon(Icons.note, size: 40)),
-              Counter(
-                key: ValueKey(2),
-                initialValue: _defaultValue,
-                minValue: 0,
-                maxValue: 10,
-                step: 0.5,
-                decimalPlaces: 1,
-                onChanged: (value) {
-                  // get the latest value from here
-                  setState(() {
-                    _defaultValue = value;
-                  });
-                },
-              ),
+              passwordInput(context),
+              loginButton(context),
             ],
           )),
     );
