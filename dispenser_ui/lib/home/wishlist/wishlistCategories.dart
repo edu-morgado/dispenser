@@ -3,8 +3,6 @@ import 'package:flutter/rendering.dart';
 
 import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
-import 'package:dispenser_ui/home/wishlist/addMenus.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class WishListCategories extends StatefulWidget {
   @override
@@ -13,40 +11,14 @@ class WishListCategories extends StatefulWidget {
   }
 }
 
-class WishListState extends State<WishListCategories>
-    with TickerProviderStateMixin {
-  ScrollController scrollController;
-  bool dialVisible = true;
-  static const List<IconData> icons = const [
-    Icons.sms,
-    Icons.mail,
-    Icons.phone
-  ];
+class WishListState extends State<WishListCategories> {
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController()
-      ..addListener(() {
-        setDialVisible(scrollController.position.userScrollDirection ==
-            ScrollDirection.forward);
-      });
   }
 
-  void loadAddProductPage(BuildContext context) {
-    print("dengue");
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProduct());
-    Navigator.of(context).push(route);
-  }
-
-  void loadAddCategoryPage(BuildContext context) {
-    print("dengue");
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddCategory());
-    Navigator.of(context).push(route);
-  }
-
+  
   void loadWishlistItemsPage(BuildContext context) {
     var route =
         MaterialPageRoute(builder: (BuildContext context) => WishListItems());
@@ -65,44 +37,9 @@ class WishListState extends State<WishListCategories>
     Navigator.of(context).push(route);
   }
 
-  void setDialVisible(bool value) {
-    setState(() {
-      dialVisible = value;
-    });
-  }
 
-  SpeedDial buildSpeedDial() {
-    return SpeedDial(
-      tooltip: 'Speed Dial',
-      heroTag: 'speed-dial-hero-tag',
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      // child: Icon(Icons.add),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.deepOrange,
-          onTap: () => loadAddProductPage(context),
-          label: 'Add a product',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.deepOrangeAccent,
-        ),
-        SpeedDialChild(
-          
-          child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.green,
-          onTap: () => loadAddCategoryPage(context),
-          label: 'Add a category',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
-        ),
-      ],
-    );
-  }
+  
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +106,6 @@ class WishListState extends State<WishListCategories>
           ),
         ),
       ]),
-      floatingActionButton: buildSpeedDial(),
     );
   }
 }
