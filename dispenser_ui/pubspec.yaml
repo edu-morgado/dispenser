@@ -17,6 +17,7 @@ dev_dependencies:
     sdk: flutter
   rflutter_alert: ^1.0.3
   flutter_speed_dial: ^1.2.5
+  flutter_counter: ^1.0.3
 
 
 flutter:

@@ -73,6 +73,8 @@ class WishListState extends State<WishListCategories>
 
   SpeedDial buildSpeedDial() {
     return SpeedDial(
+      tooltip: 'Speed Dial',
+      heroTag: 'speed-dial-hero-tag',
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       // child: Icon(Icons.add),
@@ -85,15 +87,16 @@ class WishListState extends State<WishListCategories>
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.deepOrange,
           onTap: () => loadAddProductPage(context),
-          label: 'First Child',
+          label: 'Add a product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.deepOrangeAccent,
         ),
         SpeedDialChild(
+          
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.green,
           onTap: () => loadAddCategoryPage(context),
-          label: 'Second Child',
+          label: 'Add a category',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.green,
         ),
