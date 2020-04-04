@@ -1,5 +1,6 @@
 import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
 
 class Inventory extends StatefulWidget {
   @override
@@ -15,6 +16,12 @@ class InventoryState extends State<Inventory> {
     "storage",
   ];
 
+  void loadAddInventory(BuildContext context){
+    var route = new MaterialPageRoute(
+      builder:(BuildContext context) => InventoryAdd());
+    Navigator.of(context).push(route);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(inventoryItem.length);
@@ -23,6 +30,15 @@ class InventoryState extends State<Inventory> {
         title: Text("Inventory Page"),
         centerTitle: true,
         elevation: 9.0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => loadAddInventory(context),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: inventoryItem.length,
