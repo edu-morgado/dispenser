@@ -19,6 +19,7 @@ dev_dependencies:
   flutter_speed_dial: ^1.2.5
   flutter_counter: ^1.0.3
   dropdown_formfield: 0.1.1
+  flutter_speed_dial_material_design: 1.2.0
 
 
 flutter:
