@@ -40,16 +40,12 @@ class _InventoryItemState extends State<InventoryItem> {
     ).show();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
-        child: AppBar(
-          automaticallyImplyLeading: true,
-          title: Text("Name of Food"),
-        ),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: Text("Name of Food"),
       ),
       body: ListView.builder(
         itemCount: foodItems.length,

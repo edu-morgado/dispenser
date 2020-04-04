@@ -10,19 +10,24 @@ class WishListCategories extends StatefulWidget {
 }
 
 class WishListState extends State<WishListCategories> {
-    
-      void loadWishlistItemsPage(BuildContext context) {
-
+  void loadWishlistItemsPage(BuildContext context) {
     var route = new MaterialPageRoute(
         builder: (BuildContext context) => WishListItems());
     Navigator.of(context).push(route);
   }
-  
-void loadcloudlist(BuildContext context) {
+
+  void loadcloudlist(BuildContext context) {
     var route = new MaterialPageRoute(
         builder: (BuildContext context) => RemoteWishlist());
     Navigator.of(context).push(route);
   }
+
+  void loadWishListAllItems(BuildContext context) {
+    var route = new MaterialPageRoute(
+        builder: (BuildContext context) => WishListAllItems());
+    Navigator.of(context).push(route);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +65,14 @@ void loadcloudlist(BuildContext context) {
               (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8 + 20,
-                    alignment: Alignment.center,
-                    color: Colors.red,
-                    child: Text('Grid Item $index'),
+                  child: InkWell(
+                    onTap: () => loadWishListAllItems(context),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8 + 20,
+                      alignment: Alignment.center,
+                      color: Colors.red,
+                      child: Text('Grid Item $index'),
+                    ),
                   ),
                 );
               },
@@ -82,11 +90,14 @@ void loadcloudlist(BuildContext context) {
               (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    alignment: Alignment.center,
-                    color: Colors.teal[100 * (index % 9)],
-                    child: Text('Grid Item $index'),
+                  child: InkWell(
+                    onTap: () => loadWishlistItemsPage(context),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      alignment: Alignment.center,
+                      color: Colors.teal[100 * (index % 9)],
+                      child: Text('Grid Item $index'),
+                    ),
                   ),
                 );
               },
@@ -99,16 +110,3 @@ void loadcloudlist(BuildContext context) {
   }
 }
 
-/*
-
-      GridView.builder(
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-          itemCount: categories,
-          itemBuilder: (context, i) {
-            return Card(
-              elevation: 10.0,
-              child: Text("Category Card"),
-            );
-          }),
-          */
