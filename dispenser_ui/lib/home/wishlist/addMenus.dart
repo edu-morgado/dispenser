@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/counter/counter.dart';
+import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({Key key}) : super(key: key);
