@@ -197,7 +197,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           indicatorColor: Theme.of(context).primaryColor,
         ),
       ),
-    //  floatingActionButton: floatingButton(),
+      floatingActionButton: floatingButton(),
     );
   }
 }
