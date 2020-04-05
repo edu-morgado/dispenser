@@ -1,6 +1,5 @@
 import 'package:dispenser_ui/home/notes/noteItem.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial_material_design/flutter_speed_dial_material_design.dart';
 
 class Notes extends StatefulWidget {
   @override
@@ -16,26 +15,7 @@ class NotesState extends State<Notes> {
     "storage",
   ];
 
-  Widget _buildFloatingActionButton() {
-    final icons = [
-      SpeedDialAction(child: Icon(Icons.mode_edit)),
-      SpeedDialAction(child: Icon(Icons.date_range)),
-      SpeedDialAction(child: Icon(Icons.list)),
-    ];
 
-    return SpeedDialFloatingActionButton(
-      actions: icons,
-      // Make sure one of child widget has Key value to have fade transition if widgets are same type.
-      childOnFold: Icon(Icons.event_note, key: UniqueKey()),
-      childOnUnfold: Icon(Icons.add),
-      useRotateAnimation: true,
-      onAction: _onSpeedDialAction,
-    );
-  }
-
-  _onSpeedDialAction(int selectedActionIndex) {
-    print('$selectedActionIndex Selected');
-  }
 
   @override
   Widget build(BuildContext context) {
