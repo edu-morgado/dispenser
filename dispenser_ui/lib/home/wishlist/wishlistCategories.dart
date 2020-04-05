@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/home/wishlist/addMenus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -33,7 +34,7 @@ class WishListState extends State<WishListCategories> {
 
   void loadWishListAllItems(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => WishListAllItems());
+        builder: (BuildContext context) => AddCategory());
     Navigator.of(context).push(route);
   }
 

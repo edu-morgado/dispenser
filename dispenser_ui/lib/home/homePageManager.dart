@@ -119,7 +119,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget inventoryListSpeedDial() {
     return SpeedDial(
       tooltip: 'add',
-      heroTag: null,
+      heroTag: "inventory",
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       onOpen: () => print('OPENING DIAL'),
@@ -152,7 +152,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     
     return SpeedDial(
       tooltip: 'add',
-      heroTag: null,
+      heroTag: "wishList",
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       onOpen: () => print('OPENING DIAL'),
@@ -197,7 +197,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           indicatorColor: Theme.of(context).primaryColor,
         ),
       ),
-      floatingActionButton: floatingButton(),
+    //  floatingActionButton: floatingButton(),
     );
   }
 }

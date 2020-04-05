@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_counter/flutter_counter.dart';
+import 'package:dispenser_ui/counter/counter.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({Key key}) : super(key: key);
@@ -9,8 +9,6 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +30,9 @@ class AddCategory extends StatefulWidget {
 }
 
 class _AddCategoryState extends State<AddCategory> {
-
   final TextEditingController _passwordController = TextEditingController();
 
   final FocusNode _passNode = FocusNode();
-
 
   Widget loginButton(BuildContext context) {
     return Material(
@@ -89,6 +85,23 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
 
+  Widget counter() {
+    num _defaultValue = 0;
+    return Counter(
+      initialValue: _defaultValue,
+      minValue: 0,
+      maxValue: 1000,
+      step: 1,
+      decimalPlaces: 0,
+      onChanged: (value) {
+        print("onChanged beeing called");
+        setState(() {
+          _defaultValue = value;
+          print("default value -> $_defaultValue");
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +118,7 @@ class _AddCategoryState extends State<AddCategory> {
             children: <Widget>[
               passwordInput(context),
               loginButton(context),
+              counter()
             ],
           )),
     );
