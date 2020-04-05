@@ -44,7 +44,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _tabController =
-        TabController(vsync: this, length: tabs.length, initialIndex: 1);
+        TabController(vsync: this, length: tabs.length, initialIndex: 2);
     _tabController.addListener(floatingButton);
     scrollController = ScrollController()
       ..addListener(() {
