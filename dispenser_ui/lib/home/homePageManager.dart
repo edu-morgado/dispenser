@@ -118,19 +118,19 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       children: [
         SpeedDialChild(
           child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.blue,
           onTap: () => loadAddProductPage(context),
           label: 'Add a product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
+          labelBackgroundColor: Colors.blue,
         ),
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.blue,
           onTap: () => loadAddCategoryPage(context),
           label: 'Add a category',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
+          labelBackgroundColor: Colors.blue,
         ),
       ],
     );
@@ -158,19 +158,19 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       children: [
         SpeedDialChild(
           child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.blue,
           onTap: () => loadAddProductPage(context),
           label: 'Add a product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
+          labelBackgroundColor: Colors.blue,
         ),
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.blue,
           onTap: () => loadAddCategoryPage(context),
           label: 'Add a category',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
+          labelBackgroundColor: Colors.blue,
         ),
       ],
     );
