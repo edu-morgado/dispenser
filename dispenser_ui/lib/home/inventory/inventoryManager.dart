@@ -26,20 +26,7 @@ class InventoryState extends State<Inventory> {
   Widget build(BuildContext context) {
     print(inventoryItem.length);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Inventory Page"),
-        centerTitle: true,
-        elevation: 9.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            onPressed: () => loadAddInventory(context),
-          ),
-        ],
-      ),
+      
       body: ListView.builder(
         itemCount: inventoryItem.length,
         itemBuilder: (context, i) => Column(

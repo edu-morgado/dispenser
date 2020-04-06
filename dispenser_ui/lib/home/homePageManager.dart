@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
+import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
+
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
 
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
@@ -81,6 +83,12 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).push(route);
   }
 
+  void loadAddInventory(BuildContext context) {
+    var route = new MaterialPageRoute(
+        builder: (BuildContext context) => InventoryAdd());
+    Navigator.of(context).push(route);
+  }
+
   Widget floatingButton() {
     setState(() {});
     if (_tabController.index == 0)
@@ -129,33 +137,11 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget inventoryListSpeedDial() {
-    return SpeedDial(
+    return FloatingActionButton(
       tooltip: 'add',
       heroTag: "inventory",
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.green,
-          onTap: () => loadAddProductPage(context),
-          label: 'Add a product',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.green,
-          onTap: () => loadAddCategoryPage(context),
-          label: 'Add a category',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
-        ),
-      ],
+      child: Icon(Icons.add),
+      onPressed: () => loadAddInventory(context),
     );
   }
 
