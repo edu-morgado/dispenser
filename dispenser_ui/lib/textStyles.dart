@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 Widget pageTitleStyle(String title) {
@@ -173,7 +173,7 @@ Widget faqsQuestionStyle(String title) {
     textAlign: TextAlign.center,
     style: TextStyle(
       fontSize: 25,
-      color: Colors.white,
+      color: Colors.black,
     ),
   );
 }
@@ -281,8 +281,3 @@ Widget forgotPasswordTextStyle(String text) {
   );
 }
 
-
-Din Neuzeit Grotesk  -> Color from rbg -> 4B 85 95
-Helvetica Neue
-
-*/

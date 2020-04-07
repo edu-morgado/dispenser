@@ -1,7 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Note {
+part 'Note.g.dart';
+
+
+
+@JsonSerializable()
+class ObjNote {
+
+
+  ObjNote(this.id, this.title, this.content, this.date_created,
+      this.date_last_edited, this.note_color);
+
+  factory ObjNote.fromJson(Map<String, dynamic> json) => _$ObjNoteFromJson(json);
+  Map<String, dynamic> toJson() => _$ObjNoteToJson(this);
+
   int id;
   String title;
   String content;
@@ -10,8 +24,7 @@ class Note {
   Color note_color;
   int is_archived = 0;
 
-  Note(this.id, this.title, this.content, this.date_created,
-      this.date_last_edited, this.note_color);
+
 
   Map<String, dynamic> toMap(bool forUpdate) {
     var data = {
@@ -51,4 +64,27 @@ class Note {
       'is_archived': is_archived
     }.toString();
   }
+}
+
+
+
+@JsonSerializable()
+class ListNote {
+  List<ObjNote> notes;
+
+  ListNote() : notes = List<ObjNote>();
+
+  int get lenght {
+    return notes.length;
+  }
+
+
+  bool isEmpty() {
+    return notes.length == 0;
+  }
+
+
+  factory ListNote.fromJson(Map<String, dynamic> json) =>
+      _$ListNoteFromJson(json);
+  Map<String, dynamic> toJson() => _$ListNoteToJson(this);
 }

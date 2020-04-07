@@ -139,6 +139,7 @@ class NotesDBHandler {
     var data = await db.query("notes", orderBy: "date_last_edited desc",
         where: "is_archived = ?",
         whereArgs: [0]);
+    print(data);
 
     return data;
 

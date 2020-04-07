@@ -23,11 +23,9 @@ class _NotePageState extends State<NotePage> {
   final _titleFocus = FocusNode();
   final _contentFocus = FocusNode();
 
-  String _titleFrominitial ;
-   String _contentFromInitial;
-   DateTime _lastEditedForUndo;
-
-
+  String _titleFrominitial;
+  String _contentFromInitial;
+  DateTime _lastEditedForUndo;
 
   var _editableNote;
 
@@ -47,7 +45,6 @@ class _NotePageState extends State<NotePage> {
     _titleFrominitial = widget.noteInEditing.title;
     _contentFromInitial = widget.noteInEditing.content;
 
-
     if (widget.noteInEditing.id == -1) {
       _isNewNote = true;
     }
@@ -56,21 +53,21 @@ class _NotePageState extends State<NotePage> {
       print("5 seconds passed");
       print("editable note id: ${_editableNote.id}");
       print("persisting data");
-   //   _persistData();
+         _persistData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(_editableNote.id == -1 && _editableNote.title.isEmpty) {
+    if (_editableNote.id == -1 && _editableNote.title.isEmpty) {
       FocusScope.of(context).requestFocus(_titleFocus);
     }
 
     return WillPopScope(
       child: Scaffold(
         key: _globalKey,
-        appBar: AppBar(brightness: Brightness.light,
+        appBar: AppBar(
+          brightness: Brightness.light,
           leading: BackButton(
             color: Colors.black,
           ),
@@ -86,68 +83,58 @@ class _NotePageState extends State<NotePage> {
   }
 
   Widget _body(BuildContext ctx) {
-    return
-
-      Container(
-      color: note_color,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 12),
-      child:
-
-      SafeArea(child:
-      Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Flexible(
-      child: Container(
-          padding: EdgeInsets.all(5),
+    return Container(
+        color: note_color,
+        padding: EdgeInsets.only(left: 16, right: 16, top: 12),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.all(5),
 //          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
-            child: EditableText(
-                onChanged: (str) => {updateNoteObject()},
-                maxLines: null,
-                controller: _titleController,
-                focusNode: _titleFocus,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-                cursorColor: Colors.blue,
-                backgroundCursorColor: Colors.blue),
-          ),
-          ),
-
-          Divider(color: CentralStation.borderColor,),
-
-          Flexible( child: Container(
-    padding: EdgeInsets.all(5),
+                  child: EditableText(
+                      onChanged: (str) => {updateNoteObject()},
+                      maxLines: null,
+                      controller: _titleController,
+                      focusNode: _titleFocus,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                      cursorColor: Colors.blue,
+                      backgroundCursorColor: Colors.blue),
+                ),
+              ),
+              Divider(
+                color: CentralStation.borderColor,
+              ),
+              Flexible(
+                  child: Container(
+                      padding: EdgeInsets.all(5),
 //    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
-              child: EditableText(
-            onChanged: (str) => {updateNoteObject()},
-            maxLines: 300, // line limit extendable later
-            controller: _contentController,
-            focusNode: _contentFocus,
-            style: TextStyle(color: Colors.black, fontSize: 20),
-            backgroundCursorColor: Colors.red,
-            cursorColor: Colors.blue,
-          )
-          )
-          )
-
-        ],
-      ),
-          left: true,right: true,top: false,bottom: false,
-    )
-    )
-
-
-
-    ;
+                      child: EditableText(
+                        onChanged: (str) => {updateNoteObject()},
+                        maxLines: 300, // line limit extendable later
+                        controller: _contentController,
+                        focusNode: _contentFocus,
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        backgroundCursorColor: Colors.red,
+                        cursorColor: Colors.blue,
+                      )))
+            ],
+          ),
+          left: true,
+          right: true,
+          top: false,
+          bottom: false,
+        ));
   }
 
   Widget _pageTitle() {
     return Text(_editableNote.id == -1 ? "New Note" : "Edit Note");
   }
-
-
 
   List<Widget> _archiveAction(BuildContext context) {
     List<Widget> actions = [];
@@ -194,7 +181,7 @@ class _NotePageState extends State<NotePage> {
         padding: EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
-            onTap: () => { _saveAndStartNewNote(context)  },
+            onTap: () => {_saveAndStartNewNote(context)},
             child: Icon(
               Icons.add,
               color: CentralStation.fontColor,
@@ -207,6 +194,10 @@ class _NotePageState extends State<NotePage> {
   }
 
   void bottomSheet(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
     showModalBottomSheet(
         context: context,
         builder: (BuildContext ctx) {
@@ -219,27 +210,32 @@ class _NotePageState extends State<NotePage> {
         });
   }
 
-/*
+
   void _persistData() {
     updateNoteObject();
 
     if (_editableNote.content.isNotEmpty) {
-      var noteDB = NotesDBHandler();
+    //  var noteDB = NotesDBHandler();
 
       if (_editableNote.id == -1) {
-        Future<int> autoIncrementedId =
-            noteDB.insertNote(_editableNote, true); // for new note
-        // set the id of the note from the database after inserting the new note so for next persisting
+       
+       //GETTING ID FOR NOTE from the DB
+      // set the id of the note from the database after inserting the new note so for next persisting
+
+       /* Future<int> autoIncrementedId = noteDB.insertNote(_editableNote, true); 
         autoIncrementedId.then((value) {
           _editableNote.id = value;
         });
+      */
+
+        _editableNote.id = 3;  //  HARDCODED ERASE THIS AFTER
       } else {
-        noteDB.insertNote(
-            _editableNote, false); // for updating the existing note
+       // noteDB.insertNote(_editableNote, false); // for updating the existing note
+       
       }
     }
   }
-*/
+
 
 // this function will ne used to save the updated editing value of the note to the local variables as user types
   void updateNoteObject() {
@@ -252,7 +248,6 @@ class _NotePageState extends State<NotePage> {
 
     print("same title? ${_editableNote.title == _titleFrominitial}");
     print("same content? ${_editableNote.content == _contentFromInitial}");
-
 
     if (!(_editableNote.title == _titleFrominitial &&
             _editableNote.content == _contentFromInitial) ||
@@ -274,8 +269,8 @@ class _NotePageState extends State<NotePage> {
             print("delete if note id != -1");
             // _deleteNote(_globalKey.currentContext);
           } else {
-              print("delete if note id == -1");
-          //  _exitWithoutSaving(context);
+            print("delete if note id == -1");
+            //  _exitWithoutSaving(context);
           }
           break;
         }
@@ -286,11 +281,12 @@ class _NotePageState extends State<NotePage> {
           }
           break;
         }
-      case moreOptions.copy : {
-         // _copy();
-         print("copying note");
-        break;
-      }
+      case moreOptions.copy:
+        {
+          // _copy();
+          print("copying note");
+          break;
+        }
     }
   }
 
@@ -300,25 +296,24 @@ class _NotePageState extends State<NotePage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-                title: Text("Confirm ?"),
-                content: Text("This note will be deleted permanently"),
-                actions: <Widget>[
+              title: Text("Confirm ?"),
+              content: Text("This note will be deleted permanently"),
+              actions: <Widget>[
                 FlatButton(
-                onPressed: ()  {
-              _persistenceTimer.cancel();
-     //         var noteDB = NotesDBHandler();
-              Navigator.of(context).pop();
-     //         noteDB.deleteNote(_editableNote);
-              CentralStation.updateNeeded = true;
+                    onPressed: () {
+                      _persistenceTimer.cancel();
+                      //         var noteDB = NotesDBHandler();
+                      Navigator.of(context).pop();
+                      //         noteDB.deleteNote(_editableNote);
+                      CentralStation.updateNeeded = true;
 
-              Navigator.of(context).pop();
-
-            },
-            child: Text("Yes")),
-            FlatButton(
-            onPressed: () => {Navigator.of(context).pop()},
-            child: Text("No"))
-            ],
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Yes")),
+                FlatButton(
+                    onPressed: () => {Navigator.of(context).pop()},
+                    child: Text("No"))
+              ],
             );
           });
     }
@@ -330,38 +325,40 @@ class _NotePageState extends State<NotePage> {
       note_color = newColorSelected;
       _editableNote.note_color = newColorSelected;
     });
-   // _persistColorChange();
-   print("persisting color change");
+    // _persistColorChange();
+    print("persisting color change");
     CentralStation.updateNeeded = true;
   }
 
 /*
   void _persistColorChange() {
+    
     if (_editableNote.id != -1) {
       var noteDB = NotesDBHandler();
       _editableNote.note_color = note_color;
       noteDB.insertNote(_editableNote, false);
     }
+    
   }
 */
 
-  void _saveAndStartNewNote(BuildContext context){
+  void _saveAndStartNewNote(BuildContext context) {
     _persistenceTimer.cancel();
-    var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+    var emptyNote =
+        new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     Navigator.of(context).pop();
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
-
+    Navigator.push(
+        context, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
   }
 
   Future<bool> _readyToPop() async {
     _persistenceTimer.cancel();
     //show saved toast after calling _persistData function.
-  
+
     print("persisting data");
-    //_persistData();
+    _persistData();
     return true;
   }
-
 
   void _archivePopup(BuildContext context) {
     if (_editableNote.id != -1) {
@@ -373,7 +370,8 @@ class _NotePageState extends State<NotePage> {
               content: Text("This note will be archived"),
               actions: <Widget>[
                 FlatButton(
-                    onPressed: () => print("ARCHIVING"), //_archiveThisNote(context),
+                    onPressed: () =>
+                        print("ARCHIVING"), //_archiveThisNote(context),
                     child: Text("Yes")),
                 FlatButton(
                     onPressed: () => {Navigator.of(context).pop()},
@@ -382,11 +380,10 @@ class _NotePageState extends State<NotePage> {
             );
           });
     } else {
-     // _exitWithoutSaving(context);
+      // _exitWithoutSaving(context);
     }
   }
 
-/*
   void _exitWithoutSaving(BuildContext context) {
     _persistenceTimer.cancel();
     CentralStation.updateNeeded = false;
@@ -397,9 +394,11 @@ class _NotePageState extends State<NotePage> {
     Navigator.of(context).pop();
     // set archived flag to true and send the entire note object in the database to be updated
     _editableNote.is_archived = 1;
-    var noteDB = NotesDBHandler();
-    noteDB.archiveNote(_editableNote);
+    //  var noteDB = NotesDBHandler();
+    // noteDB.archiveNote(_editableNote);
     // update will be required to remove the archived note from the staggered view
+
+    //TODOOOOO needs to save the element when arquived
     CentralStation.updateNeeded = true;
     _persistenceTimer.cancel(); // shutdown the timer
 
@@ -407,7 +406,6 @@ class _NotePageState extends State<NotePage> {
     // TODO: OPTIONAL show the toast of deletion completion
     Scaffold.of(context).showSnackBar(new SnackBar(content: Text("deleted")));
   }
-*/
 
 /*
   void _copy(){
@@ -428,12 +426,13 @@ class _NotePageState extends State<NotePage> {
       }
     });
   }
-
-*/
+  */
 
   void _undo() {
-    _titleController.text = _titleFrominitial;// widget.noteInEditing.title;
-    _contentController.text = _contentFromInitial;// widget.noteInEditing.content;
-    _editableNote.date_last_edited = _lastEditedForUndo;// widget.noteInEditing.date_last_edited;
+    _titleController.text = _titleFrominitial; // widget.noteInEditing.title;
+    _contentController.text =
+        _contentFromInitial; // widget.noteInEditing.content;
+    _editableNote.date_last_edited =
+        _lastEditedForUndo; // widget.noteInEditing.date_last_edited;
   }
 }

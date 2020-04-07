@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 
 import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
+import 'package:dispenser_ui/textStyles.dart';
 
 class WishListCategories extends StatefulWidget {
   @override
@@ -12,13 +13,11 @@ class WishListCategories extends StatefulWidget {
 }
 
 class WishListState extends State<WishListCategories> {
-
   @override
   void initState() {
     super.initState();
   }
 
-  
   void loadWishlistItemsPage(BuildContext context) {
     var route =
         MaterialPageRoute(builder: (BuildContext context) => WishListItems());
@@ -37,16 +36,91 @@ class WishListState extends State<WishListCategories> {
     Navigator.of(context).push(route);
   }
 
+  List<bool> isSelected = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+  List<Color> mycolors = [
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green
+  ];
+  void selectedForDeletion(int i) {
+    setState(() {
+      print("selceting for delection");
+      if (isSelected[i]) {
+        mycolors[i] = Colors.green;
+        isSelected[i] = false;
+      } else {
+        mycolors[i] = Colors.red;
+        isSelected[i] = true;
+      }
+    });
+  }
 
-  
- 
+  Widget deleteIconButton() {
+    print("in function deleteIconbutton");
+    for (bool selected in isSelected)
+      if (selected)
+        return IconButton(
+          icon: Icon(Icons.delete_outline),
+          onPressed: () => print("DELETE NOW NIGGA"),
+        );
+
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
-        Center(child: Text("Wish List", style: TextStyle(fontSize: 30))),
+        Row(children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.15,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: 50,
+            child: Center(child: godfathersNameStyle("Wish List")),
+          ),
+          deleteIconButton(),
+        ]),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
@@ -55,8 +129,8 @@ class WishListState extends State<WishListCategories> {
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
                   childAspectRatio: 2,
                 ),
                 delegate: SliverChildBuilderDelegate(
@@ -68,8 +142,10 @@ class WishListState extends State<WishListCategories> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
                           alignment: Alignment.center,
-                          color: Colors.red,
-                          child: Text('Grid Item $index'),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: godfathersNameStyle('Grid Item $index'),
                         ),
                       ),
                     );
@@ -77,6 +153,7 @@ class WishListState extends State<WishListCategories> {
                   childCount: 1,
                 ),
               ),
+              
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
@@ -89,12 +166,15 @@ class WishListState extends State<WishListCategories> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
+                        onLongPress: () => selectedForDeletion(index),
                         onTap: () => loadWishlistItemsPage(context),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.4,
                           alignment: Alignment.center,
-                          color: Colors.teal[100 * (index % 9)],
-                          child: Text('Grid Item $index'),
+                          decoration: BoxDecoration(
+                              color: mycolors[index],
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: godfathersNameStyle('Grid Item $index'),
                         ),
                       ),
                     );
