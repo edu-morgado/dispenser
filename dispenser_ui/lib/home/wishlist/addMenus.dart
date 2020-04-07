@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
-
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddProduct extends StatefulWidget {
@@ -84,7 +83,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Widget chooseCategories() {
-    return ColumnBuilder(
+    return ListView.builder(
       itemCount: categories.length,
       itemBuilder: (context, i) => ListTile(
         leading: Text(categories[i]),
@@ -123,15 +122,31 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        title: Text("Add smtg"),
-      ),
-      body: Flex(
-        direction: Axis.vertical,
+      resizeToAvoidBottomInset: false,
+      body: Column(
         children: [
-          SizedBox(height: 25),
+          Row(children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ]),
+          Row(children: <Widget>[
+            Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.05,
+                margin: EdgeInsets.all(10),
+                child: Center(
+                  child: Text(
+                    "Add a Product",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ))
+          ]),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
@@ -153,6 +168,7 @@ class _AddProductState extends State<AddProduct> {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.5,
               alignment: Alignment.topCenter,
               child: chooseCategories(),
             ),
@@ -160,6 +176,7 @@ class _AddProductState extends State<AddProduct> {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topCenter,
               child: addProductButton(context),
             ),
@@ -206,6 +223,7 @@ class _AddCategoryState extends State<AddCategory> {
   final TextEditingController _passwordController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode();
+  final FocusNode _descNode = FocusNode();
 
   Widget nameInput(context) {
     return Theme(
@@ -225,12 +243,36 @@ class _AddCategoryState extends State<AddCategory> {
           //loadHomePage(context);
         },
         decoration: new InputDecoration(
-          labelText: 'Catergory Name',
+          labelText: 'Category Name',
           focusColor: Colors.grey[300],
         ),
         keyboardType: TextInputType.text,
         style: new TextStyle(
           fontFamily: "Poppins",
+        ),
+      ),
+    );
+  }
+
+  Widget descriptionInput(context) {
+    return Theme(
+      data: Theme.of(context).copyWith(primaryColor: Colors.black),
+      child: TextFormField(
+        
+        focusNode: _descNode,
+        textInputAction: TextInputAction.done,
+        onEditingComplete: () {
+          FocusScope.of(context).unfocus();
+          //loadHomePage(context);
+        },
+        decoration: new InputDecoration(
+          labelText: 'Description',
+          focusColor: Colors.grey[300],
+        ),
+        keyboardType: TextInputType.text,
+        style: new TextStyle(
+          fontFamily: "Poppins",
+          fontSize: 15,
         ),
       ),
     );
@@ -292,14 +334,33 @@ class _AddCategoryState extends State<AddCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        title: Text("Add somgt"),
-      ),
+      resizeToAvoidBottomInset: false,
       body: Column(
-        children: <Widget>[
-          SizedBox(height: 40),
+        children: [
+          Row(children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ]),
+          Row(
+            children: <Widget>[
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  margin: EdgeInsets.all(10),
+                  child: Center(
+                    child: Text(
+                      "Add Category",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ))
+            ],
+          ),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
@@ -308,10 +369,19 @@ class _AddCategoryState extends State<AddCategory> {
               child: nameInput(context),
             ),
           ),
+          SizedBox(height: 10,),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.1,
+              alignment: Alignment.topLeft,
+              child: descriptionInput(context),
+            ),
+          ),
           Center(
             child: Container(
                 width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.15,
+                height: MediaQuery.of(context).size.height * 0.3,
                 alignment: Alignment.topLeft,
                 child: dropDownFormField()),
           ),
@@ -328,4 +398,3 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
 }
-
