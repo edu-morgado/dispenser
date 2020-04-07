@@ -7,15 +7,23 @@ part of 'FoodRepository.dart';
 // **************************************************************************
 
 ObjFoodRepository _$ObjFoodRepositoryFromJson(Map<String, dynamic> json) {
-  return ObjFoodRepository();
+  return ObjFoodRepository(json['type'] as int, json['name'] as String)
+    ..foodItems = (json['foodItems'] as List)
+        ?.map((e) =>
+            e == null ? null : ObjFoodItem.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$ObjFoodRepositoryToJson(ObjFoodRepository instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'type': instance.type,
+      'name': instance.name,
+      'foodItems': instance.foodItems
+    };
 
 ListFoodRepository _$ListFoodRepositoryFromJson(Map<String, dynamic> json) {
   return ListFoodRepository()
-    ..foodRepositories = (json['foodRepositories'] as List)
+    ..repositories = (json['repositories'] as List)
         ?.map((e) => e == null
             ? null
             : ObjFoodRepository.fromJson(e as Map<String, dynamic>))
@@ -23,4 +31,4 @@ ListFoodRepository _$ListFoodRepositoryFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ListFoodRepositoryToJson(ListFoodRepository instance) =>
-    <String, dynamic>{'foodRepositories': instance.foodRepositories};
+    <String, dynamic>{'repositories': instance.repositories};

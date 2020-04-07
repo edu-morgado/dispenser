@@ -6,7 +6,10 @@ part 'Category.g.dart';
 @JsonSerializable()
 class ObjCategory {
 
-  ObjCategory();
+  String name;
+  int type;
+
+  ObjCategory(this.name, this.type);
 
   factory ObjCategory.fromJson(Map<String, dynamic> json) => _$ObjCategoryFromJson(json);
   Map<String, dynamic> toJson() => _$ObjCategoryToJson(this);

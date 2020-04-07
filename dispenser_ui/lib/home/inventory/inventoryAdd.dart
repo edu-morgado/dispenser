@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/objects/FoodRepository.dart';
+
 
 class InventoryAdd extends StatefulWidget {
-  InventoryAdd({Key key, this.title}) : super(key: key);
+  
+  final Manager manager;
   final String title;
 
+  InventoryAdd(this.manager, {Key key, this.title}) : super(key: key);
+
   @override
-  InventoryAddState createState() => new InventoryAddState();
+  InventoryAddState createState() => new InventoryAddState(manager);
 }
 
 class InventoryAddState extends State<InventoryAdd> {
-  final TextEditingController _nameController = TextEditingController();
+  Manager manager;
+
+  InventoryAddState(this.manager);
+
   final FocusNode _nameNode = FocusNode();
-  final FocusNode _typeNode = FocusNode();
-  int _myActivity;
+  final TextEditingController _nameController = TextEditingController();
+  int _type;
 
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(debugLabel: '_loginScreenkey');
@@ -55,15 +64,15 @@ class InventoryAddState extends State<InventoryAdd> {
             child: DropDownFormField(
               titleText: 'Choose a type',
               hintText: 'Please choose one',
-              value: _myActivity,
+              value: _type,
               onSaved: (value) {
                 setState(() {
-                  _myActivity = value;
+                  _type = value;
                 });
               },
               onChanged: (value) {
                 setState(() {
-                  _myActivity = value;
+                  _type = value;
                 });
               },
               dataSource: choices,
@@ -76,7 +85,7 @@ class InventoryAddState extends State<InventoryAdd> {
     );
   }
 
-  Widget addCategoryButton(BuildContext context) {
+  Widget addFoodRepositoryButton(BuildContext context) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -86,10 +95,12 @@ class InventoryAddState extends State<InventoryAdd> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          //loadHomePage(context);
+          ObjFoodRepository newFoodRepository = ObjFoodRepository( _type, _nameController.text);
+          manager.foodRepositories.repositories.add(newFoodRepository);
+          Navigator.of(context).pop();
         },
         child: Text(
-          "Add Category",
+          "Add Food Repository",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
         ),
@@ -100,7 +111,7 @@ class InventoryAddState extends State<InventoryAdd> {
   @override
   void initState() {
     super.initState();
-    _myActivity = 1;
+    _type = 1;
   }
 
   @override
@@ -141,7 +152,7 @@ class InventoryAddState extends State<InventoryAdd> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topLeft,
-              child: addCategoryButton(context),
+              child: addFoodRepositoryButton(context),
             ),
           ),
         ],

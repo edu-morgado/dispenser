@@ -1,26 +1,21 @@
+import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class InventoryItem extends StatefulWidget {
-  InventoryItem({Key key}) : super(key: key);
+  final ObjFoodRepository repository;
+
+  InventoryItem(this.repository, {Key key}) : super(key: key);
 
   @override
-  _InventoryItemState createState() => _InventoryItemState();
+  _InventoryItemState createState() => _InventoryItemState(repository);
 }
 
 class _InventoryItemState extends State<InventoryItem> {
-  List<String> foodItems = [
-    "food1",
-    "food2",
-    "food3",
-    "food4",
-    "food5",
-    "food6",
-    "food7",
-    "food8",
-    "food9",
-    "food10"
-  ];
+   ObjFoodRepository repository;
+
+   _InventoryItemState(this.repository);
 
   foodInformation(BuildContext context) {
     return Alert(
@@ -42,18 +37,20 @@ class _InventoryItemState extends State<InventoryItem> {
 
   @override
   Widget build(BuildContext context) {
+    print("\n\n\nLENGHT OF FOOD ITEMS WAIT ");
+    print(repository.foodItems.length);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: Text("Name of Food"),
       ),
       body: ListView.builder(
-        itemCount: foodItems.length,
+        itemCount: 0,
         itemBuilder: (context, i) => InkWell(
           onTap: () => foodInformation(context),
           child: ListTile(
             leading: Icon(Icons.fastfood),
-            title: Text(foodItems[i]),
+            title: Text(repository.foodItems[i].name),
           ),
         ),
       ),

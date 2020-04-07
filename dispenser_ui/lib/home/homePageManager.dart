@@ -5,7 +5,6 @@ import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
 
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
-import 'package:dispenser_ui/home/testingnotes/Models/Utility.dart';
 
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
@@ -14,16 +13,23 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:dispenser_ui/home/wishlist/addMenus.dart';
 import 'package:flutter/rendering.dart';
 
+import 'package:dispenser_ui/ObjManager.dart';
+
 enum viewType { List, Staggered }
 
 class Home extends StatefulWidget {
+  final Manager manager = Manager();
+
   @override
   State<StatefulWidget> createState() {
-    return TabBarPage();
+    return TabBarPage(manager);
   }
 }
 
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
+  Manager manager;
+  
+  
   List<Widget> tabs;
   bool dialVisible = true;
 
@@ -37,10 +43,10 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
   ];
 
-  TabBarPage() {
+  TabBarPage(this.manager) {
     tabs = [
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
-      Inventory(),
+      Inventory(manager),
       WishListCategories(),
     ];
   }
@@ -85,7 +91,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddInventory(BuildContext context) {
     var route = new MaterialPageRoute(
-        builder: (BuildContext context) => InventoryAdd());
+        builder: (BuildContext context) => InventoryAdd(manager));
     Navigator.of(context).push(route);
   }
 

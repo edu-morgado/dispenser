@@ -1,15 +1,24 @@
 import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
+import 'package:dispenser_ui/ObjManager.dart';
 
 class Inventory extends StatefulWidget {
+  final Manager manager;
+
+  Inventory(this.manager);
+
   @override
   State<StatefulWidget> createState() {
-    return InventoryState();
+    return InventoryState(manager);
   }
 }
 
 class InventoryState extends State<Inventory> {
+  Manager manager;
+
+  InventoryState(this.manager);
+
   List<String> inventoryItem = [
     "fridge",
     "freezer",
@@ -18,7 +27,7 @@ class InventoryState extends State<Inventory> {
 
   void loadAddInventory(BuildContext context){
     var route = new MaterialPageRoute(
-      builder:(BuildContext context) => InventoryAdd());
+      builder:(BuildContext context) => InventoryAdd(manager));
     Navigator.of(context).push(route);
   }
 
@@ -28,7 +37,7 @@ class InventoryState extends State<Inventory> {
     return Scaffold(
       
       body: ListView.builder(
-        itemCount: inventoryItem.length,
+        itemCount: manager.foodRepositories.repositories.length,
         itemBuilder: (context, i) => Column(
           children: [
             Divider(
@@ -37,7 +46,7 @@ class InventoryState extends State<Inventory> {
             InkWell(
               onTap: () =>  Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                  InventoryItem())),
+                  InventoryItem(manager.foodRepositories.repositories[i]))),
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 width: MediaQuery.of(context).size.width * 0.95,
@@ -46,7 +55,7 @@ class InventoryState extends State<Inventory> {
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
                     image:
-                        AssetImage('assets/inventory/${inventoryItem[i]}.jpg'),
+                        AssetImage('assets/inventory/${manager.foodRepositories.repositories[i].type}.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -1,13 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'FoodItem.dart';
 
 part 'FoodRepository.g.dart';
 
 @JsonSerializable()
 class ObjFoodRepository {
 
+  int type;
+  String name;
+  List<ObjFoodItem> foodItems = List<ObjFoodItem>();
 
+  ObjFoodRepository(this.type, this.name);
 
-  ObjFoodRepository();
+  void addFoodItemToRepository(ObjFoodItem foodItem) => foodItems.add(foodItem);
 
   factory ObjFoodRepository.fromJson(Map<String, dynamic> json) => _$ObjFoodRepositoryFromJson(json);
 
@@ -18,17 +23,17 @@ class ObjFoodRepository {
 
 @JsonSerializable()
 class ListFoodRepository {
-  List<ObjFoodRepository> foodRepositories;
+  List<ObjFoodRepository> repositories;
 
-  ListFoodRepository() : foodRepositories = List<ObjFoodRepository>();
+  ListFoodRepository() : repositories = List<ObjFoodRepository>();
 
-  int get lenght {
-    return foodRepositories.length;
+  int get length {
+    return repositories.length;
   }
 
 
   bool isEmpty() {
-    return foodRepositories.length == 0;
+    return repositories.length == 0;
   }
 
 

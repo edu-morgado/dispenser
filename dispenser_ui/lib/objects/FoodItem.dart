@@ -5,8 +5,10 @@ part 'FoodItem.g.dart';
 
 @JsonSerializable()
 class ObjFoodItem {
+  String name;
+  int quantity;
 
-  ObjFoodItem();
+  ObjFoodItem(this.name, this.quantity);
 
   factory ObjFoodItem.fromJson(Map<String, dynamic> json) => _$ObjFoodItemFromJson(json);
   Map<String, dynamic> toJson() => _$ObjFoodItemToJson(this);
@@ -20,7 +22,7 @@ class ListFoodItem {
 
   ListFoodItem() : foodItems = List<ObjFoodItem>();
 
-  int get lenght {
+  int get length {
     return foodItems.length;
   }
 
