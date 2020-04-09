@@ -1,15 +1,20 @@
 
 import 'package:json_annotation/json_annotation.dart';
+import 'FoodItem.dart';
 
 part 'Category.g.dart';
 
 @JsonSerializable()
 class ObjCategory {
 
+  int id;
   String name;
-  int type;
+  List<ObjFoodItem> foodItems = List<ObjFoodItem>();
+  
 
-  ObjCategory(this.name, this.type);
+  ObjCategory(this.id,this.name);
+
+  void addFoodItemToCategory(ObjFoodItem foodItem) => foodItems.add(foodItem);
 
   factory ObjCategory.fromJson(Map<String, dynamic> json) => _$ObjCategoryFromJson(json);
   Map<String, dynamic> toJson() => _$ObjCategoryToJson(this);

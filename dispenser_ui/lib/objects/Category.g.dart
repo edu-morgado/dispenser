@@ -7,11 +7,19 @@ part of 'Category.dart';
 // **************************************************************************
 
 ObjCategory _$ObjCategoryFromJson(Map<String, dynamic> json) {
-  return ObjCategory(json['name'] as String, json['type'] as int);
+  return ObjCategory(json['id'] as int, json['name'] as String)
+    ..foodItems = (json['foodItems'] as List)
+        ?.map((e) =>
+            e == null ? null : ObjFoodItem.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$ObjCategoryToJson(ObjCategory instance) =>
-    <String, dynamic>{'name': instance.name, 'type': instance.type};
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'foodItems': instance.foodItems
+    };
 
 ListCategory _$ListCategoryFromJson(Map<String, dynamic> json) {
   return ListCategory()

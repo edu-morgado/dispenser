@@ -3,16 +3,24 @@ import 'package:flutter/rendering.dart';
 
 import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistAllItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
+import 'package:dispenser_ui/ObjManager.dart';
 
 class WishListCategories extends StatefulWidget {
+  final Manager manager;
+
+  WishListCategories(this.manager);
+
   @override
   State<StatefulWidget> createState() {
-    return WishListState();
+    return WishListState(manager);
   }
 }
 
 class WishListState extends State<WishListCategories> {
+  Manager manager;
+  WishListState(this.manager);
   @override
   void initState() {
     super.initState();
@@ -32,7 +40,7 @@ class WishListState extends State<WishListCategories> {
 
   void loadWishListAllItems(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => WishListAllItems());
+        builder: (BuildContext context) => WishListAllItems(manager.categories.categories));
     Navigator.of(context).push(route);
   }
 
@@ -84,7 +92,7 @@ class WishListState extends State<WishListCategories> {
     setState(() {
       print("selceting for delection");
       if (isSelected[i]) {
-        mycolors[i] =  Color.fromRGBO(182, 122, 133, 1);
+        mycolors[i] = Color.fromRGBO(182, 122, 133, 1);
         isSelected[i] = false;
       } else {
         mycolors[i] = Colors.red;
@@ -153,7 +161,6 @@ class WishListState extends State<WishListCategories> {
                   childCount: 1,
                 ),
               ),
-              
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,

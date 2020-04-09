@@ -95,7 +95,7 @@ class InventoryAddState extends State<InventoryAdd> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodRepository newFoodRepository = ObjFoodRepository( _type, _nameController.text);
+          ObjFoodRepository newFoodRepository = ObjFoodRepository(1, _type, _nameController.text);
           manager.foodRepositories.repositories.add(newFoodRepository);
           Navigator.of(context).pop();
         },

@@ -55,7 +55,7 @@ class InventoryState extends State<Inventory> {
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
                     image:
-                        AssetImage('assets/inventory/${manager.foodRepositories.repositories[i].type}.jpg'),
+                        AssetImage('assets/inventory/${manager.foodRepositories.repositories[i].ttype}.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),

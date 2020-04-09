@@ -44,14 +44,14 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   TabBarPage(this.manager) {
-    manager.foodRepositories.repositories.add(ObjFoodRepository(1, "DEngue"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(2, "DEngue"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3, "DEngue"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"ola"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"ola"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"ola"));
 
     tabs = [
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
       Inventory(manager),
-      WishListCategories(),
+      WishListCategories(manager),
     ];
   }
 
