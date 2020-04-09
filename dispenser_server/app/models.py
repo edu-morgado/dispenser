@@ -17,36 +17,36 @@ class Food_Item(db.Model):
                 'name' : self.name,
                 'quantity' : self.quantity}
 
-class Food_Repository(db.Model):
-    __tablename__ = 'food_repository'
+class Inventory(db.Model):
+    __tablename__ = 'inventory'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable=False)
     ttype = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    foodsJson = db.Column(db.String(10000), nullable=False)
+    foods_json = db.Column(db.String(10000), nullable=False)
 
     def __repr__(self):
-        return '<Inventory {}: {}> following foods {}'.format(self.id, self.name , self.foodsJson)
+        return '<Inventory {}: {}> following foods {}'.format(self.id, self.name , self.foods_json)
     
     def to_json(self):
         return { 'id' : self.id,
                 'ttype' : self.ttype,
                 'name' : self.name,
-                'foodsJson' : self.foodsJson}
+                'foods_json' : self.foods_json}
 
 
 class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    foodsJson = db.Column(db.String(10000), nullable=False)
+    foods_json = db.Column(db.String(10000), nullable=False)
 
     def __repr__(self):
-        return '<Category {}: {}> following foods {}'.format(self.id, self.name , self.foodsJson)
+        return '<Category {}: {}> following foods {}'.format(self.id, self.name , self.foods_json)
     
     def to_json(self):
         return { 'id' : self.id,
                 'name' : self.name,
-                'foodsJson' : self.foodsJson}
+                'foods_json' : self.foods_json}
 
 class Note(db.Model):
     __tablename__ = 'note'
