@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/objects/Category.dart';
 
 class WishListAllItems extends StatefulWidget {
+  final List<ObjCategory> categories;
+
+  WishListAllItems(this.categories);
+
   @override
   State<StatefulWidget> createState() {
-    return WishListState();
+
+    return WishListState(this.categories);
   }
 }
 
 class WishListState extends State<WishListAllItems> {
-  List<String> titles = ["Meat", "Dengue", "Coockies"];
+  List<ObjCategory> categories;
   static List<bool> isChecked = [false, false, false, false, false, false];
 
-  List<List<Widget>> foodtypes() {
-    return [meat(), dengue(), coockies()];
-  }
+  WishListState(this.categories);
+
 
   List<Widget> meat() {
     return [
@@ -92,7 +97,7 @@ class WishListState extends State<WishListAllItems> {
 
   @override
   Widget build(BuildContext context) {
-    List<List<Widget>> types = foodtypes();
+   
     return Scaffold(
       appBar: AppBar(
           title: Text("WishList Page"),
@@ -110,7 +115,7 @@ class WishListState extends State<WishListAllItems> {
             )
           ]),
       body: ListView.builder(
-        itemCount: types.length,
+        itemCount: categories.length,
         itemBuilder: (context, i) => Column(
           children: [
             Container(
@@ -119,11 +124,11 @@ class WishListState extends State<WishListAllItems> {
               child: Container(
                   height: 46,
                   width: MediaQuery.of(context).size.width,
-                  child: Center(child: Text(titles[i]))),
+                  child: Center(child: Text(categories[i].name))),
               color: Color.fromRGBO(75, 133, 149, 1),
             ),
             Column(
-              children: types[i],
+              children: [Container()],
             ),
           ],
         ),

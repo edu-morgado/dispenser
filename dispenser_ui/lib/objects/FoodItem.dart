@@ -5,10 +5,13 @@ part 'FoodItem.g.dart';
 
 @JsonSerializable()
 class ObjFoodItem {
+
+  int id;
   String name;
   int quantity;
 
-  ObjFoodItem(this.name, this.quantity);
+
+  ObjFoodItem(this.id, this.name, this.quantity);
 
   factory ObjFoodItem.fromJson(Map<String, dynamic> json) => _$ObjFoodItemFromJson(json);
   Map<String, dynamic> toJson() => _$ObjFoodItemToJson(this);

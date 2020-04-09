@@ -6,11 +6,12 @@ part 'FoodRepository.g.dart';
 @JsonSerializable()
 class ObjFoodRepository {
 
-  int type;
+  int id;
   String name;
+  int ttype;
   List<ObjFoodItem> foodItems = List<ObjFoodItem>();
 
-  ObjFoodRepository(this.type, this.name);
+  ObjFoodRepository(this.id,this.ttype, this.name);
 
   void addFoodItemToRepository(ObjFoodItem foodItem) => foodItems.add(foodItem);
 
