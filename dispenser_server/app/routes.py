@@ -6,6 +6,8 @@ from flask import g
 from flask.helpers import url_for
 
 from app.routes_fooditem import *
+from app.routes_inventory import *
+from app.routes_category import *
 
 
 @app.route('/' )
