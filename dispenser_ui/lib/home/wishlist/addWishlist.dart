@@ -1,18 +1,22 @@
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
+import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddProductWishlist extends StatefulWidget {
-  AddProductWishlist({Key key}) : super(key: key);
+  final Manager manager;
+  AddProductWishlist(this.manager,{Key key}) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddProductState createState() => _AddProductState(manager);
 }
 
 class _AddProductState extends State<AddProductWishlist> {
   final TextEditingController _passwordController = TextEditingController();
-
+  Manager manager;
+  _AddProductState(this.manager);
   final FocusNode _nameNode = FocusNode();
 
   List<String> categories = [
@@ -92,6 +96,7 @@ class _AddProductState extends State<AddProductWishlist> {
             onChanged: (bool value) {
               setState(() {
                 isChecked[i] = value;
+                //IF ELSE PARA TIRAR E POR DA CATEGORIA SELECIONADA
               });
             }),
       ),
@@ -108,7 +113,9 @@ class _AddProductState extends State<AddProductWishlist> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          //loadHomePage(context);
+          ObjFoodItem newFoodItem = ObjFoodItem(1,"fruta",3);
+          manager.foodItems.foodItems.add(newFoodItem);
+          Navigator.of(context).pop();
         },
         child: Text(
           "Add",
@@ -188,17 +195,20 @@ class _AddProductState extends State<AddProductWishlist> {
 }
 
 class AddCategoryWishlist extends StatefulWidget {
-  AddCategoryWishlist({Key key}) : super(key: key);
+final Manager manager;
+
+  AddCategoryWishlist(this.manager,{Key key}) : super(key: key);
 
   @override
-  _AddCategoryState createState() => _AddCategoryState();
+  _AddCategoryState createState() => _AddCategoryState(manager);
 }
 
 class _AddCategoryState extends State<AddCategoryWishlist> {
   final formKey = new GlobalKey<FormState>();
-
+  Manager manager;
   int _myActivity;
-
+ 
+ _AddCategoryState(this.manager);
 
   @override
   void initState() {
@@ -274,8 +284,10 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          FocusScope.of(context).unfocus();
-          //loadHomePage(context);
+           FocusScope.of(context).unfocus();
+          ObjFoodItem newFoodRepository = ObjFoodItem(1,"ei", 3);
+          manager.foodItems.foodItems.add(newFoodRepository);
+          Navigator.of(context).pop();
         },
         child: Text(
           "Add",

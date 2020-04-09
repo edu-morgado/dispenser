@@ -84,13 +84,13 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddProductWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProductWishlist());
+        MaterialPageRoute(builder: (BuildContext context) => AddProductWishlist(manager));
     Navigator.of(context).push(route);
   }
 
   void loadAddCategoryWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist());
+        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist(manager));
     Navigator.of(context).push(route);
   }
 
