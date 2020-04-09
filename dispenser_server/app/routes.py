@@ -1,7 +1,16 @@
 from app import app, db
 from app.models import *
 from flask import make_response, abort, jsonify
+from flask import request
+from flask import g
+from flask.helpers import url_for
 
+from app.routes_fooditem import *
+
+
+@app.route('/' )
+def default():
+    return "Default landing page, u shouldn't be getting this"
 
 
 @app.errorhandler(400)

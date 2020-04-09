@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 
-class FoodItem(db.Model):
+class Food_Item(db.Model):
     __tablename__ = 'food_item'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(128), nullable=False)
@@ -17,7 +17,7 @@ class FoodItem(db.Model):
                 'name' : self.name,
                 'quantity' : self.quantity}
 
-class FoodRepository(db.Model):
+class Food_Repository(db.Model):
     __tablename__ = 'food_repository'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable=False)
     ttype = db.Column(db.Integer, nullable=False)
