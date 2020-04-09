@@ -3,14 +3,14 @@ import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
-class AddProduct extends StatefulWidget {
-  AddProduct({Key key}) : super(key: key);
+class AddProductWishlist extends StatefulWidget {
+  AddProductWishlist({Key key}) : super(key: key);
 
   @override
   _AddProductState createState() => _AddProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddProductState extends State<AddProductWishlist> {
   final TextEditingController _passwordController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode();
@@ -71,7 +71,7 @@ class _AddProductState extends State<AddProduct> {
           //loadHomePage(context);
         },
         decoration: new InputDecoration(
-          labelText: 'Product Name',
+          labelText: 'Name',
           focusColor: Colors.grey[300],
         ),
         keyboardType: TextInputType.text,
@@ -98,7 +98,7 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  Widget addProductButton(BuildContext context) {
+  Widget addProductWishlistButton(BuildContext context) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -111,7 +111,7 @@ class _AddProductState extends State<AddProduct> {
           //loadHomePage(context);
         },
         child: Text(
-          "Add Product",
+          "Add",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
         ),
@@ -142,7 +142,7 @@ class _AddProductState extends State<AddProduct> {
                 margin: EdgeInsets.all(10),
                 child: Center(
                   child: Text(
-                    "Add a Product",
+                    "Product",
                     style: TextStyle(fontSize: 20),
                   ),
                 ))
@@ -178,7 +178,7 @@ class _AddProductState extends State<AddProduct> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topCenter,
-              child: addProductButton(context),
+              child: addProductWishlistButton(context),
             ),
           ),
         ],
@@ -187,32 +187,18 @@ class _AddProductState extends State<AddProduct> {
   }
 }
 
-class AddCategory extends StatefulWidget {
-  AddCategory({Key key}) : super(key: key);
+class AddCategoryWishlist extends StatefulWidget {
+  AddCategoryWishlist({Key key}) : super(key: key);
 
   @override
   _AddCategoryState createState() => _AddCategoryState();
 }
 
-class _AddCategoryState extends State<AddCategory> {
+class _AddCategoryState extends State<AddCategoryWishlist> {
   final formKey = new GlobalKey<FormState>();
 
   int _myActivity;
 
-  List<dynamic> choices = [
-    {
-      "display": "Freezer",
-      "value": 1,
-    },
-    {
-      "display": "Fridge",
-      "value": 2,
-    },
-    {
-      "display": "Storage",
-      "value": 3,
-    },
-  ];
 
   @override
   void initState() {
@@ -243,7 +229,7 @@ class _AddCategoryState extends State<AddCategory> {
           //loadHomePage(context);
         },
         decoration: new InputDecoration(
-          labelText: 'Category Name',
+          labelText: 'Name',
           focusColor: Colors.grey[300],
         ),
         keyboardType: TextInputType.text,
@@ -278,37 +264,6 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
 
-  Widget dropDownFormField() {
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(16),
-            child: DropDownFormField(
-              titleText: 'Choose a type',
-              hintText: 'Please choose one',
-              value: _myActivity,
-              onSaved: (value) {
-                setState(() {
-                  _myActivity = value;
-                });
-              },
-              onChanged: (value) {
-                setState(() {
-                  _myActivity = value;
-                });
-              },
-              dataSource: choices,
-              textField: 'display',
-              valueField: 'value',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget addCategoryButton(BuildContext context) {
     return Material(
@@ -323,14 +278,13 @@ class _AddCategoryState extends State<AddCategory> {
           //loadHomePage(context);
         },
         child: Text(
-          "Add Category",
+          "Add",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
         ),
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -355,7 +309,7 @@ class _AddCategoryState extends State<AddCategory> {
                   margin: EdgeInsets.all(10),
                   child: Center(
                     child: Text(
-                      "Add Category",
+                      "Wishlist",
                       style: TextStyle(fontSize: 20),
                     ),
                   ))
@@ -377,13 +331,6 @@ class _AddCategoryState extends State<AddCategory> {
               alignment: Alignment.topLeft,
               child: descriptionInput(context),
             ),
-          ),
-          Center(
-            child: Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.3,
-                alignment: Alignment.topLeft,
-                child: dropDownFormField()),
           ),
           Center(
             child: Container(

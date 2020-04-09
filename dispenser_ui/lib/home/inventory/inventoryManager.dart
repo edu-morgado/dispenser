@@ -1,6 +1,6 @@
 import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
+import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 
 class Inventory extends StatefulWidget {
@@ -27,7 +27,7 @@ class InventoryState extends State<Inventory> {
 
   void loadAddInventory(BuildContext context){
     var route = new MaterialPageRoute(
-      builder:(BuildContext context) => InventoryAdd(manager));
+      builder:(BuildContext context) => AddInventoryInventoryPage(manager));
     Navigator.of(context).push(route);
   }
 
