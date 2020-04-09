@@ -40,11 +40,6 @@ class Manager {
 }
 
 
-
-
-
-
-
 class FileHandler {
   Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();

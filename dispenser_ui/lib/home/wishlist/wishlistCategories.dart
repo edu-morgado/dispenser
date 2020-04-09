@@ -59,32 +59,32 @@ class WishListState extends State<WishListCategories> {
     false
   ];
   List<Color> mycolors = [
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.green
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7),
+    Color.fromRGBO(182, 122, 133, 0.7)
   ];
   void selectedForDeletion(int i) {
     setState(() {
       print("selceting for delection");
       if (isSelected[i]) {
-        mycolors[i] = Colors.green;
+        mycolors[i] =  Color.fromRGBO(182, 122, 133, 1);
         isSelected[i] = false;
       } else {
         mycolors[i] = Colors.red;

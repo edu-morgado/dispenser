@@ -14,6 +14,7 @@ import 'package:dispenser_ui/home/wishlist/addMenus.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/objects/FoodRepository.dart';
 
 enum viewType { List, Staggered }
 
@@ -28,8 +29,7 @@ class Home extends StatefulWidget {
 
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Manager manager;
-  
-  
+
   List<Widget> tabs;
   bool dialVisible = true;
 
@@ -44,6 +44,10 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   TabBarPage(this.manager) {
+    manager.foodRepositories.repositories.add(ObjFoodRepository(1, "DEngue"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(2, "DEngue"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3, "DEngue"));
+
     tabs = [
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
       Inventory(manager),
