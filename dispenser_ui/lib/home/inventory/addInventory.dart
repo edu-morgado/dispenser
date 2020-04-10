@@ -92,12 +92,22 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               value: inventoryIndex,
               onSaved: (value) {
                 setState(() {
+<<<<<<< HEAD
                   inventoryIndex = value;
+=======
+                  _myActivity = value;
+                  print(value);
+>>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
                 });
               },
               onChanged: (value) {
                 setState(() {
+<<<<<<< HEAD
                   inventoryIndex = value;
+=======
+                  _myActivity = value;
+                  print(value);
+>>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
                 });
               },
               dataSource: choices,
@@ -137,6 +147,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     List<ObjFoodRepository> repositories = manager.foodRepositories.repositories;
     isChecked = [];
     for(int i = 0; i< repositories.length ; i++) 
@@ -154,6 +165,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   //      print(choices.toString());
 
 
+=======
+    for(int i = 0; i< manager.foodRepositories.repositories.length ; i++) 
+      isChecked.add(false);
+>>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(

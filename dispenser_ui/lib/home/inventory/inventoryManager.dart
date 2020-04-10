@@ -110,7 +110,7 @@ class InventoryState extends State<Inventory> {
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    InventoryItem(manager.foodRepositories
+                                    InventoryItem(manager,manager.foodRepositories
                                         .repositories[index]))),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
