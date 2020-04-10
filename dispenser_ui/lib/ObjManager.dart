@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:dispenser_ui/objects/Category.dart';
+import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:dispenser_ui/objects/Home.dart';
@@ -15,7 +15,7 @@ class Manager {
   FileHandler fileHandler = FileHandler();
 
   ObjHome home;
-  ListCategory categories = ListCategory();
+  ListWishlist wishlists = ListWishlist();
   ListFoodItem foodItems = ListFoodItem();
   ListFoodRepository foodRepositories = ListFoodRepository();
   ListNote notes = ListNote();
@@ -33,7 +33,7 @@ class Manager {
   Future<bool> loadCategoriesFromFile() async{
     var json = await fileHandler.readFromFile("notes.txt");
     if(json == null) return false;
-    categories = ListCategory.fromJson(json);
+    wishlists = ListWishlist.fromJson(json);
     return true;
   }
 

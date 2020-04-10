@@ -109,9 +109,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void loadAddNotesNotesPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
-    Navigator.of(context).push(route);
+  //  var route =
+  //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
+  // Navigator.of(context).push(route);
   }
 
 

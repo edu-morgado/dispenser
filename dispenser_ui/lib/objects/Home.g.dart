@@ -16,7 +16,7 @@ ObjHome _$ObjHomeFromJson(Map<String, dynamic> json) {
           : ListFoodItem.fromJson(json['foodItems'] as Map<String, dynamic>),
       json['categories'] == null
           ? null
-          : ListCategory.fromJson(json['categories'] as Map<String, dynamic>),
+          : ListWishlist.fromJson(json['categories'] as Map<String, dynamic>),
       json['foodRepositories'] == null
           ? null
           : ListFoodRepository.fromJson(

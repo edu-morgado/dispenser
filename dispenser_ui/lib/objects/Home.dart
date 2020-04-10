@@ -1,6 +1,7 @@
+import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'Note.dart';
-import 'Category.dart';
+import 'Wishlist.dart';
 import 'FoodItem.dart';
 import 'FoodRepository.dart';
 
@@ -12,7 +13,7 @@ part 'Home.g.dart';
 class ObjHome {
   ListNote notes   ;
   ListFoodItem foodItems  ;
-  ListCategory categories   ;
+  ListWishlist categories   ;
   ListFoodRepository foodRepositories   ;
 
 

@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
@@ -229,14 +230,13 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
         textInputAction: TextInputAction.done,
         controller: _nameController,
         validator: (value) {
-          if (value.length < 6) {
-            return 'Password must be at least 6 characters long';
+          if (value.length < 3) {
+            return ' Name must be at least 3 characters long';
           }
           return null;
         },
         onEditingComplete: () {
           FocusScope.of(context).unfocus();
-          //loadHomePage(context);
         },
         decoration: new InputDecoration(
           labelText: 'Name',
@@ -254,12 +254,10 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
       child: TextFormField(
-        
         focusNode: _descNode,
         textInputAction: TextInputAction.done,
         onEditingComplete: () {
           FocusScope.of(context).unfocus();
-          //loadHomePage(context);
         },
         decoration: new InputDecoration(
           labelText: 'Description',
@@ -275,7 +273,7 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
   }
 
 
-  Widget addCategoryButton(BuildContext context) {
+  Widget addWishlistButton(BuildContext context) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -285,8 +283,8 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
            FocusScope.of(context).unfocus();
-          ObjFoodItem newFoodRepository = ObjFoodItem(1,"ei", 3);
-          manager.foodItems.foodItems.add(newFoodRepository);
+          ObjWishlist newWishlist = ObjWishlist(1, _nameController.text);
+          manager.wishlists.wishlists.add(newWishlist);
           Navigator.of(context).pop();
         },
         child: Text(
@@ -349,7 +347,7 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topLeft,
-              child: addCategoryButton(context),
+              child: addWishlistButton(context),
             ),
           ),
         ],

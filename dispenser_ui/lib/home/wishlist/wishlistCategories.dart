@@ -124,7 +124,7 @@ class WishListState extends State<WishListCategories> {
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
             height: 50,
-            child: Center(child: godfathersNameStyle("Wish List")),
+            child: Center(child: godfathersNameStyle("WishList")),
           ),
           deleteIconButton(),
         ]),
