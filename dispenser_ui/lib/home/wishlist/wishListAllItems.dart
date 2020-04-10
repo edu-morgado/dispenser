@@ -1,8 +1,9 @@
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/objects/Category.dart';
 
 class WishListAllItems extends StatefulWidget {
-  final List<ObjCategory> categories;
+  final List<ObjFoodItem> categories;
 
   WishListAllItems(this.categories);
 
@@ -14,7 +15,7 @@ class WishListAllItems extends StatefulWidget {
 }
 
 class WishListState extends State<WishListAllItems> {
-  List<ObjCategory> categories;
+  List<ObjFoodItem> categories;
   static List<bool> isChecked = [false, false, false, false, false, false];
 
   WishListState(this.categories);

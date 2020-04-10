@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
-import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({Key key}) : super(key: key);
+  final List<ObjFoodItem> foodItems;
+  AddProduct(this.foodItems, {Key key}) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddProductState createState() => _AddProductState(foodItems);
 }
 
 class _AddProductState extends State<AddProduct> {
-  final TextEditingController _passwordController = TextEditingController();
 
-  final FocusNode _nameNode = FocusNode();
+  List<ObjFoodItem> foodItems;
+  _AddProductState(this.foodItems);
+
+  final TextEditingController _nameController = TextEditingController();
+
+  final FocusNode _nameNode = FocusNode();  
 
   List<String> categories = [
     "category 1",
     "category 2",
     "category 3",
     "category 4",
-    " category 5",
+    "category 5",
     "category 6",
     "category 7"
   ];
@@ -35,10 +41,11 @@ class _AddProductState extends State<AddProduct> {
     false,
   ];
 
+  num value = 1;
+
   Widget counter() {
-    num _defaultValue = 1;
     return Counter(
-      initialValue: _defaultValue,
+      initialValue: value,
       minValue: 1,
       maxValue: 1000,
       step: 1,
@@ -46,8 +53,8 @@ class _AddProductState extends State<AddProduct> {
       onChanged: (value) {
         print("onChanged beeing called");
         setState(() {
-          _defaultValue = value;
-          print("default value -> $_defaultValue");
+          value = value;
+          print("default value -> $value");
         });
       },
     );
@@ -59,7 +66,7 @@ class _AddProductState extends State<AddProduct> {
       child: TextFormField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
-        controller: _passwordController,
+        controller: _nameController,
         validator: (value) {
           if (value.length < 6) {
             return 'Password must be at least 6 characters long';
@@ -108,7 +115,8 @@ class _AddProductState extends State<AddProduct> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          //loadHomePage(context);
+          foodItems.add(ObjFoodItem(1, _nameController.text,value ));
+          Navigator.of(context).pop();
         },
         child: Text(
           "Add Product",
@@ -220,7 +228,7 @@ class _AddCategoryState extends State<AddCategory> {
     super.initState();
   }
 
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode();
   final FocusNode _descNode = FocusNode();
@@ -231,7 +239,7 @@ class _AddCategoryState extends State<AddCategory> {
       child: TextFormField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
-        controller: _passwordController,
+        controller: _nameController,
         validator: (value) {
           if (value.length < 6) {
             return 'Password must be at least 6 characters long';

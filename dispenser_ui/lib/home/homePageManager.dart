@@ -83,7 +83,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddProductPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProduct());
+        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager.foodItems.foodItems));
     Navigator.of(context).push(route);
   }
 
