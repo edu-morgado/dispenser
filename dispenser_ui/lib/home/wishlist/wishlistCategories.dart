@@ -134,9 +134,10 @@ class WishListState extends State<WishListCategories> {
           child: CustomScrollView(
             slivers: <Widget>[
               SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: 20.0,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: MediaQuery.of(context).size.width * 1,
+
+                  mainAxisSpacing: 8.0,
                   crossAxisSpacing: 20.0,
                   childAspectRatio: 2,
                 ),
@@ -145,6 +146,7 @@ class WishListState extends State<WishListCategories> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
+                        onLongPress: () => selectedForDeletion(index),
                         onTap: () => loadWishListAllItems(context),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
@@ -157,35 +159,7 @@ class WishListState extends State<WishListCategories> {
                       ),
                     );
                   },
-                  childCount: 1,
-                ),
-              ),
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
-                  childAspectRatio: 1.0,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: InkWell(
-                        onLongPress: () => selectedForDeletion(index),
-                        onTap: () => loadWishlistItemsPage(context),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: mycolors[index],
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: godfathersNameStyle('Grid Item $index'),
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: 20,
+                  childCount: 3,
                 ),
               ),
             ],
