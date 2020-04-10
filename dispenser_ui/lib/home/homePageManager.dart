@@ -5,13 +5,12 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
+import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
-import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:dispenser_ui/ObjManager.dart';
-import 'package:dispenser_ui/home/addProduct.dart';
 
 enum viewType { List, Staggered }
 
@@ -78,27 +77,28 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void loadAddProductWishlistPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager));
-    Navigator.of(context).push(route);
-  }
-
-  void loadAddCategoryWishlistPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist(manager));
-    Navigator.of(context).push(route);
-  }
 
   void loadAddProductInventoryPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager));
+        MaterialPageRoute(builder: (BuildContext context) => AddProductToInventory(manager));
     Navigator.of(context).push(route);
   }
 
   void loadAddInventoryInventoryPage(BuildContext context) {
     var route =
         MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));
+    Navigator.of(context).push(route);
+  }
+
+  void loadAddProductWishlistPage(BuildContext context) {
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddProductToWishList(manager));
+    Navigator.of(context).push(route);
+  }
+
+  void loadAddCategoryWishlistPage(BuildContext context) {
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist(manager));
     Navigator.of(context).push(route);
   }
 
