@@ -136,7 +136,6 @@ class WishListState extends State<WishListCategories> {
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: MediaQuery.of(context).size.width * 1,
-
                   mainAxisSpacing: 8.0,
                   crossAxisSpacing: 20.0,
                   childAspectRatio: 2,
@@ -159,7 +158,7 @@ class WishListState extends State<WishListCategories> {
                       ),
                     );
                   },
-                  childCount: 3,
+                  childCount: manager.wishlists.wishlists.length,
                 ),
               ),
             ],
