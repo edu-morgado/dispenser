@@ -9,13 +9,13 @@ class ObjFoodItem {
   int id;
   String name;
   int quantity;
+  int section;
 
-
-  ObjFoodItem(this.id, this.name, this.quantity);
+  ObjFoodItem(this.id, this.name, this.quantity, this.section);
 
   @override
   String toString(){
-    return "id ->" + id.toString() + "name ->" + name + "quantity ->" + quantity.toString();   
+    return "id ->" + id.toString() + "name ->" + name + "quantity ->" + quantity.toString() + "section ->" + section.toString();   
   }
 
   factory ObjFoodItem.fromJson(Map<String, dynamic> json) => _$ObjFoodItemFromJson(json);

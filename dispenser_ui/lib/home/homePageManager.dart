@@ -35,21 +35,22 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   List<Tab> _bottomBarItems = [
-    Tab(icon: Icon(Icons.note, size: 40)),
     Tab(icon: Icon(Icons.home, size: 40)),
     Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
+    Tab(icon: Icon(Icons.note, size: 40)),
   ];
 
   TabBarPage(this.manager) {
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Items Not Stored"));
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"Fridge"));
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"Freezer"));
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Storage"));
     manager.wishlists.wishlists.add(ObjWishList(1,"All Items"));
     
     tabs = [
-      Container(child: StaggeredGridPage(notesViewType: notesViewType)),
       Inventory(manager),
       WishListCategories(manager),
+      Container(child: StaggeredGridPage(notesViewType: notesViewType)),
     ];
   }
 
@@ -61,7 +62,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _tabController =
-        TabController(vsync: this, length: tabs.length, initialIndex: 2);
+        TabController(vsync: this, length: tabs.length, initialIndex: 0);
     _tabController.addListener(floatingButton);
     scrollController = ScrollController()
       ..addListener(() {
@@ -120,10 +121,11 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget floatingButton() {
     setState(() {});
     if (_tabController.index == 0)
-      return notesListSpeedDial();
-    else if (_tabController.index == 1)
       return inventoryListSpeedDial();
-    else if (_tabController.index == 2) return wishListSpeedDial();
+    else if (_tabController.index == 1)
+      return wishListSpeedDial();
+    else if (_tabController.index == 2) 
+    return notesListSpeedDial();
     return null;
   }
 
@@ -294,7 +296,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: _tabController.index == 0 ? _notesAppBar() : null,
+      appBar: _tabController.index == 2 ? _notesAppBar() : null,
       body: SafeArea(
           child: TabBarView(controller: _tabController, children: tabs)),
       bottomNavigationBar: Container(
@@ -308,7 +310,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           indicatorColor: Theme.of(context).primaryColor,
         ),
       ),
-      bottomSheet: _tabController.index == 0 ? _bottomBar() : null,
+      bottomSheet: _tabController.index == 2 ? _bottomBar() : null,
       floatingActionButton: floatingButton(),
     );
   }

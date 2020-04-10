@@ -24,6 +24,7 @@ class _AddProductState extends State<AddProductToWishList> {
 
 
   num quantity = 1;
+  num section=1;
   List<bool> isChecked = List<bool>();
 
   Widget counter() {
@@ -89,6 +90,15 @@ class _AddProductState extends State<AddProductToWishList> {
     );
   }
 
+Widget chooseSection(List<ObjWishList> wishlists) {
+    return ListView.builder(
+      itemCount: wishlists.length,
+      itemBuilder: (context, i) => ListTile(
+        leading: Text(manager.wishlists.wishlists[i].name),
+      ),
+    );
+  }
+
   Widget addProductToWishListButton(BuildContext context) {
     return Material(
       elevation: 5.0,
@@ -99,7 +109,7 @@ class _AddProductState extends State<AddProductToWishList> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity );
+          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity, section);
           manager.foodItems.foodItems.add(newFoodItem);
           for(int i = 0; i < manager.wishlists.wishlists.length; i++){
             if(isChecked[i])
@@ -172,9 +182,17 @@ class _AddProductState extends State<AddProductToWishList> {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.2,
               alignment: Alignment.topCenter,
               child: chooseWishLists(wishlists),
+            ),
+          ),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.2,
+              alignment: Alignment.topCenter,
+              child: chooseSection(wishlists),
             ),
           ),
           Center(

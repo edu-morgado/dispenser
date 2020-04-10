@@ -64,15 +64,16 @@ class _InventoryItemState extends State<InventoryItem> {
                   child: Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
+              height: MediaQuery.of(context).size.height * 0.7,
               alignment: Alignment.topLeft,
               child: ListView.builder(
                 itemCount: repository.foodItems.length,
                 itemBuilder: (context, i) => InkWell(
                   onTap: () => foodInformation(context),
                   child: ListTile(
-                    leading: Icon(Icons.fastfood),
+                    leading: Icon(Icons.navigate_next),
                     title: Text(repository.foodItems[i].name),
+                    subtitle: Text("Quantity:"+repository.foodItems[i].quantity.toString()),
                   ),
                 ),
               ),
