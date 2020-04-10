@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistAllItems.dart';
@@ -40,7 +39,7 @@ class WishListState extends State<WishListCategories> {
 
   void loadWishListAllItems(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => WishListAllItems(manager.foodItems.foodItems));
+        builder: (BuildContext context) => WishListAllItems(manager));
     Navigator.of(context).push(route);
   }
 

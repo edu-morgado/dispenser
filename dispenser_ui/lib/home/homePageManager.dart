@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
-import 'package:dispenser_ui/home/inventory/inventoryAdd.dart';
-
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
-
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
-
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
-
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:dispenser_ui/home/wishlist/addMenus.dart';
-import 'package:flutter/rendering.dart';
-
-import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
+import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/home/addProduct.dart';
 
 enum viewType { List, Staggered }
 
@@ -81,23 +78,42 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void loadAddProductPage(BuildContext context) {
+  void loadAddProductWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager.foodItems.foodItems));
+        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager));
     Navigator.of(context).push(route);
   }
 
-  void loadAddCategoryPage(BuildContext context) {
+  void loadAddCategoryWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddCategory());
+        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist(manager));
     Navigator.of(context).push(route);
   }
 
-  void loadAddInventory(BuildContext context) {
-    var route = new MaterialPageRoute(
-        builder: (BuildContext context) => InventoryAdd(manager));
+  void loadAddProductInventoryPage(BuildContext context) {
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddProduct(manager));
     Navigator.of(context).push(route);
   }
+
+  void loadAddInventoryInventoryPage(BuildContext context) {
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));
+    Navigator.of(context).push(route);
+  }
+
+   void loadAddProductNotesPage(BuildContext context) {
+  //   var route =
+  //      MaterialPageRoute(builder: (BuildContext context) => AddProductInventoryPage());  //AddProductNotePage());
+  //  Navigator.of(context).push(route);
+  }
+
+  void loadAddNotesNotesPage(BuildContext context) {
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
+    Navigator.of(context).push(route);
+  }
+
 
   Widget floatingButton() {
     setState(() {});
@@ -118,6 +134,37 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget notesListSpeedDial() {
     return SpeedDial(
       tooltip: 'add',
+      heroTag: "notes",
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      onOpen: () => print('OPENING DIAL'),
+      onClose: () => print('DIAL CLOSED'),
+      visible: dialVisible,
+      curve: Curves.bounceIn,
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.accessibility, color: Colors.white),
+          backgroundColor: Colors.blue,
+          onTap: () => loadAddProductWishlistPage(context),
+          label: 'Add a product',
+          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+          labelBackgroundColor: Colors.blue,
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.brush, color: Colors.white),
+          backgroundColor: Colors.blue,
+          onTap: () => loadAddCategoryWishlistPage(context),
+          label: 'Add a Category',
+          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+          labelBackgroundColor: Colors.blue,
+        ),
+      ],
+    );
+  }
+
+  Widget inventoryListSpeedDial() {
+   return SpeedDial(
+      tooltip: 'add',
       heroTag: "inventory",
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
@@ -129,29 +176,20 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddProductPage(context),
-          label: 'Add a product',
+          onTap: () => loadAddProductInventoryPage(context),
+          label: 'Add a Product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddCategoryPage(context),
-          label: 'Add a category',
+          onTap: () => loadAddInventoryInventoryPage(context),
+          label: 'Add a Inventory',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
       ],
-    );
-  }
-
-  Widget inventoryListSpeedDial() {
-    return FloatingActionButton(
-      tooltip: 'add',
-      heroTag: "inventory",
-      child: Icon(Icons.add),
-      onPressed: () => loadAddInventory(context),
     );
   }
 
@@ -169,16 +207,16 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddProductPage(context),
-          label: 'Add a product',
+          onTap: () => loadAddProductWishlistPage(context,),
+          label: 'Add a Product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddCategoryPage(context),
-          label: 'Add a category',
+          onTap: () => loadAddCategoryWishlistPage(context),
+          label: 'Add a Wishlist',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),

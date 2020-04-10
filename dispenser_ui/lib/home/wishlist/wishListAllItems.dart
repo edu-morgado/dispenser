@@ -1,25 +1,25 @@
-import 'package:dispenser_ui/objects/FoodItem.dart';
+
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/objects/Category.dart';
+import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
+
 
 class WishListAllItems extends StatefulWidget {
-  final List<ObjFoodItem> categories;
+  final Manager manager;
 
-  WishListAllItems(this.categories);
+
+  WishListAllItems(this.manager);
 
   @override
   State<StatefulWidget> createState() {
-
-    return WishListState(this.categories);
+    return WishListState(this.manager);
   }
 }
 
 class WishListState extends State<WishListAllItems> {
-  List<ObjFoodItem> categories;
   static List<bool> isChecked = [false, false, false, false, false, false];
-
-  WishListState(this.categories);
-
+  Manager manager;
+  WishListState(this.manager);
 
   List<Widget> meat() {
     return [
@@ -96,9 +96,14 @@ class WishListState extends State<WishListAllItems> {
     ];
   }
 
+  void loadAddWishlist(BuildContext context) {
+    var route = new MaterialPageRoute(
+        builder: (BuildContext context) => AddCategoryWishlist(manager));
+    Navigator.of(context).push(route);
+  }
+
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
           title: Text("WishList Page"),
@@ -116,17 +121,28 @@ class WishListState extends State<WishListAllItems> {
             )
           ]),
       body: ListView.builder(
-        itemCount: categories.length,
+        itemCount: manager.foodItems.length,
         itemBuilder: (context, i) => Column(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
+            Center(
               child: Container(
-                  height: 46,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(child: Text(categories[i].name))),
-              color: Color.fromRGBO(75, 133, 149, 1),
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.height * 0.1,
+                alignment: Alignment.topLeft,
+                child: ListView.builder(
+                  itemCount: manager.foodItems.length,
+                  itemBuilder: (context, i) => ListTile(
+                    leading: Text(manager.foodItems.foodItems[i].name),
+                    trailing: Checkbox(
+                        value: isChecked[i],
+                        onChanged: (bool value) {
+                          setState(() {
+                            isChecked[i] = value;
+                          });
+                        }),
+                  ),
+                ),
+              ),
             ),
             Column(
               children: [Container()],
