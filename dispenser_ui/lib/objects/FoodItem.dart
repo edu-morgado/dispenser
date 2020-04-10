@@ -13,6 +13,11 @@ class ObjFoodItem {
 
   ObjFoodItem(this.id, this.name, this.quantity);
 
+  @override
+  String toString(){
+    return "id ->" + id.toString() + "name ->" + name + "quantity ->" + quantity.toString();   
+  }
+
   factory ObjFoodItem.fromJson(Map<String, dynamic> json) => _$ObjFoodItemFromJson(json);
   Map<String, dynamic> toJson() => _$ObjFoodItemToJson(this);
 }
@@ -33,6 +38,7 @@ class ListFoodItem {
   bool isEmpty() {
     return foodItems.length == 0;
   }
+
 
 
   factory ListFoodItem.fromJson(Map<String, dynamic> json) => _$ListFoodItemFromJson(json);

@@ -45,7 +45,7 @@ class _InventoryItemState extends State<InventoryItem> {
         title: Text("Name of Food"),
       ),
       body: ListView.builder(
-        itemCount: 0,
+        itemCount: repository.foodItems.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () => foodInformation(context),
           child: ListTile(

@@ -28,11 +28,6 @@ class InventoryState extends State<Inventory> {
     "storage",
   ];
 
-  void loadAddInventory(BuildContext context) {
-    var route = new MaterialPageRoute(
-        builder: (BuildContext context) => AddInventoryInventoryPage(manager));
-    Navigator.of(context).push(route);
-  }
 
   void selectedForDeletion(int i) {
     setState(() {
