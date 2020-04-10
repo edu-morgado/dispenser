@@ -25,7 +25,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   final FocusNode _nameNode = FocusNode(); 
 
 
-  num value = 1;
+  num quantity = 1;
   int inventoryIndex = 1;
 
   List<bool> isChecked = List<bool>() ;
@@ -33,7 +33,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   Widget counter() {
     return Counter(
-      initialValue: value,
+      initialValue: quantity,
       minValue: 1,
       maxValue: 1000,
       step: 1,
@@ -42,7 +42,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         print("onChanged beeing called");
         setState(() {
           value = value;
-          print("default value -> $value");
+          print("default value -> $quantity");
         });
       },
     );
@@ -92,22 +92,12 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               value: inventoryIndex,
               onSaved: (value) {
                 setState(() {
-<<<<<<< HEAD
                   inventoryIndex = value;
-=======
-                  _myActivity = value;
-                  print(value);
->>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
                 });
               },
               onChanged: (value) {
                 setState(() {
-<<<<<<< HEAD
                   inventoryIndex = value;
-=======
-                  _myActivity = value;
-                  print(value);
->>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
                 });
               },
               dataSource: choices,
@@ -130,7 +120,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,value );
+          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,quantity );
           manager.foodItems.foodItems.add(newItem);
           manager.foodRepositories.repositories[inventoryIndex].foodItems.add(newItem);
           print(manager.foodRepositories.repositories[inventoryIndex].foodItems[0].toString());
@@ -147,7 +137,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     List<ObjFoodRepository> repositories = manager.foodRepositories.repositories;
     isChecked = [];
     for(int i = 0; i< repositories.length ; i++) 
@@ -165,10 +154,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   //      print(choices.toString());
 
 
-=======
-    for(int i = 0; i< manager.foodRepositories.repositories.length ; i++) 
-      isChecked.add(false);
->>>>>>> cef05250a25067d21b99f10d9aa2b1afdd4a2973
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -258,20 +243,7 @@ class InventoryAddState extends State<AddInventoryInventoryPage> {
  
 
 
-  List<dynamic> choices = [
-    {
-      "display": "Freezer",
-      "value": 1,
-    },
-    {
-      "display": "Fridge",
-      "value": 2,
-    },
-    {
-      "display": "Storage",
-      "value": 3,
-    },
-  ];
+  List<dynamic> choices = List<dynamic>();
 
   @override
   void initState() {

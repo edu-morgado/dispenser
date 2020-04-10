@@ -4,26 +4,26 @@ import 'FoodItem.dart';
 part 'Wishlist.g.dart';
 
 @JsonSerializable()
-class ObjWishlist {
+class ObjWishList {
 
   int id;
   String name;
   List<ObjFoodItem> foodItems = List<ObjFoodItem>();
   
 
-  ObjWishlist(this.id,this.name);
+  ObjWishList(this.id,this.name);
 
   void addFoodItemToCategory(ObjFoodItem foodItem) => foodItems.add(foodItem);
 
-  factory ObjWishlist.fromJson(Map<String, dynamic> json) => _$ObjWishlistFromJson(json);
-  Map<String, dynamic> toJson() => _$ObjWishlistToJson(this);
+  factory ObjWishList.fromJson(Map<String, dynamic> json) => _$ObjWishListFromJson(json);
+  Map<String, dynamic> toJson() => _$ObjWishListToJson(this);
 }
 
 @JsonSerializable()
-class ListWishlist {
-  List<ObjWishlist> wishlists;
+class ListWishList {
+  List<ObjWishList> wishlists;
 
-  ListWishlist() : wishlists = List<ObjWishlist>();
+  ListWishList() : wishlists = List<ObjWishList>();
 
   int get lenght {
     return wishlists.length;
@@ -33,6 +33,6 @@ class ListWishlist {
     return wishlists.length == 0;
   }
 
-  factory ListWishlist.fromJson(Map<String, dynamic> json) => _$ListCategoryFromJson(json);
-  Map<String, dynamic> toJson() => _$ListCategoryToJson(this);
+  factory ListWishList.fromJson(Map<String, dynamic> json) => _$ListWishListFromJson(json);
+  Map<String, dynamic> toJson() => _$ListWishListToJson(this);
 }

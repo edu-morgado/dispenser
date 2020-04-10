@@ -15,7 +15,7 @@ class Manager {
   FileHandler fileHandler = FileHandler();
 
   ObjHome home;
-  ListWishlist wishlists = ListWishlist();
+  ListWishList wishlists = ListWishList();
   ListFoodItem foodItems = ListFoodItem();
   ListFoodRepository foodRepositories = ListFoodRepository();
   ListNote notes = ListNote();
@@ -33,7 +33,7 @@ class Manager {
   Future<bool> loadCategoriesFromFile() async{
     var json = await fileHandler.readFromFile("notes.txt");
     if(json == null) return false;
-    wishlists = ListWishlist.fromJson(json);
+    wishlists = ListWishList.fromJson(json);
     return true;
   }
 

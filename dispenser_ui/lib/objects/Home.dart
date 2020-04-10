@@ -13,7 +13,7 @@ part 'Home.g.dart';
 class ObjHome {
   ListNote notes   ;
   ListFoodItem foodItems  ;
-  ListWishlist categories   ;
+  ListWishList categories   ;
   ListFoodRepository foodRepositories   ;
 
 

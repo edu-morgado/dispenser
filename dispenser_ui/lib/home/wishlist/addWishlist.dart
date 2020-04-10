@@ -14,28 +14,21 @@ class AddProductToWishList extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProductToWishList> {
-  final TextEditingController _nameController = TextEditingController();
   Manager manager;
+
   _AddProductState(this.manager);
+
+
+  final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameNode = FocusNode();
 
 
-  num _defaultValue = 1;
-  List<String> categories = [
-    "category 1",
-    "category 2",
-    "category 3",
-    "category 4",
-    " category 5",
-    "category 6",
-    "category 7"
-  ];
-
+  num quantity = 1;
   List<bool> isChecked = List<bool>();
 
   Widget counter() {
     return Counter(
-      initialValue: _defaultValue,
+      initialValue: quantity,
       minValue: 1,
       maxValue: 1000,
       step: 1,
@@ -43,8 +36,8 @@ class _AddProductState extends State<AddProductToWishList> {
       onChanged: (value) {
         print("onChanged beeing called");
         setState(() {
-          _defaultValue = value;
-          print("default value -> $_defaultValue");
+          quantity = value;
+          print("default value -> $quantity");
         });
       },
     );
@@ -79,9 +72,9 @@ class _AddProductState extends State<AddProductToWishList> {
     );
   }
 
-  Widget chooseCategories() {
+  Widget chooseWishLists(List<ObjWishList> wishlists) {
     return ListView.builder(
-      itemCount: manager.wishlists.wishlists.length,
+      itemCount: wishlists.length,
       itemBuilder: (context, i) => ListTile(
         leading: Text(manager.wishlists.wishlists[i].name),
         trailing: Checkbox(
@@ -89,7 +82,6 @@ class _AddProductState extends State<AddProductToWishList> {
             onChanged: (bool value) {
               setState(() {
                 isChecked[i] = value;
-                
               });
             }),
       ),
@@ -106,7 +98,7 @@ class _AddProductState extends State<AddProductToWishList> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, _defaultValue );
+          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity );
           manager.foodItems.foodItems.add(newFoodItem);
           Navigator.of(context).pop();
         },
@@ -121,8 +113,12 @@ class _AddProductState extends State<AddProductToWishList> {
 
   @override
   Widget build(BuildContext context) {
-    for(int i = 0; i< manager.wishlists.wishlists.length ; i++) 
+    List<ObjWishList> wishlists = manager.wishlists.wishlists;
+        isChecked = [];
+    for(int i = 0; i< wishlists.length ; i++) 
       isChecked.add(false);
+
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -172,7 +168,7 @@ class _AddProductState extends State<AddProductToWishList> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.5,
               alignment: Alignment.topCenter,
-              child: chooseCategories(),
+              child: chooseWishLists(wishlists),
             ),
           ),
           Center(
@@ -275,7 +271,7 @@ class _AddCategoryState extends State<AddCategoryWishlist> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
            FocusScope.of(context).unfocus();
-          ObjWishlist newWishlist = ObjWishlist(1, _nameController.text);
+          ObjWishList newWishlist = ObjWishList(1, _nameController.text);
           manager.wishlists.wishlists.add(newWishlist);
           Navigator.of(context).pop();
         },
