@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/ObjManager.dart';
-import 'package:dispenser_ui/objects/FoodItem.dart';
-import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:flutter/services.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
+import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
+import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
 class AddProductToInventory extends StatefulWidget {
   final Manager manager;
@@ -19,30 +19,33 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   Manager manager;
   _AddProductToInventoryState(this.manager);
-
+   final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
-  final FocusNode _nameNode = FocusNode();  
+  final FocusNode _nameNode = FocusNode(); 
 
-  List<String> categories = [
-    "fridge",
-    "freeze",
-    "storage",
-    "custom"
-  ];
 
-  List<bool> isChecked = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+
+  List<dynamic> choices = [
+    {
+      "display": "Freezer",
+      "value": 1,
+    },
+    {
+      "display": "Fridge",
+      "value": 2,
+    },
+    {
+      "display": "Storage",
+      "value": 3,
+    },
   ];
 
   num value = 1;
+  int _myActivity = 1;
 
+  List<bool> isChecked = List<bool>() ;
+  
   Widget counter() {
     return Counter(
       initialValue: value,
@@ -89,18 +92,35 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-  Widget chooseCategories() {
-    return ListView.builder(
-      itemCount: categories.length,
-      itemBuilder: (context, i) => ListTile(
-        leading: Text(categories[i]),
-        trailing: Checkbox(
-            value: isChecked[i],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[i] = value;
-              });
-            }),
+  Widget dropDownFormField() {
+
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(16),
+            child: DropDownFormField(
+              titleText: 'Choose a type',
+              hintText: 'Please choose one',
+              value: _myActivity,
+              onSaved: (value) {
+                setState(() {
+                  _myActivity = value;
+                });
+              },
+              onChanged: (value) {
+                setState(() {
+                  _myActivity = value;
+                });
+              },
+              dataSource: choices,
+              textField: 'display',
+              valueField: 'value',
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -129,6 +149,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
+
+    for(int i = 0; i< manager.foodRepositories.repositories.length ; i++) 
+      isChecked.add(false);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -150,7 +174,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                 margin: EdgeInsets.all(10),
                 child: Center(
                   child: Text(
-                    "Add a Product",
+                    "Add Product to Inventory",
                     style: TextStyle(fontSize: 20),
                   ),
                 ))
@@ -175,11 +199,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
           ),
           Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.5,
-              alignment: Alignment.topCenter,
-              child: chooseCategories(),
-            ),
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.height * 0.3,
+                alignment: Alignment.topLeft,
+                child: dropDownFormField()),
           ),
           Center(
             child: Container(
@@ -215,8 +238,8 @@ class InventoryAddState extends State<AddInventoryInventoryPage> {
 
  InventoryAddState(this.manager);
  
+  int _myActivity = 1;
  
-  int _myActivity;
 
 
   List<dynamic> choices = [
@@ -236,7 +259,6 @@ class InventoryAddState extends State<AddInventoryInventoryPage> {
 
   @override
   void initState() {
-    _myActivity = 1;
     super.initState();
   }
 

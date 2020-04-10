@@ -40,9 +40,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   TabBarPage(this.manager) {
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"ola"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"ola"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"ola"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"Fridge"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"Freezer"));
+    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Storage"));
 
     tabs = [
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
@@ -146,7 +146,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddProductWishlistPage(context),
-          label: 'Add a product',
+          label: 'Load a product',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
@@ -154,7 +154,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddCategoryWishlistPage(context),
-          label: 'Add a Category',
+          label: 'Add a Note not working yet',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
@@ -177,7 +177,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddProductInventoryPage(context),
-          label: 'Add a Product',
+          label: 'Add Product to inventory',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
@@ -185,7 +185,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddInventoryInventoryPage(context),
-          label: 'Add a Inventory',
+          label: 'Add Inventory',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
@@ -208,7 +208,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddProductWishlistPage(context,),
-          label: 'Add a Product',
+          label: 'Add Product to Category',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
@@ -216,7 +216,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddCategoryWishlistPage(context),
-          label: 'Add a Wishlist',
+          label: 'Add Wishlist',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),

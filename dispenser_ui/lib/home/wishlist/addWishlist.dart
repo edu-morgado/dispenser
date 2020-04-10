@@ -207,13 +207,11 @@ final Manager manager;
 class _AddCategoryState extends State<AddCategoryWishlist> {
   final formKey = new GlobalKey<FormState>();
   Manager manager;
-  int _myActivity;
  
  _AddCategoryState(this.manager);
 
   @override
   void initState() {
-    _myActivity = 1;
     super.initState();
   }
 
