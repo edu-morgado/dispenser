@@ -153,7 +153,7 @@ class WishListState extends State<WishListCategories> {
                           decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(20.0)),
-                          child: godfathersNameStyle('Grid Item $index'),
+                          child: godfathersNameStyle('Wishlist ${manager.wishlists.wishlists[index].name}'),
                         ),
                       ),
                     );

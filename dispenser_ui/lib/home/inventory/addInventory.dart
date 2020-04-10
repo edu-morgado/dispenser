@@ -108,11 +108,13 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               onSaved: (value) {
                 setState(() {
                   _myActivity = value;
+                  print(value);
                 });
               },
               onChanged: (value) {
                 setState(() {
                   _myActivity = value;
+                  print(value);
                 });
               },
               dataSource: choices,
@@ -149,10 +151,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
-
     for(int i = 0; i< manager.foodRepositories.repositories.length ; i++) 
       isChecked.add(false);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(

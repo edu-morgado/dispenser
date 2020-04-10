@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
 import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
@@ -10,7 +9,9 @@ import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
+import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:dispenser_ui/ObjManager.dart';
+
 
 enum viewType { List, Staggered }
 
@@ -43,7 +44,8 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"Fridge"));
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"Freezer"));
     manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Storage"));
-
+    manager.wishlists.wishlists.add(ObjWishlist(1,"All Items"));
+    
     tabs = [
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
       Inventory(manager),
@@ -208,7 +210,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddProductWishlistPage(context,),
-          label: 'Add Product to Category',
+          label: 'Add Product to Wishlist',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),

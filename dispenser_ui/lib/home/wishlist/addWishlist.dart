@@ -31,15 +31,7 @@ class _AddProductState extends State<AddProductToWishList> {
     "category 7"
   ];
 
-  List<bool> isChecked = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
+  List<bool> isChecked = List<bool>();
 
   Widget counter() {
     return Counter(
@@ -89,15 +81,15 @@ class _AddProductState extends State<AddProductToWishList> {
 
   Widget chooseCategories() {
     return ListView.builder(
-      itemCount: categories.length,
+      itemCount: manager.wishlists.wishlists.length,
       itemBuilder: (context, i) => ListTile(
-        leading: Text(categories[i]),
+        leading: Text(manager.wishlists.wishlists[i].name),
         trailing: Checkbox(
             value: isChecked[i],
             onChanged: (bool value) {
               setState(() {
                 isChecked[i] = value;
-                //IF ELSE PARA TIRAR E POR DA CATEGORIA SELECIONADA
+                
               });
             }),
       ),
@@ -129,6 +121,8 @@ class _AddProductState extends State<AddProductToWishList> {
 
   @override
   Widget build(BuildContext context) {
+    for(int i = 0; i< manager.wishlists.wishlists.length ; i++) 
+      isChecked.add(false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
