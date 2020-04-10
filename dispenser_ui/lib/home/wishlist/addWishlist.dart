@@ -18,6 +18,8 @@ class _AddProductState extends State<AddProductToWishList> {
   _AddProductState(this.manager);
   final FocusNode _nameNode = FocusNode();
 
+
+  num _defaultValue = 1;
   List<String> categories = [
     "category 1",
     "category 2",
@@ -39,7 +41,6 @@ class _AddProductState extends State<AddProductToWishList> {
   ];
 
   Widget counter() {
-    num _defaultValue = 1;
     return Counter(
       initialValue: _defaultValue,
       minValue: 1,
@@ -112,7 +113,7 @@ class _AddProductState extends State<AddProductToWishList> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newFoodItem = ObjFoodItem(1,_nameController.text,3);
+          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, _defaultValue );
           manager.foodItems.foodItems.add(newFoodItem);
           Navigator.of(context).pop();
         },
