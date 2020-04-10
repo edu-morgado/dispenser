@@ -1,83 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/objects/Wishlist.dart';
 
 class WishListItems extends StatefulWidget {
+  final ObjWishList wishlist;
+
+  WishListItems(this.wishlist);
+
   @override
   State<StatefulWidget> createState() {
-    return WishListState();
+    return WishListState(wishlist);
   }
 }
 
 class WishListState extends State<WishListItems> {
-  static List<bool> isChecked = [false, false, false, false, false, false];
+  ObjWishList wishlist;
 
-  List<Widget> items() {
-    return [
-      ListTile(
-        leading: Text("1 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[0],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[0] = value;
-              });
-            }),
-      ),
-      ListTile(
-        leading: Text("2 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[1],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[1] = value;
-              });
-            }),
-      ),
-      ListTile(
-        leading: Text("3 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[2],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[2] = value;
-              });
-            }),
-      ),
-      ListTile(
-        leading: Text("4 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[3],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[3] = value;
-              });
-            }),
-      ),
-      ListTile(
-        leading: Text("5 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[4],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[4] = value;
-              });
-            }),
-      ),
-      ListTile(
-        leading: Text("6 ITEM"),
-        trailing: Checkbox(
-            value: isChecked[5],
-            onChanged: (bool value) {
-              setState(() {
-                isChecked[5] = value;
-              });
-            }),
-      ),
-    ];
-  }
+  WishListState(this.wishlist);
+
+   List<bool> isChecked = List<bool>();
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> foodItems = items();
+    for(int i = 0; i< wishlist.foodItems.length ; i++) 
+      isChecked.add(false);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(140.0),
@@ -107,11 +52,19 @@ class WishListState extends State<WishListItems> {
         ]),
       ),
       body: ListView.builder(
-        itemCount: foodItems.length,
-        itemBuilder: (context, i) => foodItems[i],
-      ),
+        itemCount: wishlist.foodItems.length,
+        itemBuilder: (context, i) => ListTile(
+          leading: Text(
+            wishlist.foodItems[i].name),
+            trailing: Checkbox(
+                value: isChecked[i],
+                onChanged: (bool value) {
+                  setState(() {
+                    isChecked[i] = value;
+                  });
+                }),
+          ),
+        ),
     );
   }
 }
-
-

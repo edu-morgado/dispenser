@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:dispenser_ui/home/wishlist/wishlistRemote.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistAllItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
@@ -25,17 +24,7 @@ class WishListState extends State<WishListCategories> {
     super.initState();
   }
 
-  void loadWishlistItemsPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => WishListItems());
-    Navigator.of(context).push(route);
-  }
 
-  void loadcloudlist(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => RemoteWishlist());
-    Navigator.of(context).push(route);
-  }
 
   void loadWishListAllItems(BuildContext context) {
     var route = MaterialPageRoute(
@@ -43,50 +32,11 @@ class WishListState extends State<WishListCategories> {
     Navigator.of(context).push(route);
   }
 
-  List<bool> isSelected = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-  List<Color> mycolors = [
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7),
-    Color.fromRGBO(182, 122, 133, 0.7)
-  ];
+  List<bool> isSelected = List<bool>();
+
+  List<Color> mycolors = List<Color>();
+
+
   void selectedForDeletion(int i) {
     setState(() {
       print("selceting for delection");
@@ -106,14 +56,35 @@ class WishListState extends State<WishListCategories> {
       if (selected)
         return IconButton(
           icon: Icon(Icons.delete_outline),
-          onPressed: () => print("DELETE NOW NIGGA"),
+          onPressed: () => deleteWishLists(),
         );
 
     return Container();
   }
 
+  void deleteWishLists(){
+    int i;
+    setState(() {
+      for ( i = 0; i < isSelected.length; i++){
+        print("inside for removing items");
+        if (isSelected[i]){
+          manager.wishlists.wishlists.removeAt(i);
+          i = 0;
+          isSelected = [];
+          for (int i = 0; i < manager.wishlists.wishlists.length; i++)
+            isSelected.add(false);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < manager.foodRepositories.repositories.length; i++)
+    {
+      isSelected.add(false);
+      mycolors.add(Color.fromRGBO(182, 122, 133, 1));
+    }
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
@@ -146,7 +117,8 @@ class WishListState extends State<WishListCategories> {
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
                         onLongPress: () => selectedForDeletion(index),
-                        onTap: () => loadWishListAllItems(context),
+                        onTap: () => Navigator.of(context).push(  MaterialPageRoute(
+                          builder: (BuildContext context) => WishListItems(manager.wishlists.wishlists[index]))),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
                           alignment: Alignment.center,

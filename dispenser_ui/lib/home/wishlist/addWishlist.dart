@@ -34,10 +34,8 @@ class _AddProductState extends State<AddProductToWishList> {
       step: 1,
       decimalPlaces: 0,
       onChanged: (value) {
-        print("onChanged beeing called");
         setState(() {
           quantity = value;
-          print("default value -> $quantity");
         });
       },
     );
@@ -81,7 +79,10 @@ class _AddProductState extends State<AddProductToWishList> {
             value: isChecked[i],
             onChanged: (bool value) {
               setState(() {
-                isChecked[i] = value;
+                if(isChecked[i])
+                  isChecked[i] = false;
+                else
+                  isChecked[i] = true;
               });
             }),
       ),
@@ -100,6 +101,13 @@ class _AddProductState extends State<AddProductToWishList> {
           FocusScope.of(context).unfocus();
           ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity );
           manager.foodItems.foodItems.add(newFoodItem);
+          for(int i = 0; i < manager.wishlists.wishlists.length; i++){
+            if(isChecked[i])
+            {
+              print("item $i is checked ???");
+              manager.wishlists.wishlists[i].foodItems.add(newFoodItem);
+            }
+          }
           Navigator.of(context).pop();
         },
         child: Text(
@@ -114,10 +122,8 @@ class _AddProductState extends State<AddProductToWishList> {
   @override
   Widget build(BuildContext context) {
     List<ObjWishList> wishlists = manager.wishlists.wishlists;
-        isChecked = [];
     for(int i = 0; i< wishlists.length ; i++) 
       isChecked.add(false);
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -185,20 +191,20 @@ class _AddProductState extends State<AddProductToWishList> {
   }
 }
 
-class AddCategoryWishlist extends StatefulWidget {
+class AddWishList extends StatefulWidget {
 final Manager manager;
 
-  AddCategoryWishlist(this.manager,{Key key}) : super(key: key);
+  AddWishList(this.manager,{Key key}) : super(key: key);
 
   @override
-  _AddCategoryState createState() => _AddCategoryState(manager);
+  _AddWishListState createState() => _AddWishListState(manager);
 }
 
-class _AddCategoryState extends State<AddCategoryWishlist> {
+class _AddWishListState extends State<AddWishList> {
   final formKey = new GlobalKey<FormState>();
   Manager manager;
  
- _AddCategoryState(this.manager);
+ _AddWishListState(this.manager);
 
   @override
   void initState() {

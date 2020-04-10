@@ -22,13 +22,6 @@ class InventoryState extends State<Inventory> {
 
   List<bool> isSelected = List<bool>();
 
-  List<String> inventoryItem = [
-    "fridge",
-    "freezer",
-    "storage",
-  ];
-
-
   void selectedForDeletion(int i) {
     setState(() {
       if (isSelected[i]) {
@@ -110,7 +103,7 @@ class InventoryState extends State<Inventory> {
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    InventoryItem(manager,manager.foodRepositories
+                                    InventoryItem(manager.foodRepositories
                                         .repositories[index]))),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,

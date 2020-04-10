@@ -1,24 +1,21 @@
-import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class InventoryItem extends StatefulWidget {
-  final Manager manager;
+
   final ObjFoodRepository repository;
 
-  InventoryItem(this.manager,this.repository, {Key key}) : super(key: key);
+  InventoryItem(this.repository) ;
 
   @override
-  _InventoryItemState createState() => _InventoryItemState(manager,repository);
+  _InventoryItemState createState() => _InventoryItemState(repository);
 }
 
 class _InventoryItemState extends State<InventoryItem> {
    ObjFoodRepository repository;
-   Manager manager;
 
-   _InventoryItemState(this.manager,this.repository);
+   _InventoryItemState(this.repository);
 
   foodInformation(BuildContext context) {
     return Alert(
@@ -51,7 +48,7 @@ class _InventoryItemState extends State<InventoryItem> {
           onTap: () => foodInformation(context),
           child: ListTile(
             leading: Icon(Icons.fastfood),
-            title: Text(manager.foodItems.foodItems[i].name),
+            title: Text(repository.foodItems[i].name),
           ),
         ),
       ),

@@ -86,9 +86,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).push(route);
   }
 
-  void loadAddInventoryInventoryPage(BuildContext context) {
+  void loadAddInventoryPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));
+        MaterialPageRoute(builder: (BuildContext context) => AddInventoryPage(manager));
     Navigator.of(context).push(route);
   }
 
@@ -98,9 +98,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).push(route);
   }
 
-  void loadAddCategoryWishlistPage(BuildContext context) {
+  void loadAddWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddCategoryWishlist(manager));
+        MaterialPageRoute(builder: (BuildContext context) => AddWishList(manager));
     Navigator.of(context).push(route);
   }
 
@@ -155,7 +155,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddCategoryWishlistPage(context),
+          onTap: () => loadAddWishlistPage(context),
           label: 'Add a Note not working yet',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
@@ -186,7 +186,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddInventoryInventoryPage(context),
+          onTap: () => loadAddInventoryPage(context),
           label: 'Add Inventory',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
@@ -217,7 +217,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddCategoryWishlistPage(context),
+          onTap: () => loadAddWishlistPage(context),
           label: 'Add Wishlist',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,

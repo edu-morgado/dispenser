@@ -13,7 +13,6 @@ class ObjWishList {
 
   ObjWishList(this.id,this.name);
 
-  void addFoodItemToCategory(ObjFoodItem foodItem) => foodItems.add(foodItem);
 
   factory ObjWishList.fromJson(Map<String, dynamic> json) => _$ObjWishListFromJson(json);
   Map<String, dynamic> toJson() => _$ObjWishListToJson(this);

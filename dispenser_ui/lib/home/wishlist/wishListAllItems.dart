@@ -98,7 +98,7 @@ class WishListState extends State<WishListAllItems> {
 
   void loadAddWishlist(BuildContext context) {
     var route = new MaterialPageRoute(
-        builder: (BuildContext context) => AddCategoryWishlist(manager));
+        builder: (BuildContext context) => AddWishList(manager));
     Navigator.of(context).push(route);
   }
 

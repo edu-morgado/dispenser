@@ -137,22 +137,17 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
+
     List<ObjFoodRepository> repositories = manager.foodRepositories.repositories;
-    isChecked = [];
-    for(int i = 0; i< repositories.length ; i++) 
-      isChecked.add(false);
-//    print(isChecked.toString());
+
     choices= [];
     for(int i = 0; i < repositories.length ; i++){
       choices.add(
         {
           'display' : repositories[i].name,
           'value' : i,
-
         });
     }
-  //      print(choices.toString());
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -222,18 +217,18 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
 
 
-class AddInventoryInventoryPage extends StatefulWidget {
+class AddInventoryPage extends StatefulWidget {
   
   final Manager manager;
   final String title;
 
-  AddInventoryInventoryPage(this.manager, {Key key, this.title}) : super(key: key);
+  AddInventoryPage(this.manager, {Key key, this.title}) : super(key: key);
 
   @override
   InventoryAddState createState() => new InventoryAddState(manager);
 }
 
-class InventoryAddState extends State<AddInventoryInventoryPage> {
+class InventoryAddState extends State<AddInventoryPage> {
    final formKey = new GlobalKey<FormState>();
    Manager manager;
 
