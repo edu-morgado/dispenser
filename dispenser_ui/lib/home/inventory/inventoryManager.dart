@@ -22,9 +22,9 @@ class InventoryState extends State<Inventory> {
 
   List<bool> isSelected = List<bool>();
 
-  void initializeIsSelected(int size) {
-    if (isSelected.length == 0)
-      for (int i = 0; i < size; i++) isSelected.add(false);
+   void initializeIsSelected(int size) {
+    if (isSelected.length != size )
+      for (int i = isSelected.length; i < size; i++) isSelected.add(false);
   }
 
   void setEverythingToSelected() {
