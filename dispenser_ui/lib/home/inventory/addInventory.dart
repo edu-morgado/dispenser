@@ -12,23 +12,22 @@ class AddProductToInventory extends StatefulWidget {
   AddProductToInventory(this.manager, {Key key}) : super(key: key);
 
   @override
-  _AddProductToInventoryState createState() => _AddProductToInventoryState(manager);
+  _AddProductToInventoryState createState() =>
+      _AddProductToInventoryState(manager);
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
-
   Manager manager;
   _AddProductToInventoryState(this.manager);
-   final formKey = new GlobalKey<FormState>();
+  final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
-  final FocusNode _nameNode = FocusNode(); 
-
+  final FocusNode _nameNode = FocusNode();
 
   num quantity = 1;
   int inventoryIndex = 1;
 
-  List<bool> isChecked = List<bool>() ;
+  List<bool> isChecked = List<bool>();
   List<dynamic> choices = List<dynamic>();
 
   Widget counter() {
@@ -78,7 +77,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   }
 
   Widget dropDownFormField() {
-
     return Form(
       key: formKey,
       child: Column(
@@ -98,6 +96,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               onChanged: (value) {
                 setState(() {
                   inventoryIndex = value;
+                                    Focus.of(context).unfocus();
+
                 });
               },
               dataSource: choices,
@@ -120,10 +120,13 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,quantity );
+          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text, quantity);
           manager.foodItems.foodItems.add(newItem);
-          manager.foodRepositories.repositories[inventoryIndex].foodItems.add(newItem);
-          print(manager.foodRepositories.repositories[inventoryIndex].foodItems[0].toString());
+          manager.foodRepositories.repositories[inventoryIndex].foodItems
+              .add(newItem);
+          print(manager
+              .foodRepositories.repositories[inventoryIndex].foodItems[0]
+              .toString());
           Navigator.of(context).pop();
         },
         child: Text(
@@ -137,16 +140,15 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
+    List<ObjFoodRepository> repositories =
+        manager.foodRepositories.repositories;
 
-    List<ObjFoodRepository> repositories = manager.foodRepositories.repositories;
-
-    choices= [];
-    for(int i = 0; i < repositories.length ; i++){
-      choices.add(
-        {
-          'display' : repositories[i].name,
-          'value' : i,
-        });
+    choices = [];
+    for (int i = 0; i < repositories.length; i++) {
+      choices.add({
+        'display': repositories[i].name,
+        'value': i,
+      });
     }
 
     return Scaffold(
@@ -214,11 +216,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   }
 }
 
-
-
-
 class AddInventoryPage extends StatefulWidget {
-  
   final Manager manager;
   final String title;
 
@@ -229,14 +227,12 @@ class AddInventoryPage extends StatefulWidget {
 }
 
 class InventoryAddState extends State<AddInventoryPage> {
-   final formKey = new GlobalKey<FormState>();
-   Manager manager;
+  final formKey = new GlobalKey<FormState>();
+  Manager manager;
 
- InventoryAddState(this.manager);
- 
+  InventoryAddState(this.manager);
+
   int ttype = 1;
- 
-
 
   List<dynamic> choices = List<dynamic>();
 
@@ -283,7 +279,6 @@ class InventoryAddState extends State<AddInventoryPage> {
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
       child: TextFormField(
-        
         focusNode: _descNode,
         textInputAction: TextInputAction.done,
         onEditingComplete: () {
@@ -335,8 +330,7 @@ class InventoryAddState extends State<AddInventoryPage> {
     );
   }
 
-
-   Widget addFoodRepositoryButton(BuildContext context) {
+  Widget addFoodRepositoryButton(BuildContext context) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -346,7 +340,8 @@ class InventoryAddState extends State<AddInventoryPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodRepository newFoodRepository = ObjFoodRepository(1, ttype ,"ei");
+          ObjFoodRepository newFoodRepository =
+              ObjFoodRepository(1, ttype, "ei");
           manager.foodRepositories.repositories.add(newFoodRepository);
           Navigator.of(context).pop();
         },
@@ -358,7 +353,7 @@ class InventoryAddState extends State<AddInventoryPage> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -397,7 +392,9 @@ class InventoryAddState extends State<AddInventoryPage> {
               child: nameInput(context),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
