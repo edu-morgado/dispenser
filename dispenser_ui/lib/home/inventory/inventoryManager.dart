@@ -22,15 +22,9 @@ class InventoryState extends State<Inventory> {
 
   List<bool> isSelected = List<bool>();
 
-  void initializeIsSelected(int size) {
-    for (int i = 0; i < size; i++)
-      isSelected.add(false);
-  }
-
   void selectedForDeletion(int i) {
-    if(isSelected.length == 0)
+    if (isSelected.length == 0)
       initializeIsSelected(manager.foodRepositories.repositories.length);
-
     setState(() {
       if (isSelected[i]) {
         print("INDEX -> $i not selected for deletion");
@@ -42,37 +36,61 @@ class InventoryState extends State<Inventory> {
     });
   }
 
+  void initializeIsSelected(int size) {
+    for (int i = 0; i < size; i++) isSelected.add(false);
+  }
+
   Widget deleteIconButton() {
     print("in function deleteIconbutton");
     for (int i = 0; i < isSelected.length; i++)
       if (isSelected[i])
         return IconButton(
           icon: Icon(Icons.delete_outline),
-          onPressed: () => deleteFoodRepositories(),
+          onPressed: () => deleteRepository(),
         );
 
     return Container();
   }
 
-  void deleteFoodRepositories(){
+  void deleteRepository() {
     int i;
     setState(() {
-      for ( i = 0; i < isSelected.length; i++){
-        if (isSelected[i]){
+      for (i = 0; i < isSelected.length; i++) {
+        if (isSelected[i]) {
           manager.foodRepositories.repositories.removeAt(i);
           isSelected.removeAt(i);
           i = -1;
         }
-
       }
     });
-    
   }
-  
+
+  Widget selectAllIconButton() {
+    print("in function selectIconbutton");
+    for (int i = 0; i < isSelected.length; i++)
+      if (isSelected[i])
+        return IconButton(
+          icon: Icon(Icons.select_all),
+          onPressed: () =>
+              selectAll(manager.foodRepositories.repositories.length),
+        );
+
+    return Container();
+  }
+
+  void selectAll(int size) {
+    for (int i = 0; i < size; i++) isSelected.add(true);
+  }
+
+  Widget selectedBar() {
+    return Row(children: [
+      selectAllIconButton(),
+      deleteIconButton(),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
@@ -81,11 +99,12 @@ class InventoryState extends State<Inventory> {
             width: MediaQuery.of(context).size.width * 0.15,
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.3,
             height: 50,
             child: Center(child: godfathersNameStyle("Inventory")),
           ),
-          deleteIconButton(),
+           Spacer(flex:1),
+          selectedBar(),
         ]),
         SizedBox(width: 75),
         Container(height: 20),
