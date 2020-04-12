@@ -38,28 +38,22 @@ class InventoryState extends State<Inventory> {
   }
 
   void selected(int i) {
-    setState(() {
-      if (isSelected[i]) {
-        print("INDEX -> $i not selected for deletion");
-        isSelected[i] = false;
-      } else {
-        isSelected[i] = true;
-        print("INDEX -> $i  selected for deletion");
-      }
-      print(isSelected);
-    });
+    if (isSelected[i]) {
+      print("INDEX -> $i not selected for deletion");
+      isSelected[i] = false;
+    } else {
+      isSelected[i] = true;
+      print("INDEX -> $i  selected for deletion");
+    }
+    print(isSelected);
+    setState(() {});
   }
 
   Widget deleteIconButton() {
-    print("in function deleteIconbutton");
-    for (int i = 0; i < isSelected.length; i++)
-      if (isSelected[i])
-        return IconButton(
-          icon: Icon(Icons.delete_outline),
-          onPressed: () => deleteFoodRepositories(),
-        );
-
-    return Container();
+    return IconButton(
+      icon: Icon(Icons.delete_outline),
+      onPressed: () => deleteFoodRepositories(),
+    );
   }
 
   void deleteFoodRepositories() {
@@ -76,20 +70,15 @@ class InventoryState extends State<Inventory> {
   }
 
   Widget selectAllIconButton() {
-    print("in function selectIconbutton");
-    for (int i = 0; i < isSelected.length; i++)
-      if (anySelected())
-        return Checkbox(
-            value: allSelected(),
-            onChanged: (bool value) {
-              print(allSelected());
-              if (!allSelected())
-                setEverythingToSelected();
-              else
-                setEverythingToNotSelected();
-            });
-
-    return Container();
+    return Checkbox(
+        value: allSelected(),
+        onChanged: (bool value) {
+          print(allSelected());
+          if (!allSelected())
+            setEverythingToSelected();
+          else
+            setEverythingToNotSelected();
+        });
   }
 
   bool anySelected() {
