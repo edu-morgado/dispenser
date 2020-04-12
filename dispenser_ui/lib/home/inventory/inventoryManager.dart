@@ -22,7 +22,15 @@ class InventoryState extends State<Inventory> {
 
   List<bool> isSelected = List<bool>();
 
+  void initializeIsSelected(int size) {
+    for (int i = 0; i < size; i++)
+      isSelected.add(false);
+  }
+
   void selectedForDeletion(int i) {
+    if(isSelected.length == 0)
+      initializeIsSelected(manager.foodRepositories.repositories.length);
+
     setState(() {
       if (isSelected[i]) {
         print("INDEX -> $i not selected for deletion");
@@ -50,23 +58,20 @@ class InventoryState extends State<Inventory> {
     int i;
     setState(() {
       for ( i = 0; i < isSelected.length; i++){
-        print("inside for removing items");
         if (isSelected[i]){
           manager.foodRepositories.repositories.removeAt(i);
-          i = 0;
-          isSelected = [];
-          for (int i = 0; i < manager.foodRepositories.repositories.length; i++)
-            isSelected.add(false);
+          isSelected.removeAt(i);
+          i = -1;
         }
+
       }
     });
     
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < manager.foodRepositories.repositories.length; i++)
-      isSelected.add(false);
 
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
