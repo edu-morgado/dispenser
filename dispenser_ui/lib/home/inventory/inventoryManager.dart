@@ -23,14 +23,18 @@ class InventoryState extends State<Inventory> {
   List<bool> isSelected = List<bool>();
 
   void initializeIsSelected(int size) {
-    for (int i = 0; i < size; i++)
-      isSelected.add(false);
+    for (int i = 0; i < size; i++) isSelected.add(false);
   }
 
-  void selectedForDeletion(int i) {
-    if(isSelected.length == 0)
-      initializeIsSelected(manager.foodRepositories.repositories.length);
+  void setEverythingToSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
+  }
 
+  void setEverythingToNotSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
+  }
+
+  void selected(int i) {
     setState(() {
       if (isSelected[i]) {
         print("INDEX -> $i not selected for deletion");
@@ -54,25 +58,22 @@ class InventoryState extends State<Inventory> {
     return Container();
   }
 
-  void deleteFoodRepositories(){
+  void deleteFoodRepositories() {
     int i;
     setState(() {
-      for ( i = 0; i < isSelected.length; i++){
-        if (isSelected[i]){
+      for (i = 0; i < isSelected.length; i++) {
+        if (isSelected[i]) {
           manager.foodRepositories.repositories.removeAt(i);
           isSelected.removeAt(i);
           i = -1;
         }
-
       }
     });
-    
   }
-  
 
   @override
   Widget build(BuildContext context) {
-
+    initializeIsSelected(manager.foodRepositories.repositories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
@@ -104,7 +105,7 @@ class InventoryState extends State<Inventory> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
-                        onLongPress: () => selectedForDeletion(index),
+                        onLongPress: () => selected(index),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>

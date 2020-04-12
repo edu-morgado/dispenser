@@ -23,6 +23,14 @@ class _InventoryItemState extends State<InventoryItem> {
       for (int i = 0; i < size; i++) isSelected.add(false);
   }
 
+  void setEverythingToSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
+  }
+
+  void setEverythingToNotSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
+  }
+
   void selected(int i) {
     setState(() {
       if (isSelected[i]) {
