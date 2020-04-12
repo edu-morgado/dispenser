@@ -28,16 +28,14 @@ class WishListState extends State<WishListCategories> {
   List<bool> isSelected = List<bool>();
   List<Color> mycolors = List<Color>();
 
-  
-
   void loadWishListAllItems(BuildContext context) {
     var route = MaterialPageRoute(
         builder: (BuildContext context) => WishListAllItems(manager));
     Navigator.of(context).push(route);
   }
 
-   void initializeIsSelected(int size) {
-    if (isSelected.length != size )
+  void initializeIsSelected(int size) {
+    if (isSelected.length != size)
       for (int i = isSelected.length; i < size; i++) isSelected.add(false);
   }
 
@@ -51,7 +49,7 @@ class WishListState extends State<WishListCategories> {
     setState(() {});
   }
 
-   bool anySelected() {
+  bool anySelected() {
     for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
     return false;
   }
@@ -62,8 +60,8 @@ class WishListState extends State<WishListCategories> {
     return true;
   }
 
-   void selected(int i) {
-     print("length is ${isSelected.length}");
+  void selected(int i) {
+    print("length is ${isSelected.length}");
     if (isSelected[i]) {
       print("INDEX -> $i not selected for deletion");
       isSelected[i] = false;
@@ -84,7 +82,6 @@ class WishListState extends State<WishListCategories> {
         );
     return Container();
   }
-
 
   void deleteWishlists() {
     int i;
@@ -110,8 +107,6 @@ class WishListState extends State<WishListCategories> {
             setEverythingToNotSelected();
         });
   }
-
- 
 
   Widget topBar() {
     if (anySelected())
