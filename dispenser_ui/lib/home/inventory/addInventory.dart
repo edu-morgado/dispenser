@@ -25,6 +25,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   final FocusNode _nameNode = FocusNode();
 
   num quantity = 1;
+  num section=1;
   int inventoryIndex = 1;
 
   List<bool> isChecked = List<bool>();
@@ -110,6 +111,15 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
+  Widget chooseSection(List<ObjFoodRepository> repository) {
+    return ListView.builder(
+      itemCount: repository.length,
+      itemBuilder: (context, i) => ListTile(
+        leading: Text(repository[i].name),
+      ),
+    );
+  }
+
   Widget addProductInventoryButton(BuildContext context) {
     return Material(
       elevation: 5.0,
@@ -120,7 +130,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text, quantity);
+          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,quantity, section );
           manager.foodItems.foodItems.add(newItem);
           manager.foodRepositories.repositories[inventoryIndex].foodItems
               .add(newItem);
@@ -201,6 +211,14 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                 height: MediaQuery.of(context).size.height * 0.3,
                 alignment: Alignment.topLeft,
                 child: dropDownFormField()),
+          ),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.2,
+              alignment: Alignment.topCenter,
+              child: chooseSection(repositories),
+            ),
           ),
           Center(
             child: Container(

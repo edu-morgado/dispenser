@@ -8,14 +8,15 @@ part of 'FoodItem.dart';
 
 ObjFoodItem _$ObjFoodItemFromJson(Map<String, dynamic> json) {
   return ObjFoodItem(
-      json['id'] as int, json['name'] as String, json['quantity'] as int);
+      json['id'] as int, json['name'] as String, json['quantity'] as int, json['section'] as int );
 }
 
 Map<String, dynamic> _$ObjFoodItemToJson(ObjFoodItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'quantity': instance.quantity
+      'quantity': instance.quantity,
+      'section': instance.quantity
     };
 
 ListFoodItem _$ListFoodItemFromJson(Map<String, dynamic> json) {
