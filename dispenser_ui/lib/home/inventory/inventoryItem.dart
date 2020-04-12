@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -68,6 +69,17 @@ class _InventoryItemState extends State<InventoryItem> {
     });
   }
 
+  void reorder(int oldIndex, int newIndex) {
+    if (newIndex > repository.foodItems.length)
+      newIndex = repository.foodItems.length;
+    if (oldIndex < newIndex) newIndex--;
+
+    ObjFoodItem item1 = repository.foodItems[oldIndex];
+    repository.foodItems[oldIndex] = repository.foodItems[newIndex];
+    repository.foodItems[newIndex] = item1;
+    setState(() {});
+  }
+
   foodInformation(BuildContext context) {
     return Alert(
       context: context,
@@ -115,32 +127,32 @@ class _InventoryItemState extends State<InventoryItem> {
                 ),
               ))
         ]),
-        Expanded(
-          child: Center(
+        Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.7,
-              alignment: Alignment.topLeft,
-              child: ListView.builder(
-                itemCount: repository.foodItems.length,
-                itemBuilder: (context, i) => InkWell(
-                  onTap: () => foodInformation(context),
-                  child: ListTile(
-                    leading: Icon(Icons.navigate_next),
-                    title: Text(repository.foodItems[i].name),
-                    subtitle: Text("Quantity:" +
-                        repository.foodItems[i].quantity.toString()),
-                    trailing: Checkbox(
-                        value: isSelected[i],
-                        onChanged: (bool value) {
-                          selected(i);
-                        }),
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height * 0.7,
+          alignment: Alignment.topLeft,
+          child: ReorderableListView(
+              onReorder: (oldIndex, newIndex) => reorder(oldIndex, newIndex),
+              children: [
+                for (int i = 0; i < repository.foodItems.length; i++)
+                  InkWell(
+                    key: ValueKey(i),
+                    onTap: () => foodInformation(context),
+                    child: ListTile(
+                      leading: Icon(Icons.navigate_next),
+                      title: Text(repository.foodItems[i].name),
+                      subtitle: Text("Quantity:" +
+                          repository.foodItems[i].quantity.toString()),
+                      trailing: Checkbox(
+                          value: isSelected[i],
+                          onChanged: (bool value) {
+                            selected(i);
+                          }),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
+              ]),
+        )),
       ]),
     );
   }

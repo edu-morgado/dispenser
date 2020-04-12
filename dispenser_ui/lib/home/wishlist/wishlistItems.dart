@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class WishListItems extends StatefulWidget {
   final ObjWishList wishlist;
@@ -70,6 +71,17 @@ class WishListState extends State<WishListItems> {
     });
   }
 
+    void reorder(int oldIndex, int newIndex) {
+    if (newIndex > wishlist.foodItems.length)
+      newIndex = wishlist.foodItems.length;
+    if (oldIndex < newIndex) newIndex--;
+
+    ObjFoodItem item1 = wishlist.foodItems[oldIndex];
+    wishlist.foodItems[oldIndex] = wishlist.foodItems[newIndex];
+    wishlist.foodItems[newIndex] = item1;
+    setState(() {});
+  }
+
   foodInformation(BuildContext context) {
     return Alert(
       context: context,
@@ -118,32 +130,32 @@ class WishListState extends State<WishListItems> {
                 ),
               ))
         ]),
-        Expanded(
-          child: Center(
+        Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.7,
-              alignment: Alignment.topLeft,
-              child: ListView.builder(
-                itemCount: wishlist.foodItems.length,
-                itemBuilder: (context, i) => InkWell(
-                  onTap: () => foodInformation(context),
-                  child: ListTile(
-                    leading: Icon(Icons.navigate_next),
-                    title: Text(wishlist.foodItems[i].name),
-                    subtitle: Text("Quantity:" +
-                        wishlist.foodItems[i].quantity.toString()),
-                    trailing: Checkbox(
-                        value: isSelected[i],
-                        onChanged: (bool value) {
-                          selected(i);
-                        }),
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height * 0.7,
+          alignment: Alignment.topLeft,
+          child: ReorderableListView(
+              onReorder: (oldIndex, newIndex) => reorder(oldIndex, newIndex),
+              children: [
+                for (int i = 0; i < wishlist.foodItems.length; i++)
+                  InkWell(
+                    key: ValueKey(i),
+                    onTap: () => foodInformation(context),
+                    child: ListTile(
+                      leading: Icon(Icons.navigate_next),
+                      title: Text(wishlist.foodItems[i].name),
+                      subtitle: Text("Quantity:" +
+                          wishlist.foodItems[i].quantity.toString()),
+                      trailing: Checkbox(
+                          value: isSelected[i],
+                          onChanged: (bool value) {
+                            selected(i);
+                          }),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
+              ]),
+        )),
       ]),
     );
   }
