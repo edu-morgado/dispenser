@@ -22,9 +22,22 @@ class InventoryState extends State<Inventory> {
 
   List<bool> isSelected = List<bool>();
 
-  void selectedForDeletion(int i) {
+  void initializeIsSelected(int size) {
     if (isSelected.length == 0)
-      initializeIsSelected(manager.foodRepositories.repositories.length);
+      for (int i = 0; i < size; i++) isSelected.add(false);
+  }
+
+  void setEverythingToSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
+    setState(() {});
+  }
+
+  void setEverythingToNotSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
+    setState(() {});
+  }
+
+  void selected(int i) {
     setState(() {
       if (isSelected[i]) {
         print("INDEX -> $i not selected for deletion");
@@ -33,11 +46,8 @@ class InventoryState extends State<Inventory> {
         isSelected[i] = true;
         print("INDEX -> $i  selected for deletion");
       }
+      print(isSelected);
     });
-  }
-
-  void initializeIsSelected(int size) {
-    for (int i = 0; i < size; i++) isSelected.add(false);
   }
 
   Widget deleteIconButton() {
@@ -46,13 +56,13 @@ class InventoryState extends State<Inventory> {
       if (isSelected[i])
         return IconButton(
           icon: Icon(Icons.delete_outline),
-          onPressed: () => deleteRepository(),
+          onPressed: () => deleteFoodRepositories(),
         );
 
     return Container();
   }
 
-  void deleteRepository() {
+  void deleteFoodRepositories() {
     int i;
     setState(() {
       for (i = 0; i < isSelected.length; i++) {
@@ -68,44 +78,68 @@ class InventoryState extends State<Inventory> {
   Widget selectAllIconButton() {
     print("in function selectIconbutton");
     for (int i = 0; i < isSelected.length; i++)
-      if (isSelected[i])
-        return IconButton(
-          icon: Icon(Icons.select_all),
-          onPressed: () =>
-              selectAll(manager.foodRepositories.repositories.length),
-        );
+      if (anySelected())
+        return Checkbox(
+            value: allSelected(),
+            onChanged: (bool value) {
+              print(allSelected());
+              if (!allSelected())
+                setEverythingToSelected();
+              else
+                setEverythingToNotSelected();
+            });
 
     return Container();
   }
 
-  void selectAll(int size) {
-    for (int i = 0; i < size; i++) isSelected.add(true);
+  bool anySelected() {
+    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
+    return false;
   }
 
-  Widget selectedBar() {
-    return Row(children: [
-      selectAllIconButton(),
-      deleteIconButton(),
-    ]);
+  bool allSelected() {
+    for (int i = 0; i < isSelected.length; i++)
+      if (!isSelected[i]) return false;
+    return true;
+  }
+
+  Widget topBar() {
+    if (anySelected())
+      return Row(children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.15,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 50,
+          child: Center(child: godfathersNameStyle("Inventory")),
+        ),
+        Spacer(
+          flex: 2,
+        ),
+        selectAllIconButton(),
+        deleteIconButton(),
+      ]);
+    else
+      return Row(children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.15,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: 50,
+          child: Center(child: godfathersNameStyle("Inventory")),
+        ),
+      ]);
   }
 
   @override
   Widget build(BuildContext context) {
+    initializeIsSelected(manager.foodRepositories.repositories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
-        Row(children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.15,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: 50,
-            child: Center(child: godfathersNameStyle("Inventory")),
-          ),
-           Spacer(flex:1),
-          selectedBar(),
-        ]),
+        topBar(),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
@@ -123,7 +157,7 @@ class InventoryState extends State<Inventory> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
-                        onLongPress: () => selectedForDeletion(index),
+                        onLongPress: () => selected(index),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>

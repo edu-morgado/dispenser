@@ -36,8 +36,22 @@ class WishListState extends State<WishListCategories> {
 
   List<Color> mycolors = List<Color>();
 
+  void initializeIsSelected(int size) {
+    if (isSelected.length == 0){
+      for (int i = 0; i < size; i++) isSelected.add(false);
+      for (int i = 0; i < size; i++) mycolors.add(Color.fromRGBO(182, 122, 133, 1));
+    }
+  }
+  
+  void setEverythingToSelected(){
+    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = true;
+  }
 
-  void selectedForDeletion(int i) {
+  void setEverythingToNotSelected(){
+    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = false;
+  }
+
+  void selected(int i) {
     setState(() {
       print("selceting for delection");
       if (isSelected[i]) {
@@ -80,11 +94,8 @@ class WishListState extends State<WishListCategories> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < manager.foodRepositories.repositories.length; i++)
-    {
-      isSelected.add(false);
-      mycolors.add(Color.fromRGBO(182, 122, 133, 1));
-    }
+    initializeIsSelected(manager.wishlists.wishlists.length);
+
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
@@ -116,7 +127,7 @@ class WishListState extends State<WishListCategories> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
-                        onLongPress: () => selectedForDeletion(index),
+                        onLongPress: () => selected(index),
                         onTap: () => Navigator.of(context).push(  MaterialPageRoute(
                           builder: (BuildContext context) => WishListItems(manager.wishlists.wishlists[index]))),
                         child: Container(
