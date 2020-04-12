@@ -31,6 +31,15 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   List<bool> isChecked = List<bool>();
   List<dynamic> choices = List<dynamic>();
 
+  void initializeChoices(List<ObjFoodRepository> repositories) {
+    for (int i = 0; i < repositories.length; i++) {
+      choices.add({
+        'display': repositories[i].name,
+        'value': i,
+      });
+    }
+  }
+
   Widget counter() {
     return Counter(
       initialValue: quantity,
@@ -152,14 +161,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   Widget build(BuildContext context) {
     List<ObjFoodRepository> repositories =
         manager.foodRepositories.repositories;
-
-    choices = [];
-    for (int i = 0; i < repositories.length; i++) {
-      choices.add({
-        'display': repositories[i].name,
-        'value': i,
-      });
-    }
+    initializeChoices(repositories);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -252,17 +254,21 @@ class InventoryAddState extends State<AddInventoryPage> {
 
   int ttype = 1;
 
-  List<dynamic> choices = List<dynamic>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final TextEditingController _nameController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode();
   final FocusNode _descNode = FocusNode();
+
+  List<dynamic> choices = List<dynamic>();
+
+  void initializeChoices(List<ObjFoodRepository> repositories) {
+    for (int i = 0; i < repositories.length; i++) {
+      choices.add({
+        'display': repositories[i].name,
+        'value': i,
+      });
+    }
+  }
 
   Widget nameInput(context) {
     return Theme(
@@ -374,6 +380,7 @@ class InventoryAddState extends State<AddInventoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    initializeChoices(manager.foodRepositories.repositories);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(

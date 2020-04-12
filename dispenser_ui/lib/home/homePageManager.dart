@@ -8,10 +8,10 @@ import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:dispenser_ui/objects/Wishlist.dart';
 import 'package:dispenser_ui/ObjManager.dart';
-
 
 enum viewType { List, Staggered }
 
@@ -41,12 +41,40 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   TabBarPage(this.manager) {
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Items Not Stored"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,1,"Fridge"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,2,"Freezer"));
-    manager.foodRepositories.repositories.add(ObjFoodRepository(3,3,"Storage"));
-    manager.wishlists.wishlists.add(ObjWishList(1,"All Items"));
-    
+    manager.foodRepositories.repositories
+        .add(ObjFoodRepository(1, 3, "Items Not Stored"));
+    manager.foodRepositories.repositories
+        .add(ObjFoodRepository(2, 1, "Fridge"));
+    manager.foodRepositories.repositories
+        .add(ObjFoodRepository(3, 2, "Freezer"));
+    manager.foodRepositories.repositories
+        .add(ObjFoodRepository(4, 3, "Storage"));
+    manager.wishlists.wishlists.add(ObjWishList(1, "All Items"));
+    ObjFoodItem item1 = ObjFoodItem(1, "leite", 6, 12);
+    ObjFoodItem item2 = ObjFoodItem(2, "badjoraz", 2, 12);
+    ObjFoodItem item3 = ObjFoodItem(3, "degnue", 7, 12);
+    ObjFoodItem item4 = ObjFoodItem(4, "carne", 12, 12);
+    ObjFoodItem item5 = ObjFoodItem(5, "peixe", 11, 12);
+    ObjFoodItem item6 = ObjFoodItem(6, "bolachas", 8, 12);
+    ObjFoodItem item7 = ObjFoodItem(7, "dengues", 4, 12);
+    ObjFoodItem item8 = ObjFoodItem(8, "batatas", 3, 12);
+
+    manager.foodRepositories.repositories[0].addFoodItemToRepository(item1);
+    manager.foodRepositories.repositories[0].addFoodItemToRepository(item2);
+    manager.foodRepositories.repositories[0].addFoodItemToRepository(item3);
+    manager.foodRepositories.repositories[1].addFoodItemToRepository(item1);
+    manager.foodRepositories.repositories[1].addFoodItemToRepository(item4);
+    manager.foodRepositories.repositories[1].addFoodItemToRepository(item7);
+    manager.foodRepositories.repositories[2].addFoodItemToRepository(item8);
+    manager.foodRepositories.repositories[2].addFoodItemToRepository(item6);
+    manager.foodRepositories.repositories[2].addFoodItemToRepository(item5);
+    manager.foodRepositories.repositories[3].addFoodItemToRepository(item3);
+    manager.foodRepositories.repositories[3].addFoodItemToRepository(item6);
+    manager.foodRepositories.repositories[3].addFoodItemToRepository(item5);
+    manager.wishlists.wishlists[0].foodItems.add(item1);
+    manager.wishlists.wishlists[0].foodItems.add(item3);
+    manager.wishlists.wishlists[0].foodItems.add(item2);
+
     tabs = [
       Inventory(manager),
       WishListCategories(manager),
@@ -80,43 +108,41 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-
   void loadAddProductInventoryPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProductToInventory(manager));
+    var route = MaterialPageRoute(
+        builder: (BuildContext context) => AddProductToInventory(manager));
     Navigator.of(context).push(route);
   }
 
   void loadAddInventoryPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddInventoryPage(manager));
+    var route = MaterialPageRoute(
+        builder: (BuildContext context) => AddInventoryPage(manager));
     Navigator.of(context).push(route);
   }
 
   void loadAddProductWishlistPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddProductToWishList(manager));
+    var route = MaterialPageRoute(
+        builder: (BuildContext context) => AddProductToWishList(manager));
     Navigator.of(context).push(route);
   }
 
   void loadAddWishlistPage(BuildContext context) {
-    var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddWishList(manager));
+    var route = MaterialPageRoute(
+        builder: (BuildContext context) => AddWishList(manager));
     Navigator.of(context).push(route);
   }
 
-   void loadAddProductNotesPage(BuildContext context) {
-  //   var route =
-  //      MaterialPageRoute(builder: (BuildContext context) => AddProductInventoryPage());  //AddProductNotePage());
-  //  Navigator.of(context).push(route);
+  void loadAddProductNotesPage(BuildContext context) {
+    //   var route =
+    //      MaterialPageRoute(builder: (BuildContext context) => AddProductInventoryPage());  //AddProductNotePage());
+    //  Navigator.of(context).push(route);
   }
 
   void loadAddNotesNotesPage(BuildContext context) {
-  //  var route =
-  //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
-  // Navigator.of(context).push(route);
+    //  var route =
+    //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
+    // Navigator.of(context).push(route);
   }
-
 
   Widget floatingButton() {
     setState(() {});
@@ -124,8 +150,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       return inventoryListSpeedDial();
     else if (_tabController.index == 1)
       return wishListSpeedDial();
-    else if (_tabController.index == 2) 
-    return notesListSpeedDial();
+    else if (_tabController.index == 2) return notesListSpeedDial();
     return null;
   }
 
@@ -167,7 +192,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget inventoryListSpeedDial() {
-   return SpeedDial(
+    return SpeedDial(
       tooltip: 'add',
       heroTag: "inventory",
       animatedIcon: AnimatedIcons.menu_close,
@@ -211,7 +236,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         SpeedDialChild(
           child: Icon(Icons.accessibility, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: () => loadAddProductWishlistPage(context,),
+          onTap: () => loadAddProductWishlistPage(
+            context,
+          ),
           label: 'Add Product to Wishlist',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,

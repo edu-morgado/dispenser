@@ -25,7 +25,21 @@ class _AddProductState extends State<AddProductToWishList> {
 
   num quantity = 1;
   num section=1;
-  List<bool> isChecked = List<bool>();
+  List<bool> isSelected = List<bool>();
+
+  void initializeIsSelected(int size){
+    if(isSelected.length == 0)
+      for(int i =0 ; i< size ; i++) isSelected.add(false);
+  }
+
+  void setEverythingToSelected(){
+    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = true;
+  }
+
+  void setEverythingToNotSelected(){
+    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = false;
+  }
+
 
   Widget counter() {
     return Counter(
@@ -77,17 +91,26 @@ class _AddProductState extends State<AddProductToWishList> {
       itemBuilder: (context, i) => ListTile(
         leading: Text(manager.wishlists.wishlists[i].name),
         trailing: Checkbox(
-            value: isChecked[i],
+            value: isSelected[i],
             onChanged: (bool value) {
-              setState(() {
-                if(isChecked[i])
-                  isChecked[i] = false;
-                else
-                  isChecked[i] = true;
-              });
+              selected(i);
             }),
       ),
     );
+  }
+
+  void selected(int i) {
+
+    setState(() {
+       if (isSelected[i]) {
+        print("INDEX -> $i not selected ");
+        isSelected[i] = false;
+      } else {
+        isSelected[i] = true;
+        print("INDEX -> $i  selected");
+      }
+    });
+
   }
 
 Widget chooseSection(List<ObjWishList> wishlists) {
@@ -112,7 +135,7 @@ Widget chooseSection(List<ObjWishList> wishlists) {
           ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity, section);
           manager.foodItems.foodItems.add(newFoodItem);
           for(int i = 0; i < manager.wishlists.wishlists.length; i++){
-            if(isChecked[i])
+            if(isSelected[i])
             {
               print("item $i is checked ???");
               manager.wishlists.wishlists[i].foodItems.add(newFoodItem);
@@ -132,8 +155,7 @@ Widget chooseSection(List<ObjWishList> wishlists) {
   @override
   Widget build(BuildContext context) {
     List<ObjWishList> wishlists = manager.wishlists.wishlists;
-    for(int i = 0; i< wishlists.length ; i++) 
-      isChecked.add(false);
+    initializeIsSelected(wishlists.length);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

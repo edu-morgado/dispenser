@@ -19,13 +19,11 @@ class _InventoryItemState extends State<InventoryItem> {
   List<bool> isSelected = List<bool>();
 
   void initializeIsSelected(int size) {
-    for (int i = 0; i < size; i++) isSelected.add(false);
+    if (isSelected.length == 0)
+      for (int i = 0; i < size; i++) isSelected.add(false);
   }
 
-  void selectedForDeletion(int i) {
-    if (isSelected.length == 0)
-      initializeIsSelected(repository.foodItems.length);
-
+  void selected(int i) {
     setState(() {
       if (isSelected[i]) {
         print("INDEX -> $i not selected for deletion");
@@ -53,7 +51,6 @@ class _InventoryItemState extends State<InventoryItem> {
     int i;
     setState(() {
       for (i = 0; i < isSelected.length; i++) {
-        print("inside for removing items");
         if (isSelected[i]) {
           repository.foodItems.removeAt(i);
           isSelected.removeAt(i);
@@ -83,6 +80,7 @@ class _InventoryItemState extends State<InventoryItem> {
 
   @override
   Widget build(BuildContext context) {
+    initializeIsSelected(repository.foodItems.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Row(children: <Widget>[
@@ -94,6 +92,8 @@ class _InventoryItemState extends State<InventoryItem> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
+          Spacer(),
+          deleteIconButton(),
         ]),
         Row(children: <Widget>[
           Container(
@@ -122,6 +122,11 @@ class _InventoryItemState extends State<InventoryItem> {
                     title: Text(repository.foodItems[i].name),
                     subtitle: Text("Quantity:" +
                         repository.foodItems[i].quantity.toString()),
+                    trailing: Checkbox(
+                        value: isSelected[i],
+                        onChanged: (bool value) {
+                          selected(i);
+                        }),
                   ),
                 ),
               ),
