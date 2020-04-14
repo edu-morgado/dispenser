@@ -1,21 +1,32 @@
-import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
+import 'package:dispenser_ui/home/homePageManager.dart';
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/ObjManager.dart';
+import 'package:flutter/rendering.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistAllItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
-import 'package:provider/provider.dart';
+import 'package:dispenser_ui/ObjManager.dart';
 
-class Inventory extends StatefulWidget {
+class WishListCategories extends StatefulWidget {
+  final Manager manager;
 
+  WishListCategories(this.manager);
 
   @override
   State<StatefulWidget> createState() {
-    return InventoryState();
+    return WishListState(manager);
   }
 }
 
-class InventoryState extends State<Inventory> {
+class WishListState extends State<WishListCategories> {
+  Manager manager;
+  WishListState(this.manager);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   List<bool> isSelected = List<bool>();
+  List<Color> mycolors = List<Color>();
 
   void initializeIsSelected(int size) {
     if (isSelected.length != size)
@@ -32,7 +43,19 @@ class InventoryState extends State<Inventory> {
     setState(() {});
   }
 
+  bool anySelected() {
+    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
+    return false;
+  }
+
+  bool allSelected() {
+    for (int i = 0; i < isSelected.length; i++)
+      if (!isSelected[i]) return false;
+    return true;
+  }
+
   void selected(int i) {
+    print("length is ${isSelected.length}");
     if (isSelected[i]) {
       print("INDEX -> $i not selected for deletion");
       isSelected[i] = false;
@@ -44,19 +67,22 @@ class InventoryState extends State<Inventory> {
     setState(() {});
   }
 
-  Widget deleteIconButton(Manager manager) {
-    return IconButton(
-      icon: Icon(Icons.delete_outline),
-      onPressed: () => deleteFoodRepositories(manager),
-    );
+  Widget deleteIconButton() {
+    for (bool selected in isSelected)
+      if (selected)
+        return IconButton(
+          icon: Icon(Icons.delete_outline),
+          onPressed: () => deleteWishlists(),
+        );
+    return Container();
   }
 
-  void deleteFoodRepositories(Manager manager) {
+  void deleteWishlists() {
     int i;
     setState(() {
       for (i = 0; i < isSelected.length; i++) {
         if (isSelected[i]) {
-          manager.inventories.inventories.removeAt(i);
+          manager.wishlists.wishlists.removeAt(i);
           isSelected.removeAt(i);
           i = -1;
         }
@@ -76,18 +102,7 @@ class InventoryState extends State<Inventory> {
         });
   }
 
-  bool anySelected() {
-    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
-    return false;
-  }
-
-  bool allSelected() {
-    for (int i = 0; i < isSelected.length; i++)
-      if (!isSelected[i]) return false;
-    return true;
-  }
-
-  Widget topBar(Manager manager) {
+  Widget topBar() {
     if (anySelected())
       return Row(children: [
         SizedBox(
@@ -96,13 +111,13 @@ class InventoryState extends State<Inventory> {
         Container(
           width: MediaQuery.of(context).size.width * 0.3,
           height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
+          child: Center(child: godfathersNameStyle("Wishlists")),
         ),
         Spacer(
           flex: 2,
         ),
         selectAllIconButton(),
-        deleteIconButton(manager),
+        deleteIconButton(),
       ]);
     else
       return Row(children: [
@@ -112,20 +127,18 @@ class InventoryState extends State<Inventory> {
         Container(
           width: MediaQuery.of(context).size.width * 0.7,
           height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
+          child: Center(child: godfathersNameStyle("Wishlists")),
         ),
       ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context) ;
-
-    initializeIsSelected(manager.inventories.inventories.length);
+    initializeIsSelected(manager.wishlists.wishlists.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
-        topBar(manager),
+        topBar(),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
@@ -147,24 +160,21 @@ class InventoryState extends State<Inventory> {
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    InventoryItem(manager.inventories
-                                        .inventories[index]))),
+                                    WishListItems(
+                                        manager.wishlists.wishlists[index]))),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: godfathersNameStyle(
+                              'Wishlist ${manager.wishlists.wishlists[index].name}'),
                         ),
                       ),
                     );
                   },
-                  childCount: manager.inventories.inventories.length,
+                  childCount: manager.wishlists.wishlists.length,
                 ),
               ),
             ],

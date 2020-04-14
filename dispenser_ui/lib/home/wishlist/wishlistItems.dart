@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
+import 'package:dispenser_ui/textStyles.dart';
 
 class WishListItems extends StatefulWidget {
   final ObjWishList wishlist;
@@ -19,31 +20,57 @@ class WishListState extends State<WishListItems> {
 
   WishListState(this.wishlist);
 
-   List<bool> isSelected = List<bool>();
+  List<bool> isSelected = List<bool>();
 
   void initializeIsSelected(int size) {
-    if (isSelected.length == 0)
-      for (int i = 0; i < size; i++) isSelected.add(false);
-  }
-  
-  void setEverythingToSelected(){
-    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = true;
+    if (isSelected.length != size)
+      for (int i = isSelected.length; i < size; i++) isSelected.add(false);
   }
 
-  void setEverythingToNotSelected(){
-    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = false;
+  void setEverythingToSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
+    setState(() {});
+  }
+
+  void setEverythingToNotSelected() {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
+    setState(() {});
+  }
+
+  bool anySelected() {
+    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
+    return false;
+  }
+
+  bool allSelected() {
+    for (int i = 0; i < isSelected.length; i++)
+      if (!isSelected[i]) return false;
+    return true;
   }
 
   void selected(int i) {
-    setState(() {
-      if (isSelected[i]) {
-        print("INDEX -> $i not selected for deletion");
-        isSelected[i] = false;
-      } else {
-        isSelected[i] = true;
-        print("INDEX -> $i  selected for deletion");
-      }
-    });
+    print("length is ${isSelected.length}");
+    if (isSelected[i]) {
+      print("INDEX -> $i not selected for deletion");
+      isSelected[i] = false;
+    } else {
+      isSelected[i] = true;
+      print("INDEX -> $i  selected for deletion");
+    }
+    print(isSelected);
+    setState(() {});
+  }
+
+  Widget selectAllIconButton() {
+    return Checkbox(
+        value: allSelected(),
+        onChanged: (bool value) {
+          print(allSelected());
+          if (!allSelected())
+            setEverythingToSelected();
+          else
+            setEverythingToNotSelected();
+        });
   }
 
   Widget deleteIconButton() {
@@ -71,7 +98,37 @@ class WishListState extends State<WishListItems> {
     });
   }
 
-    void reorder(int oldIndex, int newIndex) {
+  Widget topBar() {
+    if (anySelected())
+      return Row(children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.15,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 50,
+          child: Center(child: godfathersNameStyle(wishlist.name)),
+        ),
+        Spacer(
+          flex: 2,
+        ),
+        selectAllIconButton(),
+        deleteIconButton(),
+      ]);
+    else
+      return Row(children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.15,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: 50,
+          child: Center(child: godfathersNameStyle(wishlist.name)),
+        ),
+      ]);
+  }
+
+  void reorder(int oldIndex, int newIndex) {
     if (newIndex > wishlist.foodItems.length)
       newIndex = wishlist.foodItems.length;
     if (oldIndex < newIndex) newIndex--;
@@ -104,35 +161,13 @@ class WishListState extends State<WishListItems> {
   Widget build(BuildContext context) {
     initializeIsSelected(wishlist.foodItems.length);
 
-  return Scaffold(
+    return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        Row(children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.1,
-            height: MediaQuery.of(context).size.height * 0.15,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          Spacer(),
-          deleteIconButton(),
-        ]),
-        Row(children: <Widget>[
-          Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.05,
-              margin: EdgeInsets.all(10),
-              child: Center(
-                child: Text(
-                  wishlist.name,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ))
-        ]),
+        Container(height: 45),
+        topBar(),
         Center(
             child: Container(
-          width: MediaQuery.of(context).size.width * 0.85,
+          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.7,
           alignment: Alignment.topLeft,
           child: ReorderableListView(
@@ -160,5 +195,3 @@ class WishListState extends State<WishListItems> {
     );
   }
 }
-
-
