@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
-import 'package:dispenser_ui/objects/FoodRepository.dart';
+import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
 class AddProductToInventory extends StatefulWidget {
-  final Manager manager;
-  AddProductToInventory(this.manager, {Key key}) : super(key: key);
 
   @override
-  _AddProductToInventoryState createState() => _AddProductToInventoryState(manager);
+  _AddProductToInventoryState createState() => _AddProductToInventoryState();
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
 
-  Manager manager;
-  _AddProductToInventoryState(this.manager);
-   final formKey = new GlobalKey<FormState>();
+  _AddProductToInventoryState();
+
+  final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode(); 
@@ -32,10 +31,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   List<bool> isChecked = List<bool>() ;
   List<dynamic> choices = List<dynamic>();
 
-  void initializeChoices(List<ObjFoodRepository> repositories) {
-    for (int i = 0; i < repositories.length; i++) {
+  void initializeChoices(List<ObjInventory> inventories) {
+    for (int i = 0; i < inventories.length; i++) {
       choices.add({
-        'display': repositories[i].name,
+        'display': inventories[i].name,
         'value': i,
       });
     }
@@ -119,7 +118,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-  Widget chooseSection(List<ObjFoodRepository> repository) {
+  Widget chooseSection(List<ObjInventory> repository) {
     return ListView.builder(
       itemCount: repository.length,
       itemBuilder: (context, i) => ListTile(
@@ -128,7 +127,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-  Widget addProductInventoryButton(BuildContext context) {
+  Widget addProductInventoryButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -140,8 +139,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
           FocusScope.of(context).unfocus();
           ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,quantity, section );
           manager.foodItems.foodItems.add(newItem);
-          manager.foodRepositories.repositories[inventoryIndex].foodItems.add(newItem);
-          print(manager.foodRepositories.repositories[inventoryIndex].foodItems[0].toString());
+          manager.inventories.inventories[inventoryIndex].foodItems.add(newItem);
+          print(manager.inventories.inventories[inventoryIndex].foodItems[0].toString());
           Navigator.of(context).pop();
         },
         child: Text(
@@ -155,9 +154,11 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
-    List<ObjFoodRepository> repositories =
-        manager.foodRepositories.repositories;
-    initializeChoices(repositories);
+        final Manager manager = Provider.of<Manager>(context) ;
+
+    List<ObjInventory> inventories =
+        manager.inventories.inventories;
+    initializeChoices(inventories);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -215,7 +216,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.2,
               alignment: Alignment.topCenter,
-              child: chooseSection(repositories),
+              child: chooseSection(inventories),
             ),
           ),
           Center(
@@ -223,7 +224,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topCenter,
-              child: addProductInventoryButton(context),
+              child: addProductInventoryButton(context, manager),
             ),
           ),
         ],
@@ -237,20 +238,16 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
 class AddInventoryPage extends StatefulWidget {
   
-  final Manager manager;
-  final String title;
-
-  AddInventoryPage(this.manager, {Key key, this.title}) : super(key: key);
 
   @override
-  InventoryAddState createState() => new InventoryAddState(manager);
+  InventoryAddState createState() => new InventoryAddState();
 }
 
 class InventoryAddState extends State<AddInventoryPage> {
-   final formKey = new GlobalKey<FormState>();
-   Manager manager;
 
- InventoryAddState(this.manager);
+   final formKey = new GlobalKey<FormState>();
+
+ InventoryAddState();
  
   int ttype = 1;
  
@@ -263,10 +260,10 @@ class InventoryAddState extends State<AddInventoryPage> {
 
   List<dynamic> choices = List<dynamic>();
 
-  void initializeChoices(List<ObjFoodRepository> repositories) {
-    for (int i = 0; i < repositories.length; i++) {
+  void initializeChoices(List<ObjInventory> inventories) {
+    for (int i = 0; i < inventories.length; i++) {
       choices.add({
-        'display': repositories[i].name,
+        'display': inventories[i].name,
         'value': i,
       });
     }
@@ -358,7 +355,7 @@ class InventoryAddState extends State<AddInventoryPage> {
   }
 
 
-   Widget addFoodRepositoryButton(BuildContext context) {
+   Widget addFoodRepositoryButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -368,8 +365,8 @@ class InventoryAddState extends State<AddInventoryPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodRepository newFoodRepository = ObjFoodRepository(1, ttype ,"ei");
-          manager.foodRepositories.repositories.add(newFoodRepository);
+          ObjInventory newFoodRepository = ObjInventory(1, ttype ,"ei");
+          manager.inventories.inventories.add(newFoodRepository);
           Navigator.of(context).pop();
         },
         child: Text(
@@ -383,7 +380,9 @@ class InventoryAddState extends State<AddInventoryPage> {
   
   @override
   Widget build(BuildContext context) {
-    initializeChoices(manager.foodRepositories.repositories);
+    final Manager manager = Provider.of<Manager>(context) ;
+
+    initializeChoices(manager.inventories.inventories);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -441,7 +440,7 @@ class InventoryAddState extends State<AddInventoryPage> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topLeft,
-              child: addFoodRepositoryButton(context),
+              child: addFoodRepositoryButton(context, manager),
             ),
           ),
         ],

@@ -1,7 +1,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'FoodItem.dart';
-part 'Wishlist.g.dart';
+part 'WishList.g.dart';
 
 @JsonSerializable()
 class ObjWishList {

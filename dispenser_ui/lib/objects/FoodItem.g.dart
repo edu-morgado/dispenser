@@ -7,8 +7,8 @@ part of 'FoodItem.dart';
 // **************************************************************************
 
 ObjFoodItem _$ObjFoodItemFromJson(Map<String, dynamic> json) {
-  return ObjFoodItem(
-      json['id'] as int, json['name'] as String, json['quantity'] as int, json['section'] as int );
+  return ObjFoodItem(json['id'] as int, json['name'] as String,
+      json['quantity'] as int, json['section'] as int);
 }
 
 Map<String, dynamic> _$ObjFoodItemToJson(ObjFoodItem instance) =>
@@ -16,7 +16,7 @@ Map<String, dynamic> _$ObjFoodItemToJson(ObjFoodItem instance) =>
       'id': instance.id,
       'name': instance.name,
       'quantity': instance.quantity,
-      'section': instance.quantity
+      'section': instance.section
     };
 
 ListFoodItem _$ListFoodItemFromJson(Map<String, dynamic> json) {

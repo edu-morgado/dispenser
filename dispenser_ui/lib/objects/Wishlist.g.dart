@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'Wishlist.dart';
+part of 'WishList.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

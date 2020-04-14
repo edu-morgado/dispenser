@@ -14,18 +14,16 @@ ObjHome _$ObjHomeFromJson(Map<String, dynamic> json) {
       json['foodItems'] == null
           ? null
           : ListFoodItem.fromJson(json['foodItems'] as Map<String, dynamic>),
-      json['categories'] == null
+      json['categories'],
+      json['inventories'] == null
           ? null
-          : ListWishList.fromJson(json['categories'] as Map<String, dynamic>),
-      json['foodRepositories'] == null
-          ? null
-          : ListFoodRepository.fromJson(
-              json['foodRepositories'] as Map<String, dynamic>));
+          : ListInventory.fromJson(
+              json['inventories'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$ObjHomeToJson(ObjHome instance) => <String, dynamic>{
       'notes': instance.notes,
       'foodItems': instance.foodItems,
       'categories': instance.categories,
-      'foodRepositories': instance.foodRepositories
+      'inventories': instance.inventories
     };

@@ -1,21 +1,21 @@
-import 'package:dispenser_ui/objects/FoodItem.dart';
-import 'package:dispenser_ui/objects/FoodRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:dispenser_ui/objects/Inventory.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class InventoryItem extends StatefulWidget {
-  final ObjFoodRepository repository;
+  final ObjInventory inventory;
 
-  InventoryItem(this.repository);
+  InventoryItem(this.inventory);
 
   @override
-  _InventoryItemState createState() => _InventoryItemState(repository);
+  _InventoryItemState createState() => _InventoryItemState(inventory);
 }
 
 class _InventoryItemState extends State<InventoryItem> {
-  ObjFoodRepository repository;
+  ObjInventory inventory;
 
-  _InventoryItemState(this.repository);
+  _InventoryItemState(this.inventory);
 
   List<bool> isSelected = List<bool>();
 
@@ -61,7 +61,7 @@ class _InventoryItemState extends State<InventoryItem> {
     setState(() {
       for (i = 0; i < isSelected.length; i++) {
         if (isSelected[i]) {
-          repository.foodItems.removeAt(i);
+          inventory.foodItems.removeAt(i);
           isSelected.removeAt(i);
           i = -1;
         }
@@ -70,13 +70,13 @@ class _InventoryItemState extends State<InventoryItem> {
   }
 
   void reorder(int oldIndex, int newIndex) {
-    if (newIndex > repository.foodItems.length)
-      newIndex = repository.foodItems.length;
+    if (newIndex > inventory.foodItems.length)
+      newIndex = inventory.foodItems.length;
     if (oldIndex < newIndex) newIndex--;
 
-    ObjFoodItem item1 = repository.foodItems[oldIndex];
-    repository.foodItems[oldIndex] = repository.foodItems[newIndex];
-    repository.foodItems[newIndex] = item1;
+    ObjFoodItem item1 = inventory.foodItems[oldIndex];
+    inventory.foodItems[oldIndex] = inventory.foodItems[newIndex];
+    inventory.foodItems[newIndex] = item1;
     setState(() {});
   }
 
@@ -100,7 +100,7 @@ class _InventoryItemState extends State<InventoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    initializeIsSelected(repository.foodItems.length);
+    initializeIsSelected(inventory.foodItems.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Row(children: <Widget>[
@@ -122,7 +122,7 @@ class _InventoryItemState extends State<InventoryItem> {
               margin: EdgeInsets.all(10),
               child: Center(
                 child: Text(
-                  repository.name,
+                  inventory.name,
                   style: TextStyle(fontSize: 20),
                 ),
               ))
@@ -135,15 +135,15 @@ class _InventoryItemState extends State<InventoryItem> {
           child: ReorderableListView(
               onReorder: (oldIndex, newIndex) => reorder(oldIndex, newIndex),
               children: [
-                for (int i = 0; i < repository.foodItems.length; i++)
+                for (int i = 0; i < inventory.foodItems.length; i++)
                   InkWell(
                     key: ValueKey(i),
                     onTap: () => foodInformation(context),
                     child: ListTile(
                       leading: Icon(Icons.navigate_next),
-                      title: Text(repository.foodItems[i].name),
+                      title: Text(inventory.foodItems[i].name),
                       subtitle: Text("Quantity:" +
-                          repository.foodItems[i].quantity.toString()),
+                          inventory.foodItems[i].quantity.toString()),
                       trailing: Checkbox(
                           value: isSelected[i],
                           onChanged: (bool value) {

@@ -3,29 +3,23 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
-import 'package:dispenser_ui/home/wishlist/wishlistCategories.dart';
-import 'package:dispenser_ui/home/wishlist/addWishlist.dart';
+import 'package:dispenser_ui/home/wishlist/wishListManager.dart';
+import 'package:dispenser_ui/home/wishlist/addWishList.dart';
 import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
 import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
-import 'package:dispenser_ui/objects/FoodItem.dart';
-import 'package:dispenser_ui/objects/FoodRepository.dart';
-import 'package:dispenser_ui/objects/Wishlist.dart';
-import 'package:dispenser_ui/ObjManager.dart';
 
 enum viewType { List, Staggered }
 
 class Home extends StatefulWidget {
-  final Manager manager = Manager();
 
   @override
   State<StatefulWidget> createState() {
-    return TabBarPage(manager);
+    return TabBarPage();
   }
 }
 
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
-  Manager manager;
 
   List<Widget> tabs;
   bool dialVisible = true;
@@ -40,44 +34,10 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     Tab(icon: Icon(Icons.note, size: 40)),
   ];
 
-  TabBarPage(this.manager) {
-    manager.foodRepositories.repositories
-        .add(ObjFoodRepository(1, 3, "Items Not Stored"));
-    manager.foodRepositories.repositories
-        .add(ObjFoodRepository(2, 1, "Fridge"));
-    manager.foodRepositories.repositories
-        .add(ObjFoodRepository(3, 2, "Freezer"));
-    manager.foodRepositories.repositories
-        .add(ObjFoodRepository(4, 3, "Storage"));
-    manager.wishlists.wishlists.add(ObjWishList(1, "All Items"));
-    ObjFoodItem item1 = ObjFoodItem(1, "leite", 6, 12);
-    ObjFoodItem item2 = ObjFoodItem(2, "badjoraz", 2, 12);
-    ObjFoodItem item3 = ObjFoodItem(3, "degnue", 7, 12);
-    ObjFoodItem item4 = ObjFoodItem(4, "carne", 12, 12);
-    ObjFoodItem item5 = ObjFoodItem(5, "peixe", 11, 12);
-    ObjFoodItem item6 = ObjFoodItem(6, "bolachas", 8, 12);
-    ObjFoodItem item7 = ObjFoodItem(7, "dengues", 4, 12);
-    ObjFoodItem item8 = ObjFoodItem(8, "batatas", 3, 12);
-
-    manager.foodRepositories.repositories[0].addFoodItemToRepository(item1);
-    manager.foodRepositories.repositories[0].addFoodItemToRepository(item2);
-    manager.foodRepositories.repositories[0].addFoodItemToRepository(item3);
-    manager.foodRepositories.repositories[1].addFoodItemToRepository(item1);
-    manager.foodRepositories.repositories[1].addFoodItemToRepository(item4);
-    manager.foodRepositories.repositories[1].addFoodItemToRepository(item7);
-    manager.foodRepositories.repositories[2].addFoodItemToRepository(item8);
-    manager.foodRepositories.repositories[2].addFoodItemToRepository(item6);
-    manager.foodRepositories.repositories[2].addFoodItemToRepository(item5);
-    manager.foodRepositories.repositories[3].addFoodItemToRepository(item3);
-    manager.foodRepositories.repositories[3].addFoodItemToRepository(item6);
-    manager.foodRepositories.repositories[3].addFoodItemToRepository(item5);
-    manager.wishlists.wishlists[0].foodItems.add(item1);
-    manager.wishlists.wishlists[0].foodItems.add(item3);
-    manager.wishlists.wishlists[0].foodItems.add(item2);
-
+  TabBarPage() {
     tabs = [
-      Inventory(manager),
-      WishListCategories(manager),
+      Inventory(),
+      WishListCategories(),
       Container(child: StaggeredGridPage(notesViewType: notesViewType)),
     ];
   }
@@ -110,25 +70,25 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddProductInventoryPage(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddProductToInventory(manager));
+        builder: (BuildContext context) => AddProductToInventory());
     Navigator.of(context).push(route);
   }
 
   void loadAddInventoryPage(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddInventoryPage(manager));
+        builder: (BuildContext context) => AddInventoryPage());
     Navigator.of(context).push(route);
   }
 
   void loadAddProductWishlistPage(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddProductToWishList(manager));
+        builder: (BuildContext context) => AddProductToWishList());
     Navigator.of(context).push(route);
   }
 
   void loadAddWishlistPage(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddWishList(manager));
+        builder: (BuildContext context) => AddWishList());
     Navigator.of(context).push(route);
   }
 
@@ -140,7 +100,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddNotesNotesPage(BuildContext context) {
     //  var route =
-    //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage(manager));//AddNotesNotePage());
+    //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage());//AddNotesNotePage());
     // Navigator.of(context).push(route);
   }
 

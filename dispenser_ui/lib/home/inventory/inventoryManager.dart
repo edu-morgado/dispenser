@@ -1,24 +1,19 @@
 import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
+import 'package:provider/provider.dart';
 
 class Inventory extends StatefulWidget {
-  final Manager manager;
 
-  Inventory(this.manager);
 
   @override
   State<StatefulWidget> createState() {
-    return InventoryState(manager);
+    return InventoryState();
   }
 }
 
 class InventoryState extends State<Inventory> {
-  Manager manager;
-
-  InventoryState(this.manager);
 
   List<bool> isSelected = List<bool>();
 
@@ -49,19 +44,19 @@ class InventoryState extends State<Inventory> {
     setState(() {});
   }
 
-  Widget deleteIconButton() {
+  Widget deleteIconButton(Manager manager) {
     return IconButton(
       icon: Icon(Icons.delete_outline),
-      onPressed: () => deleteFoodRepositories(),
+      onPressed: () => deleteFoodRepositories(manager),
     );
   }
 
-  void deleteFoodRepositories() {
+  void deleteFoodRepositories(Manager manager) {
     int i;
     setState(() {
       for (i = 0; i < isSelected.length; i++) {
         if (isSelected[i]) {
-          manager.foodRepositories.repositories.removeAt(i);
+          manager.inventories.inventories.removeAt(i);
           isSelected.removeAt(i);
           i = -1;
         }
@@ -92,7 +87,7 @@ class InventoryState extends State<Inventory> {
     return true;
   }
 
-  Widget topBar() {
+  Widget topBar(Manager manager) {
     if (anySelected())
       return Row(children: [
         SizedBox(
@@ -107,7 +102,7 @@ class InventoryState extends State<Inventory> {
           flex: 2,
         ),
         selectAllIconButton(),
-        deleteIconButton(),
+        deleteIconButton(manager),
       ]);
     else
       return Row(children: [
@@ -124,11 +119,13 @@ class InventoryState extends State<Inventory> {
 
   @override
   Widget build(BuildContext context) {
-    initializeIsSelected(manager.foodRepositories.repositories.length);
+    final Manager manager = Provider.of<Manager>(context) ;
+
+    initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         Container(height: 45),
-        topBar(),
+        topBar(manager),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
@@ -150,8 +147,8 @@ class InventoryState extends State<Inventory> {
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    InventoryItem(manager.foodRepositories
-                                        .repositories[index]))),
+                                    InventoryItem(manager.inventories
+                                        .inventories[index]))),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.8 + 20,
                           alignment: Alignment.center,
@@ -159,7 +156,7 @@ class InventoryState extends State<Inventory> {
                             borderRadius: BorderRadius.circular(20.0),
                             image: DecorationImage(
                               image: AssetImage(
-                                  'assets/inventory/${manager.foodRepositories.repositories[index].ttype}.jpg'),
+                                  'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -167,7 +164,7 @@ class InventoryState extends State<Inventory> {
                       ),
                     );
                   },
-                  childCount: manager.foodRepositories.repositories.length,
+                  childCount: manager.inventories.inventories.length,
                 ),
               ),
             ],

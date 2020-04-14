@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dispenser_ui/objects/Wishlist.dart';
+import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 

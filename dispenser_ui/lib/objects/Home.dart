@@ -1,9 +1,8 @@
-import 'package:dispenser_ui/objects/Wishlist.dart';
+import 'WishList.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'Note.dart';
-import 'Wishlist.dart';
 import 'FoodItem.dart';
-import 'FoodRepository.dart';
+import 'Inventory.dart';
 
 
 part 'Home.g.dart';
@@ -14,11 +13,11 @@ class ObjHome {
   ListNote notes   ;
   ListFoodItem foodItems  ;
   ListWishList categories   ;
-  ListFoodRepository foodRepositories   ;
+  ListInventory inventories   ;
 
 
 
-  ObjHome(this.notes, this.foodItems, this.categories, this.foodRepositories);
+  ObjHome(this.notes, this.foodItems, this.categories, this.inventories);
 
   factory ObjHome.fromJson(Map<String, dynamic> json) => _$ObjHomeFromJson(json);
   Map<String, dynamic> toJson() => _$ObjHomeToJson(this);

@@ -1,22 +1,18 @@
-import 'package:dispenser_ui/objects/Wishlist.dart';
-import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:dispenser_ui/objects/WishList.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 
 
 class AddProductToWishList extends StatefulWidget {
-  final Manager manager;
-  AddProductToWishList(this.manager,{Key key}) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState(manager);
+  _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProductToWishList> {
-  Manager manager;
-
-  _AddProductState(this.manager);
 
 
   final TextEditingController _nameController = TextEditingController();
@@ -89,7 +85,7 @@ class _AddProductState extends State<AddProductToWishList> {
     return ListView.builder(
       itemCount: wishlists.length,
       itemBuilder: (context, i) => ListTile(
-        leading: Text(manager.wishlists.wishlists[i].name),
+        leading: Text(wishlists[i].name),
         trailing: Checkbox(
             value: isSelected[i],
             onChanged: (bool value) {
@@ -117,12 +113,12 @@ Widget chooseSection(List<ObjWishList> wishlists) {
     return ListView.builder(
       itemCount: wishlists.length,
       itemBuilder: (context, i) => ListTile(
-        leading: Text(manager.wishlists.wishlists[i].name),
+        leading: Text(wishlists[i].name),
       ),
     );
   }
 
-  Widget addProductToWishListButton(BuildContext context) {
+  Widget addProductToWishListButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -154,6 +150,8 @@ Widget chooseSection(List<ObjWishList> wishlists) {
 
   @override
   Widget build(BuildContext context) {
+    final Manager manager = Provider.of<Manager>(context) ;
+
     List<ObjWishList> wishlists = manager.wishlists.wishlists;
     initializeIsSelected(wishlists.length);
 
@@ -222,7 +220,7 @@ Widget chooseSection(List<ObjWishList> wishlists) {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topCenter,
-              child: addProductToWishListButton(context),
+              child: addProductToWishListButton(context, manager),
             ),
           ),
         ],
@@ -232,20 +230,15 @@ Widget chooseSection(List<ObjWishList> wishlists) {
 }
 
 class AddWishList extends StatefulWidget {
-final Manager manager;
-
-  AddWishList(this.manager,{Key key}) : super(key: key);
 
   @override
-  _AddWishListState createState() => _AddWishListState(manager);
+  _AddWishListState createState() => _AddWishListState();
 }
 
 class _AddWishListState extends State<AddWishList> {
-  final formKey = new GlobalKey<FormState>();
-  Manager manager;
- 
- _AddWishListState(this.manager);
 
+  final formKey = new GlobalKey<FormState>();
+ 
   @override
   void initState() {
     super.initState();
@@ -307,7 +300,7 @@ class _AddWishListState extends State<AddWishList> {
   }
 
 
-  Widget addWishlistButton(BuildContext context) {
+  Widget addWishlistButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -331,6 +324,8 @@ class _AddWishListState extends State<AddWishList> {
   }
   @override
   Widget build(BuildContext context) {
+    final Manager manager = Provider.of<Manager>(context) ;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -381,7 +376,7 @@ class _AddWishListState extends State<AddWishList> {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.1,
               alignment: Alignment.topLeft,
-              child: addWishlistButton(context),
+              child: addWishlistButton(context, manager),
             ),
           ),
         ],
