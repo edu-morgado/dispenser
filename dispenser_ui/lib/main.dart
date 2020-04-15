@@ -6,6 +6,8 @@ import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:dispenser_ui/objects/Inventory.dart';
+import 'package:dispenser_ui/objects/Note.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -30,6 +32,10 @@ class MyApp extends StatelessWidget {
     ObjFoodItem item6 = ObjFoodItem(6, "bolachas", 8, 12);
     ObjFoodItem item7 = ObjFoodItem(7, "dengues", 4, 12);
     ObjFoodItem item8 = ObjFoodItem(8, "batatas", 3, 12);
+    ObjNote note1 = ObjNote(1,"nota one dengue", "some note juicy ass content fo yo ass", DateTime(2000,1,1,1,1), DateTime(2000,1,1,1,1), Colors.red );
+    ObjNote note2 = ObjNote(2,"nota dois dengue", "some mo juicy ass content fo yo ass", DateTime(2000,1,1,1,1), DateTime(2000,1,1,1,1), Colors.blue);
+    ObjNote note3=  ObjNote(3,"nota one dengue", "wake yo fatass traca fatigated master youre sleeping behind me right now", DateTime(2000,1,1,1,1), DateTime(2000,1,1,1,1), Colors.green);
+
 
     manager.inventories.inventories[0].addFoodItemToRepository(item1);
     manager.inventories.inventories[0].addFoodItemToRepository(item2);
@@ -46,6 +52,9 @@ class MyApp extends StatelessWidget {
     manager.wishlists.wishlists[0].foodItems.add(item1);
     manager.wishlists.wishlists[0].foodItems.add(item3);
     manager.wishlists.wishlists[0].foodItems.add(item2);
+    manager.notes.notes.add(note1);
+    manager.notes.notes.add(note2);
+    manager.notes.notes.add(note3);
     return manager;
   }
 

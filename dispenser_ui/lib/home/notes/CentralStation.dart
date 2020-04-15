@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-class CentralStation {
+ class CentralStation{
   static bool _updateNeeded;
 
   static final fontColor = Color(0xff595959);
@@ -50,4 +50,4 @@ class CentralStation {
 
     return dateString;
   }
-}
+ }

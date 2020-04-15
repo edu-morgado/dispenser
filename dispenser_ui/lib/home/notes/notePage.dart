@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import '../Models/Note.dart';
-// import '../Models/SqliteHandler.dart';
 import 'dart:async';
-import '../Models/Utility.dart';
-import '../Views/MoreOptionsSheet.dart';
+import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:flutter/services.dart';
+import 'package:dispenser_ui/objects/Note.dart';
+import 'package:dispenser_ui/customizedwidgets/MoreOptionsSheet.dart';
+import 'package:dispenser_ui/home/notes/CentralStation.dart';
 
 class NotePage extends StatefulWidget {
-  final Note noteInEditing;
+  final ObjNote noteInEditing;
 
   NotePage(this.noteInEditing);
   @override
@@ -93,7 +92,7 @@ class _NotePageState extends State<NotePage> {
               Flexible(
                 child: Container(
                   padding: EdgeInsets.all(5),
-//          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
+//          decoration: BoxDecoration(border: Border.all(color: borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                   child: EditableText(
                       onChanged: (str) => {updateNoteObject()},
                       maxLines: null,
@@ -113,7 +112,7 @@ class _NotePageState extends State<NotePage> {
               Flexible(
                   child: Container(
                       padding: EdgeInsets.all(5),
-//    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
+//    decoration: BoxDecoration(border: Border.all(color: borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                       child: EditableText(
                         onChanged: (str) => {updateNoteObject()},
                         maxLines: 300, // line limit extendable later
@@ -345,7 +344,7 @@ class _NotePageState extends State<NotePage> {
   void _saveAndStartNewNote(BuildContext context) {
     _persistenceTimer.cancel();
     var emptyNote =
-        new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+         ObjNote(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     Navigator.of(context).pop();
     Navigator.push(
         context, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
@@ -428,6 +427,7 @@ class _NotePageState extends State<NotePage> {
   }
   */
 
+
   void _undo() {
     _titleController.text = _titleFrominitial; // widget.noteInEditing.title;
     _contentController.text =
@@ -435,4 +435,6 @@ class _NotePageState extends State<NotePage> {
     _editableNote.date_last_edited =
         _lastEditedForUndo; // widget.noteInEditing.date_last_edited;
   }
+
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class ColorSlider extends StatefulWidget {
   final void Function(Color)  callBackColorTapped ;
   final Color noteColor ;
@@ -29,17 +30,21 @@ class _ColorSliderState extends State<ColorSlider> {
    final Color foregroundColor = Color(0xff595959);
 
   final _check = Icon(Icons.check);
+
   Color noteColor;
-  
   int indexOfCurrentColor;
   @override void initState() {
+
     super.initState();
     this.noteColor = widget.noteColor;
     indexOfCurrentColor = colors.indexOf(noteColor);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return ListView(
       scrollDirection: Axis.horizontal,
       children:
@@ -65,9 +70,11 @@ class _ColorSliderState extends State<ColorSlider> {
                   )
               ) )
           );
+
       })
       ,);
   }
+
 
   void _colorChangeTapped(int indexOfColor) {
     setState(() {
@@ -75,6 +82,7 @@ class _ColorSliderState extends State<ColorSlider> {
       indexOfCurrentColor = indexOfColor;
       widget.callBackColorTapped(colors[indexOfColor]);
     });
+
   }
 
   Widget _checkOrNot(int index){

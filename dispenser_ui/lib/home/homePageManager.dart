@@ -5,9 +5,9 @@ import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishListManager.dart';
 import 'package:dispenser_ui/home/wishlist/addWishList.dart';
-import 'package:dispenser_ui/home/testingnotes/Models/Note.dart';
-import 'package:dispenser_ui/home/testingnotes/ViewControllers/notePage.dart';
-import 'package:dispenser_ui/home/testingnotes/ViewControllers/StaggeredView.dart';
+import 'package:dispenser_ui/home/notes/notePage.dart';
+import 'package:dispenser_ui/home/notes/StaggeredPage.dart';
+import 'package:dispenser_ui/objects/Note.dart';
 
 enum viewType { List, Staggered }
 
@@ -263,7 +263,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   void _newNoteTapped(BuildContext ctx) {
     // "-1" id indicates the note is not new
     var emptyNote =
-        new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+        new ObjNote(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     Navigator.push(
         ctx, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
   }

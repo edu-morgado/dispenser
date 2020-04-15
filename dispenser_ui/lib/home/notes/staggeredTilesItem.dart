@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import '../ViewControllers/NotePage.dart';
-import '../Models/Note.dart';
-import '../Models/Utility.dart';
+import 'package:dispenser_ui/objects/Note.dart';
+import 'package:dispenser_ui/home/notes/NotePage.dart';
+import 'package:dispenser_ui/home/notes/CentralStation.dart';
+
 
 class MyStaggeredTile extends StatefulWidget {
-  final Note note;
+  final ObjNote note;
   MyStaggeredTile(this.note);
   @override
   _MyStaggeredTileState createState() => _MyStaggeredTileState();
@@ -42,6 +43,7 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
 
   void _noteTapped(BuildContext ctx) {
     CentralStation.updateNeeded = false;
+    print("pressing note tapped");
     Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => NotePage(widget.note)));
   }
 

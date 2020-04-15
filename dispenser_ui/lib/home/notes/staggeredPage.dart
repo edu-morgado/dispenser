@@ -1,9 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../Models/Note.dart';
-import '../Models/Utility.dart';
-import '../Views/StaggeredTiles.dart';
+import 'package:provider/provider.dart';
+
+import 'package:dispenser_ui/objects/Note.dart';
+import 'package:dispenser_ui/home/notes/CentralStation.dart';
+import 'package:dispenser_ui/home/notes/StaggeredTilesItem.dart';
+import 'package:dispenser_ui/ObjManager.dart';
+
 import 'package:dispenser_ui/home/homePageManager.dart';
 
 class StaggeredGridPage extends StatefulWidget {
@@ -15,17 +18,7 @@ class StaggeredGridPage extends StatefulWidget {
 
 class _StaggeredGridPageState extends State<StaggeredGridPage> {
   // var  noteDB = NotesDBHandler();
-  List<Map<String, dynamic>> _allNotesInQueryResult = [
-    {
-      'id': 1,
-      'title': "note one dengue",
-      'content': "contentand more andore more denguebfsdf",
-      'date_created': DateTime(2000, 1, 1, 1, 1),
-      'date_last_edited': DateTime(2000, 1, 1, 1, 1),
-      'note_color': Colors.red,
-      'is_archived': 1
-    },
-  ];
+ 
   viewType notesViewType;
 
   @override
@@ -42,6 +35,9 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Manager manager = Provider.of<Manager>(context);
+
+    List<ObjNote> notes= manager.notes.notes;
     GlobalKey _stagKey = GlobalKey();
 
     print("update needed?: ${CentralStation.updateNeeded}");
@@ -57,10 +53,10 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
         crossAxisSpacing: 6,
         mainAxisSpacing: 6,
         crossAxisCount: _colForStaggeredView(context),
-        children: List.generate(_allNotesInQueryResult.length, (i) {
-          return _tileGenerator(i);
+        children: List.generate(notes.length, (i) {
+          return _tileGenerator(i, notes);
         }),
-        staggeredTiles: _tilesForView(),
+        staggeredTiles: _tilesForView(notes),
       ),
     ));
   }
@@ -71,9 +67,9 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
     return MediaQuery.of(context).size.width > 600 ? 3 : 2;
   }
 
-  List<StaggeredTile> _tilesForView() {
+  List<StaggeredTile> _tilesForView(List<ObjNote> notes) {
     // Generate staggered tiles for the view based on the current preference.
-    return List.generate(_allNotesInQueryResult.length, (index) {
+    return List.generate(notes.length, (index) {
       return StaggeredTile.fit(1);
     });
   }
@@ -91,18 +87,18 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
         left: padding, right: padding, top: top_bottom, bottom: top_bottom);
   }
 
-  MyStaggeredTile _tileGenerator(int i) {
-    return MyStaggeredTile(Note(
-        _allNotesInQueryResult[i]["id"],
-        _allNotesInQueryResult[i]["title"] == null
+  MyStaggeredTile _tileGenerator(int i, List<ObjNote> notes) {
+    return MyStaggeredTile(ObjNote(
+        notes[i].id,
+        notes[i].title == null
             ? ""
-            : _allNotesInQueryResult[i]["title"],
-        _allNotesInQueryResult[i]["content"] == null
+            : notes[i].title,
+        notes[i].title == null
             ? ""
-            : _allNotesInQueryResult[i]["content"],
-        _allNotesInQueryResult[i]["date_created"],
-        _allNotesInQueryResult[i]["date_last_edited"],
-        _allNotesInQueryResult[i]["note_color"]));
+            : notes[i].title,
+        notes[i].date_created,
+        notes[i].date_last_edited,
+        notes[i].note_color));
   }
 
 /*
@@ -111,7 +107,7 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
     var _testData = noteDB.selectAllNotes();
     _testData.then((value){
         setState(() {
-          this._allNotesInQueryResult = value;
+          this.notes = value;
           CentralStation.updateNeeded = false;
         });
     });
