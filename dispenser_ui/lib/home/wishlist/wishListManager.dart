@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:dispenser_ui/ObjManager.dart';
-class WishListCategories extends StatefulWidget {
+class WishListManager extends StatefulWidget {
 
 
   @override
@@ -14,7 +14,7 @@ class WishListCategories extends StatefulWidget {
   }
 }
 
-class WishListState extends State<WishListCategories> {
+class WishListState extends State<WishListManager> {
   @override
   void initState() {
     super.initState();
