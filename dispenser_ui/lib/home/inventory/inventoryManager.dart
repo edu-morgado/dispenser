@@ -5,8 +5,6 @@ import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
 
 class Inventory extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() {
     return InventoryState();
@@ -14,7 +12,6 @@ class Inventory extends StatefulWidget {
 }
 
 class InventoryState extends State<Inventory> {
-
   List<bool> isSelected = List<bool>();
 
   void initializeIsSelected(int size) {
@@ -119,7 +116,7 @@ class InventoryState extends State<Inventory> {
 
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context) ;
+    final Manager manager = Provider.of<Manager>(context);
 
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
@@ -143,25 +140,35 @@ class InventoryState extends State<Inventory> {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: InkWell(
-                        onLongPress: () => selected(index),
-                        onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    InventoryItem(manager.inventories
-                                        .inventories[index]))),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8 + 20,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
+                          onLongPress: () => selected(index),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      InventoryItem(manager
+                                          .inventories.inventories[index]))),
+                          child: Stack(
+                              alignment: Alignment.topRight,
+                              children: <Widget>[
+                                Container(
+                                  child: godfathersNameStyle(manager
+                                      .inventories.inventories[index].name),
+                                  width: MediaQuery.of(context).size.width,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Checkbox(
+                                    value: isSelected[index],
+                                    onChanged: (bool value) {
+                                      selected(index);
+                                    }),
+                              ])),
                     );
                   },
                   childCount: manager.inventories.inventories.length,
