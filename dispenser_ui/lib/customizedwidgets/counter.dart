@@ -9,6 +9,7 @@ class Counter extends StatefulWidget {
 
   Counter({
     @required this.initialValue,
+    @required this.selectedValue,
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
@@ -17,8 +18,7 @@ class Counter extends StatefulWidget {
     this.textStyle,
     this.step,
     this.buttonSize = 25,
-  })  : 
-        selectedValue = initialValue;
+  }) ;
         
 
   final CounterChangeCallback onChanged;
@@ -54,6 +54,7 @@ class Counter extends StatefulWidget {
     // TODO: implement createState
     return CounterState(
       initialValue:initialValue, 
+      selectedValue: selectedValue,
       minValue: minValue,
       maxValue: maxValue,
       onChanged: onChanged,
@@ -71,6 +72,7 @@ class CounterState extends State<Counter>{
 
   CounterState({
     @required this.initialValue,
+    @required this.selectedValue,
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
@@ -79,8 +81,7 @@ class CounterState extends State<Counter>{
     this.textStyle,
     this.step,
     this.buttonSize = 25,
-  })  :
-        selectedValue = initialValue;
+  });
 
   final num initialValue;
 
@@ -111,7 +112,8 @@ class CounterState extends State<Counter>{
     if (selectedValue + step <= maxValue) {
       selectedValue += step;
       onChanged((selectedValue));
-
+      setState(() {
+      });
     }
   }
 
@@ -119,6 +121,8 @@ class CounterState extends State<Counter>{
     if (selectedValue - step >= minValue) {
       selectedValue -= step;
       onChanged((selectedValue));
+            setState(() {
+      });
     }
   }
 

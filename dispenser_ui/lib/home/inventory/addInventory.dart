@@ -9,27 +9,120 @@ import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
 class AddProductToInventory extends StatefulWidget {
-
   @override
   _AddProductToInventoryState createState() => _AddProductToInventoryState();
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
-
   _AddProductToInventoryState();
 
   final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
-  final FocusNode _nameNode = FocusNode(); 
-
+  final FocusNode _nameNode = FocusNode();
 
   num quantity = 1;
-  num section=1;
+  num section = 1;
   int inventoryIndex = 1;
 
-  List<bool> isChecked = List<bool>() ;
+  List<bool> isChecked = List<bool>();
   List<dynamic> choices = List<dynamic>();
+
+  List<dynamic> products = [];
+
+  int openedTile = -1;
+  List<Widget> addTilesManager = new List<Widget>();
+
+  @override
+  void initState() {
+    addTilesManager.add(ListTile(
+      onTap: () => addTileToTiles(),
+      title: Text(
+        "Add ",
+        textAlign: TextAlign.center,
+      ),
+    ));
+    super.initState();
+  }
+
+  Widget addTile() {
+    return ListTile(
+      onTap: () => addTileToTiles(),
+      title: Text(
+        "Add ",
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  void addTileToTiles() {
+    //save previous countent
+    
+    if (products.length != 0) {
+      products[openedTile] = {
+        'name': _nameController.text,
+        'quantity': quantity,
+      };
+        addTilesManager[openedTile] = addClosedTile(products[openedTile], openedTile);
+    }
+    products.add({'name': "", 'quantity': 1});
+    quantity = 1;
+    addTilesManager.add(addTile());
+    addTilesManager[addTilesManager.length - 2] =
+        addOpenedTile(products[products.length - 1], addTilesManager.length);
+
+    openedTile = addTilesManager.length - 2;
+
+    setState(() {});
+  }
+
+  Widget addOpenedTile(dynamic tileInfo, int index) {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.05,
+          child: Center(child: counter(tileInfo['quantity'])),
+        ),
+        Center(
+            child: Container(
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height * 0.05,
+          child: nameInput(
+            context,
+            tileInfo['name'],
+          ),
+        ))
+      ],
+    );
+  }
+
+  Widget addClosedTile(dynamic tileInfo, int index) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.1,
+      child: InkWell(
+        onTap: () {
+          products[openedTile] = {
+          'name': _nameController.text,
+          'quantity': quantity,
+          };
+          addTilesManager[openedTile] = addClosedTile(products[openedTile], openedTile);
+          addTilesManager[index] = addOpenedTile(products[index], index);
+
+          openedTile = index;
+          setState(() {});
+        },
+        child: ListTile(
+          title: Row(
+            children: [
+              Text('Name:${tileInfo['name']} Quantity${tileInfo['quantity']}')
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   void initializeChoices(List<ObjInventory> inventories) {
     for (int i = 0; i < inventories.length; i++) {
@@ -40,41 +133,35 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     }
   }
 
-  Widget counter() {
+  Widget counter(int initialValue) {
     return Counter(
-      initialValue: quantity,
+      initialValue: initialValue,
+      selectedValue: initialValue,
       minValue: 1,
       maxValue: 1000,
       step: 1,
       decimalPlaces: 0,
       onChanged: (value) {
         print("onChanged beeing called");
-        setState(() {
-          value = value;
-          print("default value -> $quantity");
-        });
+        quantity = value;
+        print("quantity -> $quantity");
       },
     );
   }
 
-  Widget nameInput(context) {
+  Widget nameInput(context, String name) {
+    _nameController.text = name;
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
       child: TextFormField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
         controller: _nameController,
-        validator: (value) {
-          if (value.length < 6) {
-            return 'Password must be at least 6 characters long';
-          }
-          return null;
-        },
         onEditingComplete: () {
-          FocusScope.of(context).unfocus();
           //loadHomePage(context);
         },
         decoration: new InputDecoration(
+          hasFloatingPlaceholder: false,
           labelText: 'Product Name',
           focusColor: Colors.grey[300],
         ),
@@ -137,14 +224,17 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newItem = ObjFoodItem(1, _nameController.text,quantity, section );
+          ObjFoodItem newItem =
+              ObjFoodItem(1, _nameController.text, quantity, section);
           manager.foodItems.foodItems.add(newItem);
-          manager.inventories.inventories[inventoryIndex].foodItems.add(newItem);
-          print(manager.inventories.inventories[inventoryIndex].foodItems[0].toString());
+          manager.inventories.inventories[inventoryIndex].foodItems
+              .add(newItem);
+          print(manager.inventories.inventories[inventoryIndex].foodItems[0]
+              .toString());
           Navigator.of(context).pop();
         },
         child: Text(
-          "Add Product",
+          "Add Products",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
         ),
@@ -154,15 +244,15 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   Widget build(BuildContext context) {
-        final Manager manager = Provider.of<Manager>(context) ;
+    final Manager manager = Provider.of<Manager>(context);
 
-    List<ObjInventory> inventories =
-        manager.inventories.inventories;
+    List<ObjInventory> inventories = manager.inventories.inventories;
     initializeChoices(inventories);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
+      body: Flex(
+        direction: Axis.vertical,
         children: [
           Row(children: <Widget>[
             Container(
@@ -186,38 +276,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                   ),
                 ))
           ]),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: nameInput(context),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(child: Text("How many to add")),
-              SizedBox(
-                width: 30,
-              ),
-              counter(),
-            ],
-          ),
-          Center(
-            child: Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.3,
-                alignment: Alignment.topLeft,
-                child: dropDownFormField()),
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.2,
-              alignment: Alignment.topCenter,
-              child: chooseSection(inventories),
-            ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: addTilesManager.length,
+                itemBuilder: (context, i) => addTilesManager[i]),
           ),
           Center(
             child: Container(
@@ -227,31 +289,26 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               child: addProductInventoryButton(context, manager),
             ),
           ),
+          Container(
+            height: 90,
+          )
         ],
       ),
     );
   }
 }
 
-
-
-
 class AddInventoryPage extends StatefulWidget {
-  
-
   @override
   InventoryAddState createState() => new InventoryAddState();
 }
 
 class InventoryAddState extends State<AddInventoryPage> {
+  final formKey = new GlobalKey<FormState>();
 
-   final formKey = new GlobalKey<FormState>();
+  InventoryAddState();
 
- InventoryAddState();
- 
   int ttype = 1;
- 
-
 
   final TextEditingController _nameController = TextEditingController();
 
@@ -302,7 +359,6 @@ class InventoryAddState extends State<AddInventoryPage> {
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
       child: TextFormField(
-        
         focusNode: _descNode,
         textInputAction: TextInputAction.done,
         onEditingComplete: () {
@@ -354,8 +410,7 @@ class InventoryAddState extends State<AddInventoryPage> {
     );
   }
 
-
-   Widget addFoodRepositoryButton(BuildContext context, Manager manager) {
+  Widget addFoodRepositoryButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -365,7 +420,7 @@ class InventoryAddState extends State<AddInventoryPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjInventory newFoodRepository = ObjInventory(1, ttype ,"ei");
+          ObjInventory newFoodRepository = ObjInventory(1, ttype, "ei");
           manager.inventories.inventories.add(newFoodRepository);
           Navigator.of(context).pop();
         },
@@ -377,10 +432,10 @@ class InventoryAddState extends State<AddInventoryPage> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context) ;
+    final Manager manager = Provider.of<Manager>(context);
 
     initializeChoices(manager.inventories.inventories);
     return Scaffold(
@@ -419,7 +474,9 @@ class InventoryAddState extends State<AddInventoryPage> {
               child: nameInput(context),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,

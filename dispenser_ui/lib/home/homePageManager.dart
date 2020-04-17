@@ -38,7 +38,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     tabs = [
       Inventory(),
       WishListManager(),
-      Container(child: StaggeredGridPage(notesViewType: notesViewType)),
+      StaggeredGridPage(notesViewType: notesViewType),
     ];
   }
 
