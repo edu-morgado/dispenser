@@ -98,7 +98,7 @@ class _InventoryItemState extends State<InventoryItem> {
 
   Widget topBar() {
     if (anySelected())
-      return Row(children: [
+      return Row(children:[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.15,
         ),
@@ -159,31 +159,10 @@ class _InventoryItemState extends State<InventoryItem> {
   Widget build(BuildContext context) {
     initializeIsSelected(inventory.foodItems.length);
     return Scaffold(
-      body: Flex(direction: Axis.vertical, children: [
-        Row(children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.1,
-            height: MediaQuery.of(context).size.height * 0.15,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          Spacer(),
-          deleteIconButton(),
-        ]),
-        Row(children: <Widget>[
-          Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.05,
-              margin: EdgeInsets.all(10),
-              child: Center(
-                child: Text(
-                  inventory.name,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ))
-        ]),
+        body: Flex(direction: Axis.vertical, children: [
+    Container(height: 45),
+        topBar(),
+      Row(children: <Widget>[
         Center(
             child: Container(
           width: MediaQuery.of(context).size.width,
@@ -211,6 +190,6 @@ class _InventoryItemState extends State<InventoryItem> {
               ]),
         )),
       ]),
-    );
+    ]));
   }
 }
