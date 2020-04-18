@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/Inventory.dart';
@@ -15,8 +14,6 @@ class AddProductToInventory extends StatefulWidget {
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
-  _AddProductToInventoryState();
-
   final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
@@ -31,26 +28,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   List<dynamic> products = [];
 
-  int openedTile = -1;
+  int openedTile = 0;
   List<Widget> addTilesManager = new List<Widget>();
-
-  @override
-  void initState() {
-    addTilesManager.add(Divider(
-      thickness: 3,
-    ));
-    addTilesManager.add(Container(
-        child: ListTile(
-          onTap: () => addTileToTiles(),
-          title: dispenserButton(
-            "Add ",
-          ),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.black12,
-        )));
-    super.initState();
-  }
 
   Widget addTile() {
     return Container(
@@ -79,13 +58,13 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     quantity = 1;
     addTilesManager.add(addTile());
     addTilesManager[addTilesManager.length - 2] =
-        addOpenedTile(products[products.length - 1], addTilesManager.length);
+        addOpenedTile(products[products.length - 1]);
     openedTile = addTilesManager.length - 2;
 
     setState(() {});
   }
 
-  Widget addOpenedTile(dynamic tileInfo, int index) {
+  Widget addOpenedTile(dynamic tileInfo) {
     return Column(
       children: [
         Center(
@@ -102,7 +81,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
           height: 10,
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.3,
+          width: MediaQuery.of(context).size.width * 0.4,
           height: 40,
           decoration: BoxDecoration(
               color: Colors.cyan[300],
@@ -131,7 +110,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
           };
           addTilesManager[openedTile] =
               addClosedTile(products[openedTile], openedTile);
-          addTilesManager[index] = addOpenedTile(products[index], index);
+          addTilesManager[index] = addOpenedTile(products[index]);
           openedTile = index;
           setState(() {});
         },
@@ -272,7 +251,23 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
     List<ObjInventory> inventories = manager.inventories.inventories;
     initializeChoices(inventories);
-
+    if (addTilesManager.length == 0) {
+      addTilesManager.add(Divider(
+        thickness: 3,
+      ));
+      products.add({'name': "", 'quantity': 1});
+      addTilesManager.add(addOpenedTile(products[0]));
+      addTilesManager.add(Container(
+          child: ListTile(
+            onTap: () => addTileToTiles(),
+            title: dispenserButton(
+              "Add ",
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+          )));
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Flex(
