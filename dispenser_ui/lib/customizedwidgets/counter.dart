@@ -17,7 +17,7 @@ class Counter extends StatefulWidget {
     this.color,
     this.textStyle,
     this.step,
-    this.buttonSize = 25,
+    this.buttonSize = 30,
   }) ;
         
 
@@ -131,7 +131,7 @@ class CounterState extends State<Counter>{
     final ThemeData themeData = Theme.of(context);
     color = color ?? themeData.accentColor;
     textStyle = textStyle ?? new TextStyle(
-      fontSize: 20.0,
+      fontSize: 25.0,
     );
 
     return new Container(
@@ -155,7 +155,7 @@ class CounterState extends State<Counter>{
           new Container(
             padding: EdgeInsets.all(4.0),
             child: new Text(
-                '${num.parse((selectedValue).toStringAsFixed(decimalPlaces))}',
+                '  ${num.parse((selectedValue).toStringAsFixed(decimalPlaces))}  ',
                 style: textStyle
             ),
           ),
