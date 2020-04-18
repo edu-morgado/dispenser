@@ -23,7 +23,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   List<Widget> tabs;
   bool dialVisible = true;
-
+  bool firstTime = true;
   var notesViewType;
   ScrollController scrollController;
   TabController _tabController;
@@ -279,8 +279,23 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
+  Color hexToColor(String colorToString) {
+    String valueString = colorToString.split('(0x')[1].split(')')[0]; // kind of hacky..
+    int value = int.parse(valueString, radix: 16);
+    return (Color(value));
+  }
+
+
+
+  clearPopUp() {
+    setState(() => (firstTime = false));
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    if (firstTime) 
+      return Popup(clearPopUp);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: _tabController.index == 2 ? _notesAppBar() : null,
@@ -299,6 +314,36 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       ),
       bottomSheet: _tabController.index == 2 ? _bottomBar() : null,
       floatingActionButton: floatingButton(),
+    );
+  }
+}
+
+
+
+
+class Popup extends StatelessWidget {
+  final Function _clearPopUp;
+
+  Popup(clearPopUp) : _clearPopUp = clearPopUp;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.red,
+        ),
+        Positioned(
+          right: 15.0,
+          top: 25.0,
+          child: IconButton(
+            icon: Icon(Icons.cancel, size: 20),
+            onPressed: () => _clearPopUp(),
+          ),
+        ),
+      ]),
     );
   }
 }

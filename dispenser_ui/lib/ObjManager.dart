@@ -27,14 +27,19 @@ class Manager extends ChangeNotifier{
   DateTime notesLastRequest;
   
   
-  void saveCategory() {
-    fileHandler.writeToFile(notes, "notes.txt");
+  void saveHome() {
+    fileHandler.writeToFile(home, "home.txt");
   }
 
-  Future<bool> loadCategoriesFromFile() async{
-    var json = await fileHandler.readFromFile("notes.txt");
+  Future<bool> loadhomeFromFile() async{
+    var json = await fileHandler.readFromFile("home.txt");
     if(json == null) return false;
-    wishlists = ListWishList.fromJson(json);
+    home = ObjHome.fromJson(json);
+    return true;
+  }
+    Future<bool> deleteHome() async {
+    await fileHandler.delete("home.txt");
+    home = null;
     return true;
   }
 
@@ -56,11 +61,6 @@ class FileHandler {
     String json = jsonEncode(obj);
     File file = await _localFile(fileName);
     return file.writeAsString(json);
-  }
-
-  Future<File> saveImg(Uint8List imgBytes, String fileName) async {
-    File file = await _localFile(fileName);
-    return file.writeAsBytes(imgBytes);
   }
 
   Future<bool> exists(String filename) async {

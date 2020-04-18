@@ -36,6 +36,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   void initState() {
+    addTilesManager.add(Divider(thickness: 3,));
     addTilesManager.add(ListTile(
       onTap: () => addTileToTiles(),
       title: Text(
@@ -188,7 +189,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
       key: formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Container(
             padding: EdgeInsets.all(16),
             child: DropDownFormField(
@@ -264,7 +265,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          Row(children: <Widget>[
+          Row(children: [
             Container(
               width: MediaQuery.of(context).size.width * 0.1,
               height: MediaQuery.of(context).size.height * 0.1,
@@ -275,7 +276,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               ),
             ),
           ]),
-          Row(children: <Widget>[
+          Row(children: [
             Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.05,
@@ -393,7 +394,7 @@ class InventoryAddState extends State<AddInventoryPage> {
       key: formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Container(
             padding: EdgeInsets.all(16),
             child: DropDownFormField(
@@ -452,7 +453,7 @@ class InventoryAddState extends State<AddInventoryPage> {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          Row(children: <Widget>[
+          Row(children: [
             Container(
               width: MediaQuery.of(context).size.width * 0.1,
               height: MediaQuery.of(context).size.height * 0.15,
@@ -463,7 +464,7 @@ class InventoryAddState extends State<AddInventoryPage> {
             ),
           ]),
           Row(
-            children: <Widget>[
+            children: [
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: MediaQuery.of(context).size.height * 0.05,
