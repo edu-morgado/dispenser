@@ -15,6 +15,7 @@ class AddProductToInventory extends StatefulWidget {
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
   final formKey = new GlobalKey<FormState>();
+
   final TextEditingController _nameController = TextEditingController();
 
   final FocusNode _nameNode = FocusNode();
@@ -28,8 +29,57 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   List<dynamic> products = [];
 
-  int openedTile = 0;
+  int openedTile = 1;
   List<Widget> addTilesManager = new List<Widget>();
+
+  void initializeAddTilesManager() {
+    if (addTilesManager.length == 0) {
+      addTilesManager.add(Divider(
+          thickness:
+              3)); // cute UI feature that fucks the indexes up (not best way to do probably)
+      quantity = 1;
+      _nameController.text = "New Product";
+      products.add({
+        'name': _nameController.text,
+        'quantity': quantity
+      }); // first tile appears already open
+
+      addTilesManager.add(addOpenedTile(products[0]));
+      addTilesManager.add(Container(
+          child: ListTile(
+            onTap: () => addTileToTiles(),
+            title: dispenserButton("Add "),
+          ),
+          decoration: BoxDecoration(color: Colors.black12)));
+    }
+  }
+
+  void addTileToTiles() {
+    if (products.length != 0) {
+      products[openedTile - 1] = {
+        'name': _nameController.text,
+        'quantity': quantity,
+      };
+      addTilesManager[openedTile] =
+          addClosedTile(products[openedTile - 1], openedTile);
+    }
+    //save previous countent and turns it into a closed tile (about to open a tile and its a new one)
+
+    quantity = 1;
+    _nameController.text = "New Product";
+    products.add({'name': _nameController.text, 'quantity': quantity});
+    addTilesManager.add(addTile());
+    // adding a new product element for new input information, adding an ADD tile to the end of widget list
+
+    addTilesManager[addTilesManager.length - 2] =
+        addOpenedTile(products[products.length - 1]);
+    // making the before-than-last tile the opened Tile using the last element of
+    // information because last tile is the add button (doesnt neeed information)
+
+    openedTile = addTilesManager.length - 2;
+    // opened tile before-than-last in widget list is now opened Tile
+    setState(() {});
+  }
 
   Widget addTile() {
     return Container(
@@ -42,26 +92,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         decoration: BoxDecoration(
           color: Colors.black12,
         ));
-  }
-
-  void addTileToTiles() {
-    //save previous countent
-    if (products.length != 0) {
-      products[openedTile] = {
-        'name': _nameController.text,
-        'quantity': quantity,
-      };
-      addTilesManager[openedTile] =
-          addClosedTile(products[openedTile], openedTile);
-    }
-    products.add({'name': "", 'quantity': 1});
-    quantity = 1;
-    addTilesManager.add(addTile());
-    addTilesManager[addTilesManager.length - 2] =
-        addOpenedTile(products[products.length - 1]);
-    openedTile = addTilesManager.length - 2;
-
-    setState(() {});
   }
 
   Widget addOpenedTile(dynamic tileInfo) {
@@ -93,7 +123,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-  Widget addClosedTile(dynamic tileInfo, int index) {
+  Widget addClosedTile(dynamic tileInfo, int newIndex) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
@@ -104,14 +134,16 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
-          products[openedTile] = {
+          products[openedTile - 1] = {
             'name': _nameController.text,
             'quantity': quantity,
           };
           addTilesManager[openedTile] =
-              addClosedTile(products[openedTile], openedTile);
-          addTilesManager[index] = addOpenedTile(products[index]);
-          openedTile = index;
+              addClosedTile(products[openedTile - 1], openedTile);
+          addTilesManager[newIndex] = addOpenedTile(products[newIndex - 1]);
+          _nameController.text = products[newIndex - 1]["name"];
+          quantity = products[newIndex - 1]["quantity"];
+          openedTile = newIndex;
           setState(() {});
         },
         child: ListTile(
@@ -125,15 +157,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         ),
       ),
     );
-  }
-
-  void initializeChoices(List<ObjInventory> inventories) {
-    for (int i = 0; i < inventories.length; i++) {
-      choices.add({
-        'display': inventories[i].name,
-        'value': i,
-      });
-    }
   }
 
   Widget counter(int initialValue) {
@@ -249,25 +272,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   Widget build(BuildContext context) {
     final Manager manager = Provider.of<Manager>(context);
 
-    List<ObjInventory> inventories = manager.inventories.inventories;
-    initializeChoices(inventories);
-    if (addTilesManager.length == 0) {
-      addTilesManager.add(Divider(
-        thickness: 3,
-      ));
-      products.add({'name': "", 'quantity': 1});
-      addTilesManager.add(addOpenedTile(products[0]));
-      addTilesManager.add(Container(
-          child: ListTile(
-            onTap: () => addTileToTiles(),
-            title: dispenserButton(
-              "Add ",
-            ),
-          ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-          )));
-    }
+    initializeAddTilesManager();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Flex(
