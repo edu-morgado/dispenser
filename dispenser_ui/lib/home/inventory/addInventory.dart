@@ -257,7 +257,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
           Row(children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width * 0.1,
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.1,
+              alignment: Alignment.bottomLeft,
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(),

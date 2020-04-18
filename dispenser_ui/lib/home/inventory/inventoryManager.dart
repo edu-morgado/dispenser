@@ -146,29 +146,30 @@ class InventoryState extends State<Inventory> {
                                   builder: (BuildContext context) =>
                                       InventoryItem(manager
                                           .inventories.inventories[index]))),
-                          child: Stack(
-                              alignment: Alignment.topRight,
-                              children: <Widget>[
-                                Container(
-                                  child: godfathersNameStyle(manager
-                                      .inventories.inventories[index].name),
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                          child:
+                              Stack(alignment: Alignment.topRight, children: [
+                            Container(
+                              child: godfathersNameStyle(
+                                  manager.inventories.inventories[index].name),
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                  fit: BoxFit.cover,
                                 ),
-                                Checkbox(
+                              ),
+                            ),
+                            anySelected()
+                                ? Checkbox(
                                     value: isSelected[index],
                                     onChanged: (bool value) {
                                       selected(index);
-                                    }),
-                              ])),
+                                    })
+                                : Container(),
+                          ])),
                     );
                   },
                   childCount: manager.inventories.inventories.length,
