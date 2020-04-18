@@ -36,13 +36,19 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   @override
   void initState() {
-    addTilesManager.add(Divider(thickness: 3,));
-    addTilesManager.add(ListTile(
-      onTap: () => addTileToTiles(),
-      title: dispenserButton(
-        "Add ",
-      ),
+    addTilesManager.add(Divider(
+      thickness: 3,
     ));
+    addTilesManager.add(Container(
+        child: ListTile(
+          onTap: () => addTileToTiles(),
+          title: dispenserButton(
+            "Add ",
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black12,
+        )));
     super.initState();
   }
 
@@ -54,7 +60,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
             "Add ",
           ),
         ),
-       
         decoration: BoxDecoration(
           color: Colors.black12,
         ));
@@ -93,12 +98,15 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Container(
           width: MediaQuery.of(context).size.width * 0.3,
           height: 40,
           decoration: BoxDecoration(
-              color: Colors.cyan[300], borderRadius: BorderRadius.circular(30.0)),
+              color: Colors.cyan[300],
+              borderRadius: BorderRadius.circular(30.0)),
           child: Center(child: counter(tileInfo['quantity'])),
         ),
         SizedBox(height: 20)
@@ -112,7 +120,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
       height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
           color: Colors.cyan[100],
-          border: Border.all(color: Colors.black87),
+          border: Border.all(color: Colors.black45),
           borderRadius: BorderRadius.circular(5.0)),
       alignment: Alignment.center,
       child: InkWell(
