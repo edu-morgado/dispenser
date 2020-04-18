@@ -39,27 +39,29 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     addTilesManager.add(Divider(thickness: 3,));
     addTilesManager.add(ListTile(
       onTap: () => addTileToTiles(),
-      title: Text(
+      title: dispenserButton(
         "Add ",
-        textAlign: TextAlign.center,
       ),
     ));
     super.initState();
   }
 
   Widget addTile() {
-    return ListTile(
-      onTap: () => addTileToTiles(),
-      title: Text(
-        "Add ",
-        textAlign: TextAlign.center,
-      ),
-    );
+    return Container(
+        child: ListTile(
+          onTap: () => addTileToTiles(),
+          title: dispenserButton(
+            "Add ",
+          ),
+        ),
+       
+        decoration: BoxDecoration(
+          color: Colors.black12,
+        ));
   }
 
   void addTileToTiles() {
     //save previous countent
-
     if (products.length != 0) {
       products[openedTile] = {
         'name': _nameController.text,
@@ -73,7 +75,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     addTilesManager.add(addTile());
     addTilesManager[addTilesManager.length - 2] =
         addOpenedTile(products[products.length - 1], addTilesManager.length);
-
     openedTile = addTilesManager.length - 2;
 
     setState(() {});
@@ -82,23 +83,25 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   Widget addOpenedTile(dynamic tileInfo, int index) {
     return Column(
       children: [
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: nameInput(
+              context,
+              tileInfo['name'],
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
         Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.05,
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 40,
           decoration: BoxDecoration(
-              color: Color(0xff01A0C7),
-              borderRadius: BorderRadius.circular(20.0)),
+              color: Colors.cyan[300], borderRadius: BorderRadius.circular(30.0)),
           child: Center(child: counter(tileInfo['quantity'])),
         ),
-        Center(
-            child: Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.05,
-          child: nameInput(
-            context,
-            tileInfo['name'],
-          ),
-        ))
+        SizedBox(height: 20)
       ],
     );
   }
@@ -108,8 +111,9 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
-        color: Colors.cyan[50]
-      ),
+          color: Colors.cyan[100],
+          border: Border.all(color: Colors.black87),
+          borderRadius: BorderRadius.circular(5.0)),
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
@@ -125,9 +129,10 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         },
         child: ListTile(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('${tileInfo['name']} x${tileInfo['quantity']}')
+              dispenserDescription(
+                  '${tileInfo['quantity']}x ${tileInfo['name']}')
             ],
           ),
         ),
@@ -288,9 +293,11 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                 ))
           ]),
           Expanded(
-            child: ListView.builder(
-                itemCount: addTilesManager.length,
-                itemBuilder: (context, i) => addTilesManager[i]),
+            child: SafeArea(
+              child: ListView.builder(
+                  itemCount: addTilesManager.length,
+                  itemBuilder: (context, i) => addTilesManager[i]),
+            ),
           ),
           Center(
             child: Container(
@@ -300,9 +307,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
               child: addProductInventoryButton(context, manager),
             ),
           ),
-          Container(
-            height: 90,
-          )
+          SizedBox(height: 20)
         ],
       ),
     );
