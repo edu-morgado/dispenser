@@ -169,11 +169,13 @@ class WishListState extends State<WishListManager> {
                                   child: godfathersNameStyle(
                                       'Wishlist ${manager.wishlists.wishlists[index].name}'),
                                 ),
-                                Checkbox(
-                                    value: isSelected[index],
-                                    onChanged: (bool value) {
-                                      selected(index);
-                                    }),
+                                anySelected()
+                                    ? Checkbox(
+                                        value: isSelected[index],
+                                        onChanged: (bool value) {
+                                          selected(index);
+                                        })
+                                    : Container(),
                               ]),
                         ));
                   },
