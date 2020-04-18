@@ -16,7 +16,12 @@ class AddProductToInventory extends StatefulWidget {
 class _AddProductToInventoryState extends State<AddProductToInventory> {
   final formKey = new GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-
+  @override
+  void dispose() {
+   _nameController.dispose();
+   _nameNode.dispose();
+    super.dispose();
+  }
   final FocusNode _nameNode = FocusNode();
 
   num quantity = 1;
@@ -248,7 +253,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   @override
   Widget build(BuildContext context) {
     final Manager manager = Provider.of<Manager>(context);
-
     List<ObjInventory> inventories = manager.inventories.inventories;
     initializeChoices(inventories);
     if (addTilesManager.length == 0) {
@@ -333,6 +337,12 @@ class InventoryAddState extends State<AddInventoryPage> {
 
   final FocusNode _nameNode = FocusNode();
   final FocusNode _descNode = FocusNode();
+  @override
+  void dispose() {
+   _descNode.dispose();
+   _nameNode.dispose();
+    super.dispose();
+  }
 
   List<dynamic> choices = List<dynamic>();
 
