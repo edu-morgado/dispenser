@@ -94,7 +94,7 @@ Widget drawerRegisterTitle(BuildContext context, String title, String title2) {
 
 Widget drawerRegisterLocation(String location, String locationExplained) {
   return RichText(
-    textAlign: TextAlign.left ,
+    textAlign: TextAlign.left,
     text: TextSpan(
         text: location,
         style: TextStyle(
@@ -124,7 +124,6 @@ Widget titleTextStyle(String text) {
   );
 }
 
-
 Widget discountTextStyle(String text) {
   return AutoSizeText(
     text,
@@ -144,20 +143,14 @@ Widget godfathersNameStyle(String name) {
   return AutoSizeText(
     name,
     maxLines: 1,
-    style: TextStyle(
-      fontSize: 33,
-      fontWeight: FontWeight.w800
-    ),
+    style: TextStyle(fontSize: 33, fontWeight: FontWeight.w800),
   );
 }
 
 Widget godfathersTextStyle(String text) {
   return AutoSizeText(
     text,
-    style: TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.w300
-    ),
+    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
   );
 }
 
@@ -281,3 +274,26 @@ Widget forgotPasswordTextStyle(String text) {
   );
 }
 
+Widget dispenserTitle(String text) {
+  return AutoSizeText(
+    text,
+    textAlign: TextAlign.center,
+    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+  );
+}
+
+Widget dispenserDescription(String text) {
+  return AutoSizeText(
+    text,
+    textAlign: TextAlign.center,
+    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+  );
+}
+
+Widget dispenserButton(String text) {
+  return AutoSizeText(
+    text,
+    textAlign: TextAlign.center,
+    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, fontFamily: 'Montserrat'),
+  );
+}
