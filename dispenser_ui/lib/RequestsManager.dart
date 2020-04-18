@@ -33,17 +33,7 @@ class NotesDBHandler {
   }
 
 
-  initDB() async {
-    var path = await getDatabasesPath();
-    var dbPath = join(path, 'notes.db');
-    // ignore: argument_type_not_assignable
-    Database dbConnection = await openDatabase(
-        dbPath, version: 1, onCreate: (Database db, int version) async {
-      print("executing create query from onCreate callback");
-      await db.execute(_buildCreateQuery());
-    });
-
-    await dbConnection.execute(_buildCreateQuery());
+  ///////////tion.execute(_buildCreateQuery());
     _buildCreateQuery();
     return dbConnection;
   }

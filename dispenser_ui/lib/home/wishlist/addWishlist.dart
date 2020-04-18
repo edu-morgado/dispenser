@@ -18,7 +18,12 @@ class _AddProductState extends State<AddProductToWishList> {
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameNode = FocusNode();
 
-
+  @override
+  void dispose() {
+   _nameController.dispose();
+   _nameNode.dispose();
+    super.dispose();
+  }
   num quantity = 1;
   num section=1;
   List<bool> isSelected = List<bool>();
@@ -248,6 +253,13 @@ class _AddWishListState extends State<AddWishList> {
 
   final FocusNode _nameNode = FocusNode();
   final FocusNode _descNode = FocusNode();
+
+  @override
+  void dispose() {
+   _descNode.dispose();
+   _nameNode.dispose();
+    super.dispose();
+  }
 
   Widget nameInput(context) {
     return Theme(
