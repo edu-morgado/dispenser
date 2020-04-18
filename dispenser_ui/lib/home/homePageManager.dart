@@ -23,7 +23,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   List<Widget> tabs;
   bool dialVisible = true;
-  bool firstTime = true;
+  bool firstTime = false;
   var notesViewType;
   ScrollController scrollController;
   TabController _tabController;
