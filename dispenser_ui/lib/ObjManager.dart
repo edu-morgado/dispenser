@@ -15,7 +15,6 @@ import 'package:dispenser_ui/objects/Note.dart';
 class Manager extends ChangeNotifier{
   FileHandler fileHandler = FileHandler();
 
-  ObjHome home;
   ListWishList wishlists = ListWishList();
   ListFoodItem foodItems = ListFoodItem();
   ListInventory inventories = ListInventory();
@@ -27,21 +26,78 @@ class Manager extends ChangeNotifier{
   DateTime notesLastRequest;
   
   
-  void saveHome() {
-    fileHandler.writeToFile(home, "home.txt");
+  saveFoodItems() {
+    fileHandler.writeToFile(foodItems, "foodItems.txt");
   }
 
-  Future<bool> loadhomeFromFile() async{
-    var json = await fileHandler.readFromFile("home.txt");
+  Future<bool> loadFoodItemsFromFile() async {
+    var json = await fileHandler.readFromFile("foodItems.txt");
     if(json == null) return false;
-    home = ObjHome.fromJson(json);
+    foodItems = ListFoodItem.fromJson(json);
     return true;
   }
-    Future<bool> deleteHome() async {
-    await fileHandler.delete("home.txt");
-    home = null;
+
+  Future<bool> deleteFoodItems() async {
+    await fileHandler.delete("foodItems.txt");
+    foodItems = null;
     return true;
   }
+
+
+
+  saveInventories() {
+    fileHandler.writeToFile(inventories, "inventories.txt");
+  }
+
+  Future<bool> loadInventoriesFromFile() async {
+    var json = await fileHandler.readFromFile("inventories.txt");
+    if(json == null) return false;
+    inventories = ListInventory.fromJson(json);
+    return true;
+  }
+
+  Future<bool> deleteInventories() async {
+    await fileHandler.delete("inventories.txt");
+    inventories = null;
+    return true;
+  }
+
+
+  saveWishLists() {
+    fileHandler.writeToFile(wishlists, "wishlists.txt");
+  }
+
+  Future<bool> loadWishListsFromFile() async {
+    var json = await fileHandler.readFromFile("wishlists.txt");
+    if(json == null) return false;
+    wishlists = ListWishList.fromJson(json);
+    return true;
+  }
+
+  Future<bool> deleteWishList() async {
+    await fileHandler.delete("wishlists.txt");
+    wishlists = null;
+    return true;
+  }
+
+    
+  saveNotes() {
+    fileHandler.writeToFile(notes, "notes.txt");
+  }
+
+  Future<bool> loadNotesFromFile() async {
+    var json = await fileHandler.readFromFile("notes.txt");
+    if(json == null) return false;
+    notes = ListNote.fromJson(json);
+    return true;
+  }
+
+  Future<bool> deleteNotes() async {
+    await fileHandler.delete("notes.txt");
+    notes = null;
+    return true;
+  }
+
 
 }
 
