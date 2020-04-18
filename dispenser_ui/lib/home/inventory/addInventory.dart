@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -57,13 +58,14 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   void addTileToTiles() {
     //save previous countent
-    
+
     if (products.length != 0) {
       products[openedTile] = {
         'name': _nameController.text,
         'quantity': quantity,
       };
-        addTilesManager[openedTile] = addClosedTile(products[openedTile], openedTile);
+      addTilesManager[openedTile] =
+          addClosedTile(products[openedTile], openedTile);
     }
     products.add({'name': "", 'quantity': 1});
     quantity = 1;
@@ -82,6 +84,9 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.05,
+          decoration: BoxDecoration(
+              color: Color(0xff01A0C7),
+              borderRadius: BorderRadius.circular(20.0)),
           child: Center(child: counter(tileInfo['quantity'])),
         ),
         Center(
@@ -101,22 +106,27 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
+      decoration: BoxDecoration(
+        color: Colors.cyan[50]
+      ),
+      alignment: Alignment.center,
       child: InkWell(
         onTap: () {
           products[openedTile] = {
-          'name': _nameController.text,
-          'quantity': quantity,
+            'name': _nameController.text,
+            'quantity': quantity,
           };
-          addTilesManager[openedTile] = addClosedTile(products[openedTile], openedTile);
+          addTilesManager[openedTile] =
+              addClosedTile(products[openedTile], openedTile);
           addTilesManager[index] = addOpenedTile(products[index], index);
-
           openedTile = index;
           setState(() {});
         },
         child: ListTile(
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Name:${tileInfo['name']} Quantity${tileInfo['quantity']}')
+              Text('${tileInfo['name']} x${tileInfo['quantity']}')
             ],
           ),
         ),
@@ -270,9 +280,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                 height: MediaQuery.of(context).size.height * 0.05,
                 margin: EdgeInsets.all(10),
                 child: Center(
-                  child: Text(
+                  child: godfathersNameStyle(
                     "Add Product to Inventory",
-                    style: TextStyle(fontSize: 20),
                   ),
                 ))
           ]),
