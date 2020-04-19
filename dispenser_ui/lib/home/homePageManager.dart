@@ -8,36 +8,44 @@ import 'package:dispenser_ui/home/wishlist/addWishList.dart';
 import 'package:dispenser_ui/home/notes/notePage.dart';
 import 'package:dispenser_ui/home/notes/StaggeredPage.dart';
 import 'package:dispenser_ui/objects/Note.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
+import 'package:dispenser_ui/objects/WishList.dart';
+import 'package:dispenser_ui/objects/Inventory.dart';
+import 'package:provider/provider.dart';
+
+import 'package:dispenser_ui/ObjManager.dart';
 
 enum viewType { List, Staggered }
 
 class Home extends StatefulWidget {
+  final Manager manager;
 
+  Home(this.manager); 
   @override
   State<StatefulWidget> createState() {
-    return TabBarPage();
+    return TabBarPage(this.manager);
   }
 }
 
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
-
   List<Widget> tabs;
   bool dialVisible = true;
   bool firstTime = false;
   var notesViewType;
   ScrollController scrollController;
   TabController _tabController;
-
+  Manager manager;
   List<Tab> _bottomBarItems = [
     Tab(icon: Icon(Icons.home, size: 40)),
     Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
     Tab(icon: Icon(Icons.note, size: 40)),
   ];
 
-  TabBarPage() {
+  TabBarPage(this.manager) {
+
     tabs = [
-      Inventory(),
-      WishListManager(),
+      Inventory(manager),
+      WishListManager(manager),
       StaggeredGridPage(notesViewType: notesViewType),
     ];
   }
@@ -49,6 +57,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _tabController =
         TabController(vsync: this, length: tabs.length, initialIndex: 0);
     _tabController.addListener(floatingButton);
@@ -58,13 +67,18 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
             ScrollDirection.forward);
       });
     notesViewType = viewType.Staggered;
-
-    super.initState();
+    
   }
+
+  /*  
+  
+  */
+ 
 
   @override
   void dispose() {
     _tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -87,21 +101,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void loadAddWishlistPage(BuildContext context) {
-    var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddWishList());
+    var route =
+        MaterialPageRoute(builder: (BuildContext context) => AddWishList());
     Navigator.of(context).push(route);
-  }
-
-  void loadAddProductNotesPage(BuildContext context) {
-    //   var route =
-    //      MaterialPageRoute(builder: (BuildContext context) => AddProductInventoryPage());  //AddProductNotePage());
-    //  Navigator.of(context).push(route);
-  }
-
-  void loadAddNotesNotesPage(BuildContext context) {
-    //  var route =
-    //     MaterialPageRoute(builder: (BuildContext context) => AddInventoryInventoryPage());//AddNotesNotePage());
-    // Navigator.of(context).push(route);
   }
 
   Widget floatingButton() {
@@ -279,23 +281,16 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
-  Color hexToColor(String colorToString) {
-    String valueString = colorToString.split('(0x')[1].split(')')[0]; // kind of hacky..
-    int value = int.parse(valueString, radix: 16);
-    return (Color(value));
-  }
-
-
-
   clearPopUp() {
     setState(() => (firstTime = false));
   }
 
-
   @override
   Widget build(BuildContext context) {
-    if (firstTime) 
-      return Popup(clearPopUp);
+    if (firstTime) return Popup(clearPopUp);
+
+
+    print("Doing build function now");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: _tabController.index == 2 ? _notesAppBar() : null,
@@ -317,9 +312,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 }
-
-
-
 
 class Popup extends StatelessWidget {
   final Function _clearPopUp;

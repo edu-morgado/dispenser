@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
-
 import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 
 class WishListManager extends StatefulWidget {
+  final Manager manager;
+
+  WishListManager(this.manager);
   @override
   State<StatefulWidget> createState() {
-    return WishListState();
+    return WishListState(this.manager);
   }
 }
 
 class WishListState extends State<WishListManager> {
+  Manager manager;
+  WishListState(this.manager);
+
   @override
   void initState() {
+    manager.loadWishListsFromFile().then((bool hasUpdated) {
+      if (manager.wishlists != null) {
+        print("we have loaded the wishlists from disk");
+        print(manager.wishlists.toJson());
+      }
+      if (mounted && hasUpdated)
+        setState(() {
+          print("now its setting state");
+        });
+    });
     super.initState();
   }
 
@@ -125,8 +139,6 @@ class WishListState extends State<WishListManager> {
 
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context);
-
     initializeIsSelected(manager.wishlists.wishlists.length);
 
     return Scaffold(
@@ -136,53 +148,36 @@ class WishListState extends State<WishListManager> {
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: MediaQuery.of(context).size.width * 1,
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 20.0,
-                  childAspectRatio: 2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: InkWell(
-                          onLongPress: () => selected(index),
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      WishListItems(
-                                          manager.wishlists.wishlists[index]))),
-                          child: Stack(
-                              alignment: Alignment.topRight,
-                              children: <Widget>[
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius:
-                                          BorderRadius.circular(20.0)),
-                                  child: godfathersNameStyle(
-                                      'Wishlist ${manager.wishlists.wishlists[index].name}'),
-                                ),
-                                anySelected()
-                                    ? Checkbox(
-                                        value: isSelected[index],
-                                        onChanged: (bool value) {
-                                          selected(index);
-                                        })
-                                    : Container(),
-                              ]),
-                        ));
-                  },
-                  childCount: manager.wishlists.wishlists.length,
-                ),
+          child: ListView.builder(
+            itemCount: manager.wishlists.wishlists.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: InkWell(
+                onLongPress: () => selected(index),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        WishListItems(manager.wishlists.wishlists[index]))),
+                child: Stack(alignment: Alignment.topRight, children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: godfathersNameStyle(
+                        'Wishlist ${manager.wishlists.wishlists[index].name}'),
+                  ),
+                  anySelected()
+                      ? Checkbox(
+                          value: isSelected[index],
+                          onChanged: (bool value) {
+                            selected(index);
+                          })
+                      : Container(),
+                ]),
               ),
-            ],
+            ),
           ),
         ),
       ]),

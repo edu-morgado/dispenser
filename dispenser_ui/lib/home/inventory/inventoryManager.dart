@@ -5,14 +5,38 @@ import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
 
 class Inventory extends StatefulWidget {
+  final Manager manager;
+  
+  Inventory(this.manager);
+
   @override
   State<StatefulWidget> createState() {
-    return InventoryState();
+    return InventoryState(this.manager);
   }
 }
 
 class InventoryState extends State<Inventory> {
+  Manager manager;
+  InventoryState(this.manager);
+   
   List<bool> isSelected = List<bool>();
+  
+
+  @override
+  void initState() {
+    manager.loadInventoriesFromFile().then((bool hasUpdated){
+      if (manager.inventories != null)
+      {
+        print("we have loaded the inventories from disk");
+        print(manager.inventories.toJson());
+        
+      }
+      if(mounted && hasUpdated) setState(() {
+        print("now its setting state");
+      });
+    });    
+    super.initState();
+  }
 
   void initializeIsSelected(int size) {
     if (isSelected.length != size)
@@ -116,7 +140,6 @@ class InventoryState extends State<Inventory> {
 
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context);
 
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
@@ -126,56 +149,40 @@ class InventoryState extends State<Inventory> {
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: MediaQuery.of(context).size.width * 1,
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 20.0,
-                  childAspectRatio: 2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: InkWell(
-                          onLongPress: () => selected(index),
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      InventoryItem(manager
-                                          .inventories.inventories[index]))),
-                          child:
-                              Stack(alignment: Alignment.topRight, children: [
-                            Container(
-                              child: godfathersNameStyle(
-                                  manager.inventories.inventories[index].name),
-                              width: MediaQuery.of(context).size.width,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            anySelected()
-                                ? Checkbox(
-                                    value: isSelected[index],
-                                    onChanged: (bool value) {
-                                      selected(index);
-                                    })
-                                : Container(),
-                          ])),
-                    );
-                  },
-                  childCount: manager.inventories.inventories.length,
-                ),
-              ),
-            ],
+          child: ListView.builder(
+            itemCount: manager.inventories.inventories.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: InkWell(
+                  onLongPress: () => selected(index),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          InventoryItem(manager.inventories.inventories[index]))),
+                  child: Stack(alignment: Alignment.topRight, children: [
+                    Container(
+                      child: godfathersNameStyle(
+                          manager.inventories.inventories[index].name),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        image: DecorationImage(
+                          image: AssetImage(
+                              'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    anySelected()
+                        ? Checkbox(
+                            value: isSelected[index],
+                            onChanged: (bool value) {
+                              selected(index);
+                            })
+                        : Container(),
+                  ])),
+            ),
           ),
         ),
       ]),

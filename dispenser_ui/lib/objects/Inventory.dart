@@ -13,8 +13,7 @@ class ObjInventory {
 
   ObjInventory(this.id,this.ttype, this.name);
 
-  void addFoodItemToRepository(ObjFoodItem foodItem) => foodItems.add(foodItem);
-
+ 
   factory ObjInventory.fromJson(Map<String, dynamic> json) => _$ObjInventoryFromJson(json);
 
   Map<String, dynamic> toJson() => _$ObjInventoryToJson(this);

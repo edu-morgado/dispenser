@@ -255,13 +255,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newItem =
-              ObjFoodItem(1, _nameController.text, quantity, section);
-          manager.foodItems.foodItems.add(newItem);
-          manager.inventories.inventories[inventoryIndex].foodItems
-              .add(newItem);
-          print(manager.inventories.inventories[inventoryIndex].foodItems[0]
-              .toString());
+          saveNewFoodItems(manager);
+         
           Navigator.of(context).pop();
         },
         child: Text(
@@ -271,6 +266,19 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         ),
       ),
     );
+  }
+
+  void saveNewFoodItems(Manager manager) {
+
+    for(int i = 0; i < products.length; i++) {
+      ObjFoodItem newItem = new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1 );
+       //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
+      manager.foodItems.foodItems.add(newItem);
+      manager.inventories.inventories[inventoryIndex].foodItems
+          .add(newItem);
+    }
+    manager.saveInventories();
+    manager.saveFoodItems();
   }
 
   @override
