@@ -1,81 +1,195 @@
 import 'package:flutter/material.dart';
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
 import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/ObjManager.dart';
-
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddProductToWishList extends StatefulWidget {
-
   @override
   _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProductToWishList> {
-
-
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameNode = FocusNode();
+  final formKey = new GlobalKey<FormState>();
 
   @override
   void dispose() {
-   _nameController.dispose();
-   _nameNode.dispose();
+    _nameController.dispose();
+    _nameNode.dispose();
     super.dispose();
   }
+
   num quantity = 1;
-  num section=1;
+  num section = 1;
+  int wishlistsIndex = 1;
   List<bool> isSelected = List<bool>();
+  List<dynamic> choices = List<dynamic>();
+  List<dynamic> products = [];
+  int openedTile = 1;
+  List<Widget> addTilesManager = new List<Widget>();
 
-   void initializeIsSelected(int size) {
-    if (isSelected.length != size )
-      for (int i = isSelected.length; i < size; i++) isSelected.add(false);
+  void initializeAddTilesManager() {
+    if (addTilesManager.length == 0) {
+      addTilesManager.add(Divider(
+          thickness:
+              3)); // cute UI feature that fucks the indexes up (not best way to do probably)
+      quantity = 1;
+      _nameController.text = "New Product";
+      products.add({
+        'name': _nameController.text,
+        'quantity': quantity
+      }); // first tile appears already open
+
+      addTilesManager.add(addOpenedTile(products[0]));
+      addTilesManager.add(Container(
+          child: ListTile(
+            onTap: () => addTileToTiles(),
+            title: dispenserButton("Add "),
+          ),
+          decoration: BoxDecoration(color: Colors.black12)));
+    }
   }
 
-  void setEverythingToSelected(){
-    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = true;
+  void addTileToTiles() {
+    if (products.length != 0) {
+      products[openedTile - 1] = {
+        'name': _nameController.text,
+        'quantity': quantity,
+      };
+      addTilesManager[openedTile] =
+          addClosedTile(products[openedTile - 1], openedTile);
+    }
+    //save previous countent and turns it into a closed tile (about to open a tile and its a new one)
+
+    quantity = 1;
+    _nameController.text = "New Product";
+    products.add({'name': _nameController.text, 'quantity': quantity});
+    addTilesManager.add(addTile());
+    // adding a new product element for new input information, adding an ADD tile to the end of widget list
+
+    addTilesManager[addTilesManager.length - 2] =
+        addOpenedTile(products[products.length - 1]);
+    // making the before-than-last tile the opened Tile using the last element of
+    // information because last tile is the add button (doesnt neeed information)
+
+    openedTile = addTilesManager.length - 2;
+    // opened tile before-than-last in widget list is now opened Tile
+    setState(() {});
   }
 
-  void setEverythingToNotSelected(){
-    for(int i = 0 ; i < isSelected.length ; i++) isSelected[i] = false;
+  Widget addTile() {
+    return Container(
+        child: ListTile(
+          onTap: () => addTileToTiles(),
+          title: dispenserButton(
+            "Add ",
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black12,
+        ));
   }
 
+  Widget addOpenedTile(dynamic tileInfo) {
+    return Column(
+      children: [
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: nameInput(
+              context,
+              tileInfo['name'],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.cyan[300],
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Center(child: counter(tileInfo['quantity'])),
+        ),
+        SizedBox(height: 20)
+      ],
+    );
+  }
 
-  Widget counter() {
+  Widget addClosedTile(dynamic tileInfo, int newIndex) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.1,
+      decoration: BoxDecoration(
+          color: Colors.cyan[100],
+          border: Border.all(color: Colors.black45),
+          borderRadius: BorderRadius.circular(5.0)),
+      alignment: Alignment.center,
+      child: InkWell(
+        onTap: () {
+          products[openedTile - 1] = {
+            'name': _nameController.text,
+            'quantity': quantity,
+          };
+          addTilesManager[openedTile] =
+              addClosedTile(products[openedTile - 1], openedTile);
+          addTilesManager[newIndex] = addOpenedTile(products[newIndex - 1]);
+          _nameController.text = products[newIndex - 1]["name"];
+          quantity = products[newIndex - 1]["quantity"];
+          openedTile = newIndex;
+          setState(() {});
+        },
+        child: ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              dispenserDescription(
+                  '${tileInfo['quantity']}x ${tileInfo['name']}')
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget counter(initialValue) {
     return Counter(
-      initialValue: quantity,
+      initialValue: initialValue,
+      selectedValue: initialValue,
       minValue: 1,
       maxValue: 1000,
       step: 1,
       decimalPlaces: 0,
       onChanged: (value) {
-        setState(() {
-          quantity = value;
-        });
+        print("onChanged beeing called");
+        quantity = value;
+        print("quantity -> $quantity");
       },
     );
   }
 
-  Widget nameInput(context) {
+  Widget nameInput(context, String name) {
+    _nameController.text = name;
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
       child: TextFormField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
         controller: _nameController,
-        validator: (value) {
-          if (value.length < 6) {
-            return 'Password must be at least 6 characters long';
-          }
-          return null;
-        },
         onEditingComplete: () {
-          FocusScope.of(context).unfocus();
           //loadHomePage(context);
         },
         decoration: new InputDecoration(
-          labelText: 'Name',
+          hasFloatingPlaceholder: false,
+          labelText: 'Product Name',
           focusColor: Colors.grey[300],
         ),
         keyboardType: TextInputType.text,
@@ -86,35 +200,39 @@ class _AddProductState extends State<AddProductToWishList> {
     );
   }
 
-  Widget chooseWishLists(List<ObjWishList> wishlists) {
-    return ListView.builder(
-      itemCount: wishlists.length,
-      itemBuilder: (context, i) => ListTile(
-        leading: Text(wishlists[i].name),
-        trailing: Checkbox(
-            value: isSelected[i],
-            onChanged: (bool value) {
-              selected(i);
-            }),
+  Widget dropDownFormField() {
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            child: DropDownFormField(
+              titleText: 'Choose a type',
+              hintText: 'Please choose one',
+              value: wishlistsIndex,
+              onSaved: (value) {
+                setState(() {
+                  wishlistsIndex = value;
+                });
+              },
+              onChanged: (value) {
+                setState(() {
+                  wishlistsIndex = value;
+                });
+              },
+              dataSource: choices,
+              textField: 'display',
+              valueField: 'value',
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  void selected(int i) {
-
-    setState(() {
-       if (isSelected[i]) {
-        print("INDEX -> $i not selected ");
-        isSelected[i] = false;
-      } else {
-        isSelected[i] = true;
-        print("INDEX -> $i  selected");
-      }
-    });
-
-  }
-
-Widget chooseSection(List<ObjWishList> wishlists) {
+  Widget chooseSection(List<ObjWishList> wishlists) {
     return ListView.builder(
       itemCount: wishlists.length,
       itemBuilder: (context, i) => ListTile(
@@ -133,19 +251,11 @@ Widget chooseSection(List<ObjWishList> wishlists) {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjFoodItem newFoodItem = ObjFoodItem(1, _nameController.text, quantity, section);
-          manager.foodItems.foodItems.add(newFoodItem);
-          for(int i = 0; i < manager.wishlists.wishlists.length; i++){
-            if(isSelected[i])
-            {
-              print("item $i is checked ???");
-              manager.wishlists.wishlists[i].foodItems.add(newFoodItem);
-            }
-          }
+          saveNewFoodItems(manager);
           Navigator.of(context).pop();
         },
         child: Text(
-          "Add",
+          "Add Products",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
         ),
@@ -153,71 +263,56 @@ Widget chooseSection(List<ObjWishList> wishlists) {
     );
   }
 
+  void saveNewFoodItems(Manager manager) {
+    for (int i = 0; i < products.length; i++) {
+      ObjFoodItem newItem =
+          new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1);
+      //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
+      manager.foodItems.foodItems.add(newItem);
+      manager.wishlists.wishlists[wishlistsIndex].foodItems.add(newItem);
+    }
+    manager.saveWishLists();
+    manager.saveFoodItems();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context) ;
+    final Manager manager = Provider.of<Manager>(context);
 
-    List<ObjWishList> wishlists = manager.wishlists.wishlists;
-    initializeIsSelected(wishlists.length);
+    initializeAddTilesManager();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
+      body: Flex(
+        direction: Axis.vertical,
         children: [
-          Row(children: <Widget>[
+          Row(children: [
             Container(
               width: MediaQuery.of(context).size.width * 0.1,
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.1,
+              alignment: Alignment.bottomLeft,
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ]),
-          Row(children: <Widget>[
+          Row(children: [
             Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.05,
                 margin: EdgeInsets.all(10),
                 child: Center(
-                  child: Text(
-                    "Product",
-                    style: TextStyle(fontSize: 20),
+                  child: godfathersNameStyle(
+                    "Add Product to Wishlist",
                   ),
                 ))
           ]),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: nameInput(context),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(child: Text("How many to add")),
-              SizedBox(
-                width: 30,
-              ),
-              counter(),
-            ],
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.2,
-              alignment: Alignment.topCenter,
-              child: chooseWishLists(wishlists),
-            ),
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.2,
-              alignment: Alignment.topCenter,
-              child: chooseSection(wishlists),
+          Expanded(
+            child: SafeArea(
+              child: ListView.builder(
+                  itemCount: addTilesManager.length,
+                  itemBuilder: (context, i) => addTilesManager[i]),
             ),
           ),
           Center(
@@ -228,6 +323,7 @@ Widget chooseSection(List<ObjWishList> wishlists) {
               child: addProductToWishListButton(context, manager),
             ),
           ),
+          SizedBox(height: 20)
         ],
       ),
     );
@@ -235,15 +331,13 @@ Widget chooseSection(List<ObjWishList> wishlists) {
 }
 
 class AddWishList extends StatefulWidget {
-
   @override
   _AddWishListState createState() => _AddWishListState();
 }
 
 class _AddWishListState extends State<AddWishList> {
-
   final formKey = new GlobalKey<FormState>();
- 
+
   @override
   void initState() {
     super.initState();
@@ -256,8 +350,8 @@ class _AddWishListState extends State<AddWishList> {
 
   @override
   void dispose() {
-   _descNode.dispose();
-   _nameNode.dispose();
+    _descNode.dispose();
+    _nameNode.dispose();
     super.dispose();
   }
 
@@ -311,7 +405,6 @@ class _AddWishListState extends State<AddWishList> {
     );
   }
 
-
   Widget addWishlistButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
@@ -321,7 +414,7 @@ class _AddWishListState extends State<AddWishList> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-           FocusScope.of(context).unfocus();
+          FocusScope.of(context).unfocus();
           ObjWishList newWishlist = ObjWishList(1, _nameController.text);
           manager.wishlists.wishlists.add(newWishlist);
           Navigator.of(context).pop();
@@ -334,9 +427,10 @@ class _AddWishListState extends State<AddWishList> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    final Manager manager = Provider.of<Manager>(context) ;
+    final Manager manager = Provider.of<Manager>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -374,7 +468,9 @@ class _AddWishListState extends State<AddWishList> {
               child: nameInput(context),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
