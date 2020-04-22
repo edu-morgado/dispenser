@@ -169,7 +169,7 @@ class InventoryState extends State<Inventory> {
                         borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           image: AssetImage(
-                              'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                              'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
                           fit: BoxFit.cover,
                         ),
                       ),
