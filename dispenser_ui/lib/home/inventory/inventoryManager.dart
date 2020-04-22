@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class Inventory extends StatefulWidget {
   final Manager manager;
-  
+
   Inventory(this.manager);
 
   @override
@@ -18,23 +18,21 @@ class Inventory extends StatefulWidget {
 class InventoryState extends State<Inventory> {
   Manager manager;
   InventoryState(this.manager);
-   
+
   List<bool> isSelected = List<bool>();
-  
 
   @override
   void initState() {
-    manager.loadInventoriesFromFile().then((bool hasUpdated){
-      if (manager.inventories != null)
-      {
+    manager.loadInventoriesFromFile().then((bool hasUpdated) {
+      if (manager.inventories != null) {
         print("we have loaded the inventories from disk");
         print(manager.inventories.toJson());
-        
       }
-      if(mounted && hasUpdated) setState(() {
-        print("now its setting state");
-      });
-    });    
+      if (mounted && hasUpdated)
+        setState(() {
+          print("now its setting state");
+        });
+    });
     super.initState();
   }
 
@@ -111,40 +109,45 @@ class InventoryState extends State<Inventory> {
   Widget topBar(Manager manager) {
     if (anySelected())
       return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
+        Stack(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: Center(child: godfathersNameStyle("Edit Inventories")),
+              decoration: BoxDecoration(
+                color: Colors.purple,
+                borderRadius: new BorderRadius.vertical(
+                  bottom: new Radius.circular(20.0),
+                ),
+              ),
+            ),
+            Positioned(bottom: 0, left: 0, child: selectAllIconButton()),
+            Positioned(bottom: 0, right: 0, child: deleteIconButton(manager)),
+          ],
         ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
-        ),
-        Spacer(
-          flex: 2,
-        ),
-        selectAllIconButton(),
-        deleteIconButton(manager),
       ]);
     else
       return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
-        ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
-        ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.15,
+          child: Center(child: godfathersNameStyle("Inventories")),
+          decoration: BoxDecoration(
+            color: Colors.purple,
+            borderRadius: new BorderRadius.vertical(
+              bottom: new Radius.circular(20.0),
+            ),
+          ),
+        )
       ]);
   }
 
   @override
   Widget build(BuildContext context) {
-
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        Container(height: 45),
         topBar(manager),
         SizedBox(width: 75),
         Container(height: 20),
@@ -156,9 +159,9 @@ class InventoryState extends State<Inventory> {
               child: InkWell(
                   onLongPress: () => selected(index),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          InventoryItem(manager.inventories.inventories[index]))),
-                  child: Stack(alignment: Alignment.topRight, children: [
+                      builder: (BuildContext context) => InventoryItem(
+                          manager.inventories.inventories[index]))),
+                  child: Stack(alignment: Alignment.topLeft, children: [
                     Container(
                       child: godfathersNameStyle(
                           manager.inventories.inventories[index].name),
