@@ -17,13 +17,14 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   final formKey = new GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
+  final FocusNode _nameNode = FocusNode();
+
   @override
   void dispose() {
-   _nameController.dispose();
-   _nameNode.dispose();
+    _nameController.dispose();
+    _nameNode.dispose();
     super.dispose();
   }
-  final FocusNode _nameNode = FocusNode();
 
   num quantity = 1;
   num section = 1;
@@ -256,7 +257,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
         onPressed: () {
           FocusScope.of(context).unfocus();
           saveNewFoodItems(manager);
-         
+
           Navigator.of(context).pop();
         },
         child: Text(
@@ -269,13 +270,12 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   }
 
   void saveNewFoodItems(Manager manager) {
-
-    for(int i = 0; i < products.length; i++) {
-      ObjFoodItem newItem = new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1 );
-       //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
+    for (int i = 0; i < products.length; i++) {
+      ObjFoodItem newItem =
+          new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1);
+      //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
       manager.foodItems.foodItems.add(newItem);
-      manager.inventories.inventories[inventoryIndex].foodItems
-          .add(newItem);
+      manager.inventories.inventories[inventoryIndex].foodItems.add(newItem);
     }
     manager.saveInventories();
     manager.saveFoodItems();
@@ -310,7 +310,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
                 margin: EdgeInsets.all(10),
                 child: Center(
                   child: godfathersNameStyle(
-                    "Add Product to Inventory",
+                    "Add Products to Inventory",
                   ),
                 ))
           ]),
@@ -354,8 +354,8 @@ class InventoryAddState extends State<AddInventoryPage> {
   final FocusNode _descNode = FocusNode();
   @override
   void dispose() {
-   _descNode.dispose();
-   _nameNode.dispose();
+    _descNode.dispose();
+    _nameNode.dispose();
     super.dispose();
   }
 
