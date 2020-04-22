@@ -2,8 +2,7 @@ import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
-class FoodItemColumn extends StatefulWidget{
-
+class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
   FoodItemColumn(this.updateParentState);
 
@@ -19,7 +18,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   FoodItemColumnState(this.updateParentState);
 
   num quantity = 1;
-  int openedTile = 1;
+  int openedTile = -1;
   List<bool> isChecked = List<bool>();
   List<dynamic> products = [];
   List<Widget> addTilesManager = new List<Widget>();
@@ -39,7 +38,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'quantity': quantity
       }); // first tile appears already open
 
-      addTilesManager.add(addClosedTile(products[0],openedTile, context));
+      addTilesManager.add(addClosedTile(products[0], 1, context));
       addTilesManager.add(Container(
           child: ListTile(
             onTap: () => addTileToTiles(context),
@@ -57,7 +56,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   }
 
   void addTileToTiles(BuildContext context) {
-    if (products.length != 0) {
+    if (products.length != 0 && openedTile != -1) {
       products[openedTile - 1] = {
         'name': _nameController.text,
         'quantity': quantity,
@@ -74,7 +73,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     // adding a new product element for new input information, adding an ADD tile to the end of widget list
 
     addTilesManager[addTilesManager.length - 2] =
-        addOpenedTile(products[products.length - 1], context);
+        addOpenedTile(products[products.length - 1],addTilesManager.length - 2,  context);
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
 
@@ -101,19 +100,29 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         ));
   }
 
-  Widget addOpenedTile(dynamic tileInfo, BuildContext context) {
+  Widget addOpenedTile(dynamic tileInfo, int ownIndex, BuildContext context) {
     return Column(
       children: [
-        Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.1,
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Container(
+            width: 300,
             child: nameInput(
               context,
               tileInfo['name'],
             ),
           ),
-        ),
+          IconButton(
+            icon: Icon(
+              Icons.close,
+            ),
+            onPressed: ()  {
+              setState(() {
+                openedTile = -1;
+                addTilesManager[ownIndex] = addClosedTile(tileInfo, ownIndex, context);
+              });
+            },
+          )
+        ]),
         SizedBox(
           height: 10,
         ),
@@ -140,8 +149,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           borderRadius: BorderRadius.circular(5.0)),
       alignment: Alignment.center,
       child: InkWell(
-        onTap: () { 
-          if(openedTile != -1) {
+        onTap: () {
+          if (openedTile != -1) {
             products[openedTile - 1] = {
               'name': _nameController.text,
               'quantity': quantity,
@@ -149,11 +158,18 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             addTilesManager[openedTile] =
                 addClosedTile(products[openedTile - 1], openedTile, context);
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex - 1], context);
+                addOpenedTile(products[newIndex - 1], newIndex, context);
             _nameController.text = products[newIndex - 1]["name"];
             quantity = products[newIndex - 1]["quantity"];
           }
+          else{
+            print("openedTile is supose to be -1 -> $openedTile");
+              addTilesManager[newIndex] =
+                addOpenedTile(products[newIndex - 1], newIndex, context);
+          }
           openedTile = newIndex;
+          print("openedTile is supose to be 1 -> $openedTile");
+
           updateParentState();
         },
         child: ListTile(

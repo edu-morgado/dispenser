@@ -166,15 +166,45 @@ class InventoryState extends State<Inventory> {
               padding: EdgeInsets.all(5.0),
               child: InkWell(
                   onLongPress: () => selected(index),
-                  onTap: () {
-                    setState(() {
-                      isOpened != index ? isOpened = index : isOpened = -1;
-                    });
-                  },
                   child: Stack(alignment: Alignment.topLeft, children: [
                     index == isOpened
                         ? Column(children: [
-                            Container(
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isOpened != index
+                                      ? isOpened = index
+                                      : isOpened = -1;
+                                });
+                              },
+                              child: Container(
+                                child: godfathersNameStyle(manager
+                                    .inventories.inventories[index].name),
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.15,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            FoodItemColumn(updateFoodItems)
+                          ])
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isOpened != index
+                                    ? isOpened = index
+                                    : isOpened = -1;
+                              });
+                            },
+                            child: Container(
                               child: godfathersNameStyle(
                                   manager.inventories.inventories[index].name),
                               width: MediaQuery.of(context).size.width,
@@ -187,22 +217,6 @@ class InventoryState extends State<Inventory> {
                                       'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
                                   fit: BoxFit.cover,
                                 ),
-                              ),
-                            ),
-                            FoodItemColumn(updateFoodItems)
-                          ])
-                        : Container(
-                            child: godfathersNameStyle(
-                                manager.inventories.inventories[index].name),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
