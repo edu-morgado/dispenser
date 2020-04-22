@@ -161,10 +161,8 @@ class InventoryState extends State<Inventory> {
               child: InkWell(
                   onLongPress: () => selected(index),
                   onTap: () {
-                    print("tapping");
                     setState(() {
-                      isOpened = index;
-                      print("isOpened is ->$isOpened");
+                      isOpened != index ? isOpened = index : isOpened = -1;
                     });
                   },
                   child: Stack(alignment: Alignment.topRight, children: [

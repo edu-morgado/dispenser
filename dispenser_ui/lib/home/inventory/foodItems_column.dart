@@ -39,7 +39,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'quantity': quantity
       }); // first tile appears already open
 
-      addTilesManager.add(addOpenedTile(products[0], context));
+      addTilesManager.add(addClosedTile(products[0],openedTile, context));
       addTilesManager.add(Container(
           child: ListTile(
             onTap: () => addTileToTiles(context),
@@ -140,17 +140,19 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           borderRadius: BorderRadius.circular(5.0)),
       alignment: Alignment.center,
       child: InkWell(
-        onTap: () {
-          products[openedTile - 1] = {
-            'name': _nameController.text,
-            'quantity': quantity,
-          };
-          addTilesManager[openedTile] =
-              addClosedTile(products[openedTile - 1], openedTile, context);
-          addTilesManager[newIndex] =
-              addOpenedTile(products[newIndex - 1], context);
-          _nameController.text = products[newIndex - 1]["name"];
-          quantity = products[newIndex - 1]["quantity"];
+        onTap: () { 
+          if(openedTile != -1) {
+            products[openedTile - 1] = {
+              'name': _nameController.text,
+              'quantity': quantity,
+            };
+            addTilesManager[openedTile] =
+                addClosedTile(products[openedTile - 1], openedTile, context);
+            addTilesManager[newIndex] =
+                addOpenedTile(products[newIndex - 1], context);
+            _nameController.text = products[newIndex - 1]["name"];
+            quantity = products[newIndex - 1]["quantity"];
+          }
           openedTile = newIndex;
           updateParentState();
         },
