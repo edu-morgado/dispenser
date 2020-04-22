@@ -2,8 +2,7 @@ import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 
-class FoodItemColumn extends StatefulWidget{
-
+class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
   FoodItemColumn(this.updateParentState);
 
@@ -39,7 +38,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'quantity': quantity
       }); // first tile appears already open
 
-      addTilesManager.add(addClosedTile(products[0],openedTile, context));
+      addTilesManager.add(addClosedTile(products[0], openedTile, context));
       addTilesManager.add(Container(
           child: ListTile(
             onTap: () => addTileToTiles(context),
@@ -135,13 +134,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
-          color: Colors.cyan[100],
-          border: Border.all(color: Colors.black45),
-          borderRadius: BorderRadius.circular(5.0)),
+          color: Colors.purple[50],
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(30.0)),
       alignment: Alignment.center,
       child: InkWell(
-        onTap: () { 
-          if(openedTile != -1) {
+        onTap: () {
+          if (openedTile != -1) {
             products[openedTile - 1] = {
               'name': _nameController.text,
               'quantity': quantity,
@@ -157,13 +156,26 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           updateParentState();
         },
         child: ListTile(
-          title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text(
-              '${tileInfo['quantity']}x ${tileInfo['name']}',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-            ),
-          ]),
+          leading: Icon(Icons.navigate_next),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '${tileInfo['name']}      ',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+              ),
+              Text(
+                '${tileInfo['quantity']}      ',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
+          subtitle: Text("  Category:"),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+          ),
         ),
       ),
     );
