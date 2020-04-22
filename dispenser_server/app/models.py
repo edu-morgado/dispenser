@@ -1,6 +1,7 @@
 from app import app, db
 from datetime import datetime
-
+from sqlalchemy.dialects.postgresql import UUID
+from uuid import uuid4
 
 class Home(db.Model):
     __tablename__ = 'home'
@@ -23,11 +24,10 @@ class Home(db.Model):
                 'date_created':self.date_created,
                 'date_last_update':self.date_last_update}
 
-
-
 class Inventory(db.Model):
     __tablename__ = 'inventory'
     id = db.Column(db.Integer, autoincrement = True, primary_key = True, nullable = False)
+ #   uuid = db.Column(UUID(as_uuid=True), default=uuid4);
     name = db.Column(db.String(128), nullable=False)
     ttype = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, default = datetime.now())

@@ -4,6 +4,26 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    DATABASE_URI=r'sqlite:///C:\Users\Eduardo\Documents\projects\dispenser\dispenser_server\dengue.db'
-    SQLALCHEMY_DATABASE_URI = DATABASE_URI
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SQLALCHEMY_DATABASE_URI = r'postgresql://eduardo@localhost:5432/dispenser'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    TESTING = True
