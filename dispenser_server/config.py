@@ -8,7 +8,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
-    SQLALCHEMY_DATABASE_URI = r'postgresql://eduardo@localhost:5432/dispenser'
+    SQLALCHEMY_DATABASE_URI = r'postgresql://eduardo:Gandatrio1998@localhost/dispenser'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProductionConfig(Config):

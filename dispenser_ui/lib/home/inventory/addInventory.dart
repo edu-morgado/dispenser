@@ -14,7 +14,6 @@ class AddProductToInventory extends StatefulWidget {
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
-  final formKey = new GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameNode = FocusNode();
@@ -27,15 +26,9 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   }
 
   num quantity = 1;
-  num section = 1;
-  int inventoryIndex = 1;
-
-  List<bool> isChecked = List<bool>();
-  List<dynamic> choices = List<dynamic>();
-
-  List<dynamic> products = [];
-
   int openedTile = 1;
+  List<bool> isChecked = List<bool>();
+  List<dynamic> products = [];
   List<Widget> addTilesManager = new List<Widget>();
 
   void initializeAddTilesManager() {
@@ -205,46 +198,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-  Widget dropDownFormField() {
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            child: DropDownFormField(
-              titleText: 'Choose a type',
-              hintText: 'Please choose one',
-              value: inventoryIndex,
-              onSaved: (value) {
-                setState(() {
-                  inventoryIndex = value;
-                });
-              },
-              onChanged: (value) {
-                setState(() {
-                  inventoryIndex = value;
-                });
-              },
-              dataSource: choices,
-              textField: 'display',
-              valueField: 'value',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget chooseSection(List<ObjInventory> repository) {
-    return ListView.builder(
-      itemCount: repository.length,
-      itemBuilder: (context, i) => ListTile(
-        leading: Text(repository[i].name),
-      ),
-    );
-  }
 
   Widget addProductInventoryButton(BuildContext context, Manager manager) {
     return Material(
@@ -273,9 +226,8 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     for (int i = 0; i < products.length; i++) {
       ObjFoodItem newItem =
           new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1);
-      //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
       manager.foodItems.foodItems.add(newItem);
-      manager.inventories.inventories[inventoryIndex].foodItems.add(newItem);
+      manager.inventories.inventories[1].foodItems.add(newItem);
     }
     manager.saveInventories();
     manager.saveFoodItems();

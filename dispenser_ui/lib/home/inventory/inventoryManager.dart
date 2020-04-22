@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
+import 'package:dispenser_ui/home/inventory/foodItems_column.dart';
 
 class Inventory extends StatefulWidget {
   final Manager manager;
-  
+
   Inventory(this.manager);
 
   @override
@@ -18,23 +19,22 @@ class Inventory extends StatefulWidget {
 class InventoryState extends State<Inventory> {
   Manager manager;
   InventoryState(this.manager);
-   
+
   List<bool> isSelected = List<bool>();
-  
+  int isOpened = -1;
 
   @override
   void initState() {
-    manager.loadInventoriesFromFile().then((bool hasUpdated){
-      if (manager.inventories != null)
-      {
+    manager.loadInventoriesFromFile().then((bool hasUpdated) {
+      if (manager.inventories != null) {
         print("we have loaded the inventories from disk");
         print(manager.inventories.toJson());
-        
       }
-      if(mounted && hasUpdated) setState(() {
-        print("now its setting state");
-      });
-    });    
+      if (mounted && hasUpdated)
+        setState(() {
+          print("now its setting state");
+        });
+    });
     super.initState();
   }
 
@@ -138,9 +138,14 @@ class InventoryState extends State<Inventory> {
       ]);
   }
 
+  void updateFoodItems() {
+    setState(() {
+      print("SETSTATING FOR UPDATEING FOOD PRODUCTS");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
@@ -152,28 +157,51 @@ class InventoryState extends State<Inventory> {
           child: ListView.builder(
             itemCount: manager.inventories.inventories.length,
             itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5.0),
               child: InkWell(
                   onLongPress: () => selected(index),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          InventoryItem(manager.inventories.inventories[index]))),
+                  onTap: () {
+                    print("tapping");
+                    setState(() {
+                      isOpened = index;
+                      print("isOpened is ->$isOpened");
+                    });
+                  },
                   child: Stack(alignment: Alignment.topRight, children: [
-                    Container(
-                      child: godfathersNameStyle(
-                          manager.inventories.inventories[index].name),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    index == isOpened
+                        ? Column(children: [
+                            Container(
+                              child: godfathersNameStyle(
+                                  manager.inventories.inventories[index].name),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            FoodItemColumn(updateFoodItems)
+                          ])
+                        : Container(
+                            child: godfathersNameStyle(
+                                manager.inventories.inventories[index].name),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                     anySelected()
                         ? Checkbox(
                             value: isSelected[index],
