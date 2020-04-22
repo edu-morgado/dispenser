@@ -111,30 +111,37 @@ class InventoryState extends State<Inventory> {
   Widget topBar(Manager manager) {
     if (anySelected())
       return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
+        Stack(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: Center(child: godfathersNameStyle("Edit Inventories")),
+              decoration: BoxDecoration(
+                color: Colors.purple,
+                borderRadius: new BorderRadius.vertical(
+                  bottom: new Radius.circular(20.0),
+                ),
+              ),
+            ),
+            Positioned(bottom: 0, left: 0, child: selectAllIconButton()),
+            Positioned(bottom: 0, right: 0, child: deleteIconButton(manager)),
+          ],
         ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
-        ),
-        Spacer(
-          flex: 2,
-        ),
-        selectAllIconButton(),
-        deleteIconButton(manager),
       ]);
     else
       return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
-        ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Inventory")),
-        ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.15,
+          child: Center(child: godfathersNameStyle("Inventories")),
+          decoration: BoxDecoration(
+            color: Colors.purple,
+            borderRadius: new BorderRadius.vertical(
+              bottom: new Radius.circular(20.0),
+            ),
+          ),
+        )
       ]);
   }
 
@@ -149,7 +156,6 @@ class InventoryState extends State<Inventory> {
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        Container(height: 45),
         topBar(manager),
         SizedBox(width: 75),
         Container(height: 20),
@@ -165,7 +171,7 @@ class InventoryState extends State<Inventory> {
                       isOpened != index ? isOpened = index : isOpened = -1;
                     });
                   },
-                  child: Stack(alignment: Alignment.topRight, children: [
+                  child: Stack(alignment: Alignment.topLeft, children: [
                     index == isOpened
                         ? Column(children: [
                             Container(
@@ -178,7 +184,7 @@ class InventoryState extends State<Inventory> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 image: DecorationImage(
                                   image: AssetImage(
-                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -195,7 +201,7 @@ class InventoryState extends State<Inventory> {
                               borderRadius: BorderRadius.circular(20.0),
                               image: DecorationImage(
                                 image: AssetImage(
-                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpg'),
+                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -38,9 +38,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/inventory/1.jpg
-    - assets/inventory/2.jpg
-    - assets/inventory/3.jpg
+    - assets/inventory/1.jpeg
+    - assets/inventory/2.jpeg
+    - assets/inventory/3.jpeg
   # fonts:
   #   - family: Schyler
   #     fonts:
