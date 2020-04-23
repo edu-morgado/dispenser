@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -20,7 +21,7 @@ enum viewType { List, Staggered }
 class Home extends StatefulWidget {
   final Manager manager;
 
-  Home(this.manager); 
+  Home(this.manager);
   @override
   State<StatefulWidget> createState() {
     return TabBarPage(this.manager);
@@ -35,15 +36,10 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ScrollController scrollController;
   TabController _tabController;
   Manager manager;
-  List<Tab> _bottomBarItems = [
-    Tab(icon: Icon(Icons.home, size: 40)),
-    Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
-    Tab(icon: Icon(Icons.note, size: 40)),
-  ];
 
   TabBarPage(this.manager) {
-
     tabs = [
+      Inventory(manager),
       Inventory(manager),
       WishListManager(manager),
       StaggeredGridPage(notesViewType: notesViewType),
@@ -67,7 +63,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
             ScrollDirection.forward);
       });
     notesViewType = viewType.Staggered;
-     ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
+    ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
     ObjFoodItem item2 = ObjFoodItem("badjoraz", 2, 12);
     ObjFoodItem item3 = ObjFoodItem("degnue", 7, 12);
     ObjFoodItem item4 = ObjFoodItem("carne", 12, 12);
@@ -124,11 +120,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     manager.saveInventories();
     manager.saveWishLists();
   }
-
-  /*  
-  
-  */
- 
 
   @override
   void dispose() {
@@ -343,24 +334,27 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (firstTime) return Popup(clearPopUp);
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: _tabController.index == 2 ? _notesAppBar() : null,
-      body: SafeArea(
-          child: TabBarView(controller: _tabController, children: tabs)),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        height: 50.0,
-        child: TabBar(
+      appBar: AppBar(
+        title: Center(child:godfathersNameStyle("DISPENSER")),
+        backgroundColor: Colors.purple[200],
+        elevation: 20.0,
+        bottom: TabBar(
           controller: _tabController,
-          tabs: _bottomBarItems,
-          unselectedLabelColor: Colors.black,
-          labelColor: Theme.of(context).primaryColor,
-          indicatorColor: Theme.of(context).primaryColor,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              icon: Icon(choice.icon),
+            );
+          }).toList(),
         ),
       ),
-      bottomSheet: _tabController.index == 2 ? _bottomBar() : null,
+      body: SafeArea(
+          child: TabBarView(
+        controller: _tabController,
+        children: tabs,
+      )),
       floatingActionButton: floatingButton(),
     );
   }
@@ -392,3 +386,18 @@ class Popup extends StatelessWidget {
     );
   }
 }
+
+class Choice {
+  const Choice({this.title, this.icon});
+  final String title;
+  final IconData icon;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Home', icon: Icons.home),
+  const Choice(title: 'Inventory', icon: Icons.kitchen),
+  const Choice(title: 'Wishlist', icon: Icons.add_shopping_cart),
+  const Choice(title: 'Notes', icon: Icons.message),
+];
+
+
