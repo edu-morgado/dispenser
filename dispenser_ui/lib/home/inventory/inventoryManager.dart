@@ -108,27 +108,41 @@ class InventoryState extends State<Inventory> {
     return true;
   }
 
+  int inventoryNumbSelected() {
+    int n = 0;
+    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) n++;
+    return n;
+  }
+
   Widget topBar(Manager manager) {
     if (anySelected())
-      return Row(children: [
-        Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Center(child: godfathersNameStyle("Edit Inventories")),
-              decoration: BoxDecoration(
-                color: Colors.purple,
-                borderRadius: new BorderRadius.vertical(
-                  bottom: new Radius.circular(20.0),
-                ),
+      return Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Center(child: godfathersNameStyle("Editing Inventories")),
+            decoration: BoxDecoration(
+              color: Colors.purple,
+              borderRadius: new BorderRadius.vertical(
+                bottom: new Radius.circular(20.0),
               ),
             ),
-            Positioned(bottom: 0, left: 0, child: selectAllIconButton()),
-            Positioned(bottom: 0, right: 0, child: deleteIconButton(manager)),
-          ],
-        ),
-      ]);
+          ),
+          Row(
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: selectAllIconButton()),
+              dispenserDescription(
+                  "${inventoryNumbSelected()} Inventories Selected"),
+              Expanded(child: Container()),
+              deleteIconButton(manager),
+            ],
+          ),
+        ],
+      );
     else
       return Row(children: [
         Container(

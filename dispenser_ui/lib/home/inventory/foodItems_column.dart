@@ -149,9 +149,9 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
-          color: Colors.cyan[100],
-          border: Border.all(color: Colors.black45),
-          borderRadius: BorderRadius.circular(5.0)),
+          color: Colors.purple[50],
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(30.0)),
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
@@ -177,13 +177,26 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           updateParentState();
         },
         child: ListTile(
-          title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text(
-              '${tileInfo['quantity']}x ${tileInfo['name']}',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-            ),
-          ]),
+          leading: Icon(Icons.navigate_next),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '${tileInfo['name']}      ',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+              ),
+              Text(
+                '${tileInfo['quantity']}      ',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
+          subtitle: Text("  Category:"),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+          ),
         ),
       ),
     );

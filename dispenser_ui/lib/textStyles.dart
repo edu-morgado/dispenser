@@ -286,7 +286,7 @@ Widget dispenserDescription(String text) {
   return AutoSizeText(
     text,
     textAlign: TextAlign.center,
-    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
   );
 }
 
