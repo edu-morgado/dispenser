@@ -4,11 +4,12 @@ import '../ObjManager.dart';
 import '../textStyles.dart';
 
 class TopBar extends StatelessWidget {
-  TopBar(this.updateParent, this.manager, this.context, this.isSelected);
+  TopBar(this.updateParent, this.manager, this.context, this.isSelected, this.name);
   Function updateParent;
   Manager manager;
   List<bool> isSelected;
   BuildContext context;
+  String name;
 
   Widget deleteIconButton(Manager manager) {
     return IconButton(
@@ -79,9 +80,9 @@ class TopBar extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.2,
-            child: Center(child: godfathersNameStyle("Editing Inventories")),
+            child: Center(child: godfathersTextStyle("$name")),
             decoration: BoxDecoration(
-              color: Colors.purple,
+              color: Colors.purple[50],
               borderRadius: new BorderRadius.vertical(
                 bottom: new Radius.circular(20.0),
               ),
@@ -93,7 +94,7 @@ class TopBar extends StatelessWidget {
                   padding: EdgeInsets.only(left: 5),
                   child: selectAllIconButton()),
               dispenserDescription(
-                  "${inventoryNumbSelected()} Inventories Selected"),
+                  "${inventoryNumbSelected()} $name Selected"),
               Expanded(child: Container()),
               deleteIconButton(manager),
             ],
@@ -104,10 +105,10 @@ class TopBar extends StatelessWidget {
       return Row(children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.15,
-          child: Center(child: godfathersNameStyle("Inventories")),
+          height: MediaQuery.of(context).size.height * 0.1 ,
+          child: Center(child: godfathersTextStyle("$name")),
           decoration: BoxDecoration(
-            color: Colors.purple,
+            color: Colors.purple[100],
             borderRadius: new BorderRadius.vertical(
               bottom: new Radius.circular(20.0),
             ),

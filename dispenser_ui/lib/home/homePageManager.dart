@@ -337,7 +337,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Center(child:godfathersNameStyle("DISPENSER")),
+        title: Center(child:godfathersTextStyle("DISPENSER")),
         backgroundColor: Colors.purple[200],
         elevation: 20.0,
         bottom: TabBar(
@@ -395,8 +395,8 @@ class Choice {
 
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'Home', icon: Icons.home),
-  const Choice(title: 'Inventory', icon: Icons.kitchen),
-  const Choice(title: 'Wishlist', icon: Icons.add_shopping_cart),
+  const Choice(title: 'Inventories', icon: Icons.kitchen),
+  const Choice(title: 'Wishlists', icon: Icons.add_shopping_cart),
   const Choice(title: 'Notes', icon: Icons.message),
 ];
 

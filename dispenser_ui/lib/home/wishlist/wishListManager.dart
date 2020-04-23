@@ -64,7 +64,7 @@ class WishListState extends State<WishListManager> {
 
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        TopBar(updateFoodItems, manager, context, isSelected),
+        TopBar(updateFoodItems, manager, context, isSelected, "Wishlists"),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
