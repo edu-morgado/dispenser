@@ -1,22 +1,21 @@
-import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
+import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
+import 'package:dispenser_ui/objects/Inventory.dart';
+import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
-  FoodItemColumn(this.updateParentState);
+  final ObjInventory inventory;
+  FoodItemColumn(this.updateParentState, this.inventory);
 
   @override
   State<StatefulWidget> createState() {
-    return FoodItemColumnState(updateParentState);
+    return FoodItemColumnState();
   }
 }
 
 class FoodItemColumnState extends State<FoodItemColumn> {
-  Function updateParentState;
-
-  FoodItemColumnState(this.updateParentState);
-
   num quantity = 1;
   int openedTile = -1;
   List<bool> isChecked = List<bool>();
@@ -26,19 +25,37 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameNode = FocusNode();
 
+  void updateInventory() {
+    for (int i = 0; i < widget.inventory.foodItems.length; i++) {
+      ObjFoodItem foodItem = widget.inventory.foodItems[i];
+      if (products[i]['name'] != foodItem.foodname ||
+          products[i]['quantity'] != foodItem.foodquantity) {
+        print("updating inventory");
+        foodItem.foodname = products[i]['name'];
+        foodItem.foodquantity = products[i]['quantity'];
+      }
+    }
+
+    for(int i =  widget.inventory.foodItems.length; i < products.length ; i++) {
+      ObjFoodItem newProduct = ObjFoodItem(products[i]['name'], products[i]['quantity'], 1);
+      widget.inventory.foodItems.add(newProduct);
+    }
+  }
+
   void initializeAddTilesManager(BuildContext context) {
     if (addTilesManager.length == 0) {
       addTilesManager.add(Divider(
           thickness:
               3)); // cute UI feature that fucks the indexes up (not best way to do probably)
-      quantity = 1;
-      _nameController.text = "New Product";
-      products.add({
-        'name': _nameController.text,
-        'quantity': quantity
-      }); // first tile appears already open
 
-      addTilesManager.add(addClosedTile(products[0], 1, context));
+      for (int i = 0; i < widget.inventory.foodItems.length; i++) {
+        products.add({
+          'name': widget.inventory.foodItems[i].name,
+          'quantity': widget.inventory.foodItems[i].quantity
+        });
+        addTilesManager.add(addClosedTile(products[i], i + 1, context));
+      }
+
       addTilesManager.add(Container(
           child: ListTile(
             onTap: () => addTileToTiles(context),
@@ -61,6 +78,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'name': _nameController.text,
         'quantity': quantity,
       };
+      updateInventory();
       addTilesManager[openedTile] =
           addClosedTile(products[openedTile - 1], openedTile, context);
     }
@@ -79,7 +97,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
 
     openedTile = addTilesManager.length - 2;
     // opened tile before-than-last in widget list is now opened Tile
-    updateParentState();
+    widget.updateParentState();
   }
 
   Widget addTile(BuildContext context) {
@@ -121,9 +139,11 @@ class FoodItemColumnState extends State<FoodItemColumn> {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
-                openedTile = -1;
+                updateInventory();
+
                 addTilesManager[ownIndex] =
-                    addClosedTile(tileInfo, ownIndex, context);
+                    addClosedTile(products[openedTile - 1], ownIndex, context);
+                openedTile = -1;
               });
             },
           )
@@ -160,6 +180,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
               'name': _nameController.text,
               'quantity': quantity,
             };
+            updateInventory();
+
             addTilesManager[openedTile] =
                 addClosedTile(products[openedTile - 1], openedTile, context);
             addTilesManager[newIndex] =
@@ -167,14 +189,11 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             _nameController.text = products[newIndex - 1]["name"];
             quantity = products[newIndex - 1]["quantity"];
           } else {
-            print("openedTile is supose to be -1 -> $openedTile");
             addTilesManager[newIndex] =
                 addOpenedTile(products[newIndex - 1], newIndex, context);
           }
           openedTile = newIndex;
-          print("openedTile is supose to be 1 -> $openedTile");
-
-          updateParentState();
+          widget.updateParentState();
         },
         child: ListTile(
           leading: Icon(Icons.navigate_next),
@@ -195,6 +214,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           ),
           subtitle: Text("  Category:"),
           trailing: IconButton(
+            onPressed: () => print("need to delete it"),
             icon: Icon(Icons.delete),
           ),
         ),
@@ -211,9 +231,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       step: 1,
       decimalPlaces: 0,
       onChanged: (value) {
-        print("onChanged beeing called");
         quantity = value;
-        print("quantity -> $quantity");
       },
     );
   }

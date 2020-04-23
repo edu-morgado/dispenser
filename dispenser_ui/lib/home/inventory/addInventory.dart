@@ -225,7 +225,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
       ObjFoodItem newItem =
-          new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1);
+          new ObjFoodItem(products[i]["name"], products[i]["quantity"], 1);
       manager.foodItems.foodItems.add(newItem);
       manager.inventories.inventories[1].foodItems.add(newItem);
     }

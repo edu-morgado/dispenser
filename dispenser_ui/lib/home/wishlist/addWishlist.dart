@@ -266,7 +266,7 @@ class _AddProductState extends State<AddProductToWishList> {
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
       ObjFoodItem newItem =
-          new ObjFoodItem(1, products[i]["name"], products[i]["quantity"], 1);
+          new ObjFoodItem(products[i]["name"], products[i]["quantity"], 1);
       //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
       manager.foodItems.foodItems.add(newItem);
       manager.wishlists.wishlists[wishlistsIndex].foodItems.add(newItem);

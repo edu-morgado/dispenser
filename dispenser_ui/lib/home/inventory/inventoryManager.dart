@@ -1,4 +1,3 @@
-import 'package:dispenser_ui/home/inventory/inventoryItem.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
@@ -26,10 +25,6 @@ class InventoryState extends State<Inventory> {
   @override
   void initState() {
     manager.loadInventoriesFromFile().then((bool hasUpdated) {
-      if (manager.inventories != null) {
-        print("we have loaded the inventories from disk");
-        print(manager.inventories.toJson());
-      }
       if (mounted && hasUpdated)
         setState(() {
           print("now its setting state");
@@ -184,7 +179,6 @@ class InventoryState extends State<Inventory> {
                         ? Column(children: [
                             GestureDetector(
                               onLongPress: () => selected(index),
-
                               onTap: () {
                                 setState(() {
                                   isOpened != index
@@ -209,7 +203,7 @@ class InventoryState extends State<Inventory> {
                                 ),
                               ),
                             ),
-                            FoodItemColumn(updateFoodItems)
+                            FoodItemColumn(updateFoodItems, manager.inventories.inventories[index])
                           ])
                         : GestureDetector(
                             onLongPress: () => selected(index),

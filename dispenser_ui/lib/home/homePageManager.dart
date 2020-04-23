@@ -67,14 +67,14 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
             ScrollDirection.forward);
       });
     notesViewType = viewType.Staggered;
-     ObjFoodItem item1 = ObjFoodItem(1, "leite", 6, 12);
-    ObjFoodItem item2 = ObjFoodItem(2, "badjoraz", 2, 12);
-    ObjFoodItem item3 = ObjFoodItem(3, "degnue", 7, 12);
-    ObjFoodItem item4 = ObjFoodItem(4, "carne", 12, 12);
-    ObjFoodItem item5 = ObjFoodItem(5, "peixe", 11, 12);
-    ObjFoodItem item6 = ObjFoodItem(6, "bolachas", 8, 12);
-    ObjFoodItem item7 = ObjFoodItem(7, "dengues", 4, 12);
-    ObjFoodItem item8 = ObjFoodItem(8, "batatas", 3, 12);
+     ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
+    ObjFoodItem item2 = ObjFoodItem("badjoraz", 2, 12);
+    ObjFoodItem item3 = ObjFoodItem("degnue", 7, 12);
+    ObjFoodItem item4 = ObjFoodItem("carne", 12, 12);
+    ObjFoodItem item5 = ObjFoodItem("peixe", 11, 12);
+    ObjFoodItem item6 = ObjFoodItem("bolachas", 8, 12);
+    ObjFoodItem item7 = ObjFoodItem("dengues", 4, 12);
+    ObjFoodItem item8 = ObjFoodItem("batatas", 3, 12);
     ObjNote note1 = ObjNote(
         1,
         "nota one dengue",
@@ -121,7 +121,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     manager.notes.notes.add(note2);
     manager.notes.notes.add(note3);
 
-    print("saving ivnentories now sgould be stored, lets see");
     manager.saveInventories();
     manager.saveWishLists();
   }
@@ -345,8 +344,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     if (firstTime) return Popup(clearPopUp);
 
-
-    print("Doing build function now");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: _tabController.index == 2 ? _notesAppBar() : null,
