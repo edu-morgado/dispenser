@@ -7,14 +7,12 @@ from flask import request
 
 @app.route('/api/inventory/create', methods=['POST'])
 def create_inventory():
-    id = request.form.get('id')
     name = request.form.get('name')
     ttype = request.form.get('ttype')
-    foods_json = request.form.get('foods_json')
-    if id is None or name is None or ttype is None or foods_json is None:
+    if id is None or name is None or ttype is None :
         abort(400)  # missing arguments
 
-    inventory = Inventory(id = id,name = name, ttype = ttype, foods_json = foods_json)
+    inventory = Inventory(name = name, ttype = ttype)
     db.session.add(inventory)
     db.session.commit()
     return {'success': True}, 201
@@ -39,7 +37,7 @@ def update_inventory(inventory_id):
     name = request.form.get('name')
     ttype = request.form.get('ttype')
     foods_json = request.form.get('foods_json')
-    if name is None or ttype is None or foods_json is None:
+    if name is None or ttype is None:
         abort(400)  # missing arguments
 
     inventory = Inventory.query.get(inventory_id)
@@ -48,7 +46,6 @@ def update_inventory(inventory_id):
 
 
     inventory.ttype = ttype
-    inventory.foods_json = foods_json
     db.session.commit()
     return {'success': True}, 200
 

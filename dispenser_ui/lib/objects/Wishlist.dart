@@ -32,6 +32,11 @@ class ListWishList {
     return wishlists.length == 0;
   }
 
+  bool updateFromList(List<ObjWishList> newWishlists) {
+    wishlists = newWishlists;
+    return true;
+  }
+
   factory ListWishList.fromJson(Map<String, dynamic> json) => _$ListWishListFromJson(json);
   Map<String, dynamic> toJson() => _$ListWishListToJson(this);
 }

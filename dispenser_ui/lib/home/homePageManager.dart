@@ -15,12 +15,14 @@ import 'package:provider/provider.dart';
 
 import 'package:dispenser_ui/ObjManager.dart';
 
+import '../Request.dart';
+
 enum viewType { List, Staggered }
 
 class Home extends StatefulWidget {
   final Manager manager;
 
-  Home(this.manager); 
+  Home(this.manager);
   @override
   State<StatefulWidget> createState() {
     return TabBarPage(this.manager);
@@ -42,7 +44,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ];
 
   TabBarPage(this.manager) {
-
     tabs = [
       Inventory(manager),
       WishListManager(manager),
@@ -67,68 +68,76 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
             ScrollDirection.forward);
       });
     notesViewType = viewType.Staggered;
-     ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
-    ObjFoodItem item2 = ObjFoodItem("badjoraz", 2, 12);
-    ObjFoodItem item3 = ObjFoodItem("degnue", 7, 12);
-    ObjFoodItem item4 = ObjFoodItem("carne", 12, 12);
-    ObjFoodItem item5 = ObjFoodItem("peixe", 11, 12);
-    ObjFoodItem item6 = ObjFoodItem("bolachas", 8, 12);
-    ObjFoodItem item7 = ObjFoodItem("dengues", 4, 12);
-    ObjFoodItem item8 = ObjFoodItem("batatas", 3, 12);
-    ObjNote note1 = ObjNote(
-        1,
-        "nota one dengue",
-        "some note juicy ass content fo yo ass",
-        DateTime(2000, 1, 1, 1, 1),
-        DateTime(2000, 1, 1, 1, 1),
-        Colors.red);
-    ObjNote note2 = ObjNote(
-        2,
-        "nota dois dengue",
-        "some mo juicy ass content fo yo ass",
-        DateTime(2000, 1, 1, 1, 1),
-        DateTime(2000, 1, 1, 1, 1),
-        Colors.blue);
-    ObjNote note3 = ObjNote(
-        3,
-        "nota one dengue",
-        "wake yo fatass traca fatigated master youre sleeping behind me right now",
-        DateTime(2000, 1, 1, 1, 1),
-        DateTime(2000, 1, 1, 1, 1),
-        Colors.green);
 
-    manager.inventories.inventories.add(ObjInventory(1, 3, "Items Not Stored"));
-    manager.inventories.inventories.add(ObjInventory(2, 1, "Fridge"));
-    manager.inventories.inventories.add(ObjInventory(3, 2, "Freezer"));
-    manager.inventories.inventories.add(ObjInventory(4, 3, "Storage"));
-    manager.wishlists.wishlists.add(ObjWishList(1, "All Items"));
-    manager.inventories.inventories[0].foodItems.add(item1);
-    manager.inventories.inventories[0].foodItems.add(item2);
-    manager.inventories.inventories[0].foodItems.add(item3);
-    manager.inventories.inventories[1].foodItems.add(item1);
-    manager.inventories.inventories[1].foodItems.add(item4);
-    manager.inventories.inventories[1].foodItems.add(item7);
-    manager.inventories.inventories[2].foodItems.add(item8);
-    manager.inventories.inventories[2].foodItems.add(item6);
-    manager.inventories.inventories[2].foodItems.add(item5);
-    manager.inventories.inventories[3].foodItems.add(item3);
-    manager.inventories.inventories[3].foodItems.add(item6);
-    manager.inventories.inventories[3].foodItems.add(item5);
-    manager.wishlists.wishlists[0].foodItems.add(item1);
-    manager.wishlists.wishlists[0].foodItems.add(item3);
-    manager.wishlists.wishlists[0].foodItems.add(item2);
-    manager.notes.notes.add(note1);
-    manager.notes.notes.add(note2);
-    manager.notes.notes.add(note3);
+    // ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
+    // ObjFoodItem item2 = ObjFoodItem("badjoraz", 2, 12);
+    // ObjFoodItem item3 = ObjFoodItem("degnue", 7, 12);
+    // ObjFoodItem item4 = ObjFoodItem("carne", 12, 12);
+    // ObjFoodItem item5 = ObjFoodItem("peixe", 11, 12);
+    // ObjFoodItem item6 = ObjFoodItem("bolachas", 8, 12);
+    // ObjFoodItem item7 = ObjFoodItem("dengues", 4, 12);
+    // ObjFoodItem item8 = ObjFoodItem("batatas", 3, 12);
+    // ObjNote note1 = ObjNote(
+    //     1,
+    //     "nota one dengue",
+    //     "some note juicy ass content fo yo ass",
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     Colors.red);
+    // ObjNote note2 = ObjNote(
+    //     2,
+    //     "nota dois dengue",
+    //     "some mo juicy ass content fo yo ass",
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     Colors.blue);
+    // ObjNote note3 = ObjNote(
+    //     3,
+    //     "nota one dengue",
+    //     "wake yo fatass traca fatigated master youre sleeping behind me right now",
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     DateTime(2000, 1, 1, 1, 1),
+    //     Colors.green);
 
-    manager.saveInventories();
-    manager.saveWishLists();
+    // manager.inventories.inventories.add(ObjInventory(1, 3, "Items Not Stored"));
+    // manager.inventories.inventories.add(ObjInventory(2, 1, "Fridge"));
+    // manager.inventories.inventories.add(ObjInventory(3, 2, "Freezer"));
+    // manager.inventories.inventories.add(ObjInventory(4, 3, "Storage"));
+    // manager.wishlists.wishlists.add(ObjWishList(1, "All Items"));
+    // manager.inventories.inventories[0].foodItems.add(item1);
+    // manager.inventories.inventories[0].foodItems.add(item2);
+    // manager.inventories.inventories[0].foodItems.add(item3);
+    // manager.inventories.inventories[1].foodItems.add(item1);
+    // manager.inventories.inventories[1].foodItems.add(item4);
+    // manager.inventories.inventories[1].foodItems.add(item7);
+    // manager.inventories.inventories[2].foodItems.add(item8);
+    // manager.inventories.inventories[2].foodItems.add(item6);
+    // manager.inventories.inventories[2].foodItems.add(item5);
+    // manager.inventories.inventories[3].foodItems.add(item3);
+    // manager.inventories.inventories[3].foodItems.add(item6);
+    // manager.inventories.inventories[3].foodItems.add(item5);
+    // manager.wishlists.wishlists[0].foodItems.add(item1);
+    // manager.wishlists.wishlists[0].foodItems.add(item3);
+    // manager.wishlists.wishlists[0].foodItems.add(item2);
+    // manager.notes.notes.add(note1);
+    // manager.notes.notes.add(note2);
+    // manager.notes.notes.add(note3);
+
+    //manager.requestFoodItems();
+    //manager.inventories.inventories = [];
+    // Requests.createFoodItem("food from app", 30, "categoria dos dengues")
+    //     .then((bool value) {
+    //   print("the value is $value");
+    // });
+    Requests.readFoodItems().then((dynamic food_items) {});
+    Requests.readInventories().then((dynamic inventories) {});
+    Requests.readWishLists().then((dynamic inventories) {});
+
   }
 
   /*  
   
   */
- 
 
   @override
   void dispose() {

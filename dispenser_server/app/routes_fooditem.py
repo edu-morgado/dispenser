@@ -6,13 +6,13 @@ from flask import request
 
 @app.route('/api/food_item/create', methods=['POST'])
 def create_food_item():
-    id = request.form.get('id')
     name = request.form.get('name')
     quantity = request.form.get('quantity')
-    if id is None or name is None or quantity is None:
+    category = request.form.get('category')
+    if name is None or quantity is None or category is None:
         abort(400)  # missing arguments
 
-    food_item = Food_Item(id = id, name = name, quantity = quantity)
+    food_item = Food_Item( name = name, quantity = quantity, category = category)
     db.session.add(food_item)
     db.session.commit()
     return {'success': True}, 201
@@ -35,7 +35,8 @@ def update_food_item(food_item_id):
 
     name = request.form.get('name')
     quantity = request.form.get('quantity')
-    if name is None or quantity is None:
+    category = request.form.get('category')
+    if name is None or quantity is None or category is None:
         abort(400)  # missing arguments
 
     food_item = Food_Item.query.get(food_item_id)
@@ -44,6 +45,7 @@ def update_food_item(food_item_id):
 
     food_item.name = name
     food_item.quantity = quantity
+    food_item.category = category
     db.session.commit()
     return {'success': True}, 200
 

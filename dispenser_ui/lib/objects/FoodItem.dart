@@ -59,6 +59,12 @@ class ListFoodItem {
     return foodItems.length == 0;
   }
 
+  bool updateFromList(List<ObjFoodItem> newFoodItems){
+    foodItems = newFoodItems;
+    return true;
+  }
+
+
   factory ListFoodItem.fromJson(Map<String, dynamic> json) =>
       _$ListFoodItemFromJson(json);
   Map<String, dynamic> toJson() => _$ListFoodItemToJson(this);

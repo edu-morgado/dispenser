@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -6,13 +5,14 @@ import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:dispenser_ui/Request.dart';
 import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:dispenser_ui/objects/Home.dart';
 import 'package:dispenser_ui/objects/Note.dart';
 
-class Manager extends ChangeNotifier{
+class Manager extends ChangeNotifier {
   FileHandler fileHandler = FileHandler();
 
   ListWishList wishlists = ListWishList();
@@ -24,15 +24,70 @@ class Manager extends ChangeNotifier{
   DateTime foodItemsLastRequest;
   DateTime foodRepositoriesLastRequest;
   DateTime notesLastRequest;
-  
-  
+
+  /*******************************************************************
+   * ***********************Food Items related requests *************
+   ******************************************************************/
+
+  Future<ListFoodItem> getFoodItems() async {
+    var json = await Requests.readFoodItems();
+    if (json == null) return null;
+    foodItems.updateFromList(json);
+    saveFoodItems();
+    for (int i = 0; i < foodItems.foodItems.length; i++) {
+      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+    }
+    return foodItems;
+  }
+
+  /*******************************************************************
+   * ***********************Inventories related requests *************
+   ******************************************************************/
+
+  Future<ListInventory> getInventories() async {
+    var json = await Requests.readInventories();
+    if (json == null) return null;
+    inventories.updateFromList(json);
+    saveInventories();
+    for (int i = 0; i < inventories.inventories.length; i++)
+      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+
+    return inventories;
+  }
+
+  /*******************************************************************
+   * ***********************Wishlists related requests *************
+   ******************************************************************/
+
+  Future<ListWishList> getWishlists() async {
+    var json = await Requests.readWishLists();
+    if (json == null) return null;
+    wishlists.updateFromList(json);
+    saveWishLists();
+    for (int i = 0; i < wishlists.wishlists.length; i++)
+      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+    return wishlists;
+  }
+
+
+
+
+
+
+
+  /*******************************************************************
+   *   ******************************************************************
+   * ***********************LOCAL STORAGE RELATED FUNCTIONS related requests
+   *   ******************************************************************
+   ******************************************************************/
+
   saveFoodItems() {
     fileHandler.writeToFile(foodItems, "foodItems.txt");
   }
 
   Future<bool> loadFoodItemsFromFile() async {
     var json = await fileHandler.readFromFile("foodItems.txt");
-    if(json == null) return false;
+    if (json == null) return false;
     foodItems = ListFoodItem.fromJson(json);
     return true;
   }
@@ -43,15 +98,13 @@ class Manager extends ChangeNotifier{
     return true;
   }
 
-
-
   saveInventories() {
     fileHandler.writeToFile(inventories, "inventories.txt");
   }
 
   Future<bool> loadInventoriesFromFile() async {
     var json = await fileHandler.readFromFile("inventories.txt");
-    if(json == null) return false;
+    if (json == null) return false;
     inventories = ListInventory.fromJson(json);
     return true;
   }
@@ -62,14 +115,13 @@ class Manager extends ChangeNotifier{
     return true;
   }
 
-
   saveWishLists() {
     fileHandler.writeToFile(wishlists, "wishlists.txt");
   }
 
   Future<bool> loadWishListsFromFile() async {
     var json = await fileHandler.readFromFile("wishlists.txt");
-    if(json == null) return false;
+    if (json == null) return false;
     wishlists = ListWishList.fromJson(json);
     return true;
   }
@@ -80,14 +132,13 @@ class Manager extends ChangeNotifier{
     return true;
   }
 
-    
   saveNotes() {
     fileHandler.writeToFile(notes, "notes.txt");
   }
 
   Future<bool> loadNotesFromFile() async {
     var json = await fileHandler.readFromFile("notes.txt");
-    if(json == null) return false;
+    if (json == null) return false;
     notes = ListNote.fromJson(json);
     return true;
   }
@@ -97,10 +148,7 @@ class Manager extends ChangeNotifier{
     notes = null;
     return true;
   }
-
-
 }
-
 
 class FileHandler {
   Future<String> get localPath async {

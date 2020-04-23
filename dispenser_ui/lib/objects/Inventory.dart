@@ -36,6 +36,13 @@ class ListInventory {
     return inventories.length == 0;
   }
 
+  bool updateFromList(List<ObjInventory> newInventories){
+    inventories = newInventories;
+    return true;
+  }
+
+
+
 
   factory ListInventory.fromJson(Map<String, dynamic> json) =>
       _$ListInventoryFromJson(json);
