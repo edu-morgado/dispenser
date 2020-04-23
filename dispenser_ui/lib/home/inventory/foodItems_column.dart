@@ -72,8 +72,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     addTilesManager.add(addTile(context));
     // adding a new product element for new input information, adding an ADD tile to the end of widget list
 
-    addTilesManager[addTilesManager.length - 2] =
-        addOpenedTile(products[products.length - 1],addTilesManager.length - 2,  context);
+    addTilesManager[addTilesManager.length - 2] = addOpenedTile(
+        products[products.length - 1], addTilesManager.length - 2, context);
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
 
@@ -115,10 +115,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             icon: Icon(
               Icons.close,
             ),
-            onPressed: ()  {
+            onPressed: () {
               setState(() {
+                products[openedTile - 1] = {
+                  'name': _nameController.text,
+                  'quantity': quantity,
+                };
                 openedTile = -1;
-                addTilesManager[ownIndex] = addClosedTile(tileInfo, ownIndex, context);
+                addTilesManager[ownIndex] =
+                    addClosedTile(tileInfo, ownIndex, context);
               });
             },
           )
@@ -161,10 +166,9 @@ class FoodItemColumnState extends State<FoodItemColumn> {
                 addOpenedTile(products[newIndex - 1], newIndex, context);
             _nameController.text = products[newIndex - 1]["name"];
             quantity = products[newIndex - 1]["quantity"];
-          }
-          else{
+          } else {
             print("openedTile is supose to be -1 -> $openedTile");
-              addTilesManager[newIndex] =
+            addTilesManager[newIndex] =
                 addOpenedTile(products[newIndex - 1], newIndex, context);
           }
           openedTile = newIndex;

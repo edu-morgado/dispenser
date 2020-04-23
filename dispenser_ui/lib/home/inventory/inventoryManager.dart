@@ -165,11 +165,12 @@ class InventoryState extends State<Inventory> {
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.all(5.0),
               child: InkWell(
-                  onLongPress: () => selected(index),
                   child: Stack(alignment: Alignment.topLeft, children: [
                     index == isOpened
                         ? Column(children: [
                             GestureDetector(
+                              onLongPress: () => selected(index),
+
                               onTap: () {
                                 setState(() {
                                   isOpened != index
@@ -197,6 +198,7 @@ class InventoryState extends State<Inventory> {
                             FoodItemColumn(updateFoodItems)
                           ])
                         : GestureDetector(
+                            onLongPress: () => selected(index),
                             onTap: () {
                               setState(() {
                                 isOpened != index
