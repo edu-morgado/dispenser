@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/home/homer/HomeManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -39,7 +40,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   TabBarPage(this.manager) {
     tabs = [
-      Inventory(manager),
+      HomeManager(manager),
       Inventory(manager),
       WishListManager(manager),
       StaggeredGridPage(notesViewType: notesViewType),
