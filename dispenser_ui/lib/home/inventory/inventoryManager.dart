@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
-import 'package:dispenser_ui/home/inventory/foodItems_column.dart';
+import 'package:dispenser_ui/customizedwidgets/foodItems_column.dart';
 
 class Inventory extends StatefulWidget {
   final Manager manager;

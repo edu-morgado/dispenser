@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
-import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 
 class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
-  final ObjInventory inventory;
-  FoodItemColumn(this.updateParentState, this.inventory);
+  final dynamic repository;
+  FoodItemColumn(this.updateParentState, this.repository);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,20 +24,20 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameNode = FocusNode();
 
-  void updateInventory() {
-    for (int i = 0; i < widget.inventory.foodItems.length; i++) {
-      ObjFoodItem foodItem = widget.inventory.foodItems[i];
+  void updateRepository() {
+    for (int i = 0; i < widget.repository.foodItems.length; i++) {
+      ObjFoodItem foodItem = widget.repository.foodItems[i];
       if (products[i]['name'] != foodItem.foodname ||
           products[i]['quantity'] != foodItem.foodquantity) {
-        print("updating inventory");
+        print("updating repository");
         foodItem.foodname = products[i]['name'];
         foodItem.foodquantity = products[i]['quantity'];
       }
     }
 
-    for(int i =  widget.inventory.foodItems.length; i < products.length ; i++) {
+    for(int i =  widget.repository.foodItems.length; i < products.length ; i++) {
       ObjFoodItem newProduct = ObjFoodItem(products[i]['name'], products[i]['quantity'], 1);
-      widget.inventory.foodItems.add(newProduct);
+      widget.repository.foodItems.add(newProduct);
     }
   }
 
@@ -48,10 +47,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           thickness:
               3)); // cute UI feature that fucks the indexes up (not best way to do probably)
 
-      for (int i = 0; i < widget.inventory.foodItems.length; i++) {
+      for (int i = 0; i < widget.repository.foodItems.length; i++) {
         products.add({
-          'name': widget.inventory.foodItems[i].name,
-          'quantity': widget.inventory.foodItems[i].quantity
+          'name': widget.repository.foodItems[i].name,
+          'quantity': widget.repository.foodItems[i].quantity
         });
         addTilesManager.add(addClosedTile(products[i], i + 1, context));
       }
@@ -78,7 +77,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'name': _nameController.text,
         'quantity': quantity,
       };
-      updateInventory();
+      updateRepository();
       addTilesManager[openedTile] =
           addClosedTile(products[openedTile - 1], openedTile, context);
     }
@@ -139,7 +138,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
-                updateInventory();
+                updateRepository();
 
                 addTilesManager[ownIndex] =
                     addClosedTile(products[openedTile - 1], ownIndex, context);
@@ -180,7 +179,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
               'name': _nameController.text,
               'quantity': quantity,
             };
-            updateInventory();
+            updateRepository();
 
             addTilesManager[openedTile] =
                 addClosedTile(products[openedTile - 1], openedTile, context);
