@@ -23,14 +23,13 @@ from app.models import *
 
 
 
-
 if(len(Home.query.all()) == 0 ):
     print("populating database now")
     home1 = Home(name="home1dengue")
     home2 = Home(name="home2dengue")
     inventory1 = Inventory(name = "inventory1  ", ttype =1 , home = home1)
     inventory2 = Inventory(name = "inventory2  ", ttype =2 , home = home1)
-    inventory3 = Inventory(name = "inventory3  ", ttype =0 , home = home1)
+    inventory3 = Inventory(name = "inventory3  ", ttype =3 , home = home1)
     inventory4 = Inventory(name = "inventory4  ", ttype =2 , home = home2)
     inventory5 = Inventory(name = "inventory5  ", ttype =1 , home = home2)
     inventory6 = Inventory(name = "inventory6  ", ttype =1 , home = home2)
@@ -58,5 +57,3 @@ if(len(Home.query.all()) == 0 ):
     db.session.add(home1)
     db.session.add(home2)
     db.session.commit()
-
-

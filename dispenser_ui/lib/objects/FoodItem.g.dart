@@ -8,10 +8,16 @@ part of 'FoodItem.dart';
 
 ObjFoodItem _$ObjFoodItemFromJson(Map<String, dynamic> json) {
   return ObjFoodItem(
-      json['name'] as String, json['quantity'] as int, json['category'] as int)
-    ..id = json['id'] as int
-    ..foodname = json['foodname'] as String
-    ..foodquantity = json['foodquantity'] as int;
+      json['name'] as String,
+      json['quantity'] as int,
+      json['category'] as String,
+      json['dateCreated'] == null
+          ? null
+          : DateTime.parse(json['dateCreated'] as String),
+      json['dateLastUpdated'] == null
+          ? null
+          : DateTime.parse(json['dateLastUpdated'] as String))
+    ..id = json['id'] as int;
 }
 
 Map<String, dynamic> _$ObjFoodItemToJson(ObjFoodItem instance) =>
@@ -20,8 +26,8 @@ Map<String, dynamic> _$ObjFoodItemToJson(ObjFoodItem instance) =>
       'name': instance.name,
       'quantity': instance.quantity,
       'category': instance.category,
-      'foodname': instance.foodname,
-      'foodquantity': instance.foodquantity
+      'dateCreated': instance.dateCreated?.toIso8601String(),
+      'dateLastUpdated': instance.dateLastUpdated?.toIso8601String()
     };
 
 ListFoodItem _$ListFoodItemFromJson(Map<String, dynamic> json) {

@@ -15,6 +15,9 @@ import 'package:dispenser_ui/objects/Note.dart';
 class Manager extends ChangeNotifier {
   FileHandler fileHandler = FileHandler();
 
+  int id;
+  String name;
+
   ListWishList wishlists = ListWishList();
   ListFoodItem foodItems = ListFoodItem();
   ListInventory inventories = ListInventory();
@@ -26,54 +29,185 @@ class Manager extends ChangeNotifier {
   DateTime notesLastRequest;
 
   /*******************************************************************
+   * ***************************Home related requests *************
+   ******************************************************************/
+
+  Future<bool> getHomeInfo(int id) async {
+    var json = await Requests.readHome(id);
+
+    if (json == null) return null;
+
+    this.id = json['id'];
+    this.name = json['name'];
+    return true;
+  }
+
+  Future<bool> getHomeWishLists() async {
+    if (await getWishLists(this.id) == null) {
+      print("Couldnt load WishLists from Home");
+      return null;
+    }
+    for (int i = 0; i < this.wishlists.wishlists.length; i++) {
+      if (await getFoodItemsFromWishList(this.wishlists.wishlists[i]) == null) {
+        print("Couldnt load FoodItems from WishLists");
+        return null;
+      }
+    }
+    print("******** Finished loading All Home WishLists with the Food in it");
+    return true;
+  }
+
+  Future<bool> getHomeInventories() async {
+    if (await getInventories(this.id) == null) {
+      print("Couldnt load Inventories from Home");
+      return null;
+    }
+    for (int i = 0; i < this.inventories.inventories.length; i++) {
+      if (await getFoodItemsFromInventory(this.inventories.inventories[i]) ==
+          null) {
+        print("Couldnt load FoodItems from Inventories");
+        return null;
+      }
+    }
+    print("******** Finished loading All Home Inventories with the Food in it");
+    return true;
+  }
+
+  Future<bool> getEntireHomeInformation(int j) async {
+    if (await getHomeInfo(j) == null) {
+      print("Not possible to sucessfully load all home items");
+      return null;
+    }
+    if (await getHomeWishLists() == null) {
+      print("Not possible to sucessfully load all home items");
+      return null;
+    }
+    if (await getHomeInventories() == null) {
+      print("Not possible to sucessfully load all home items");
+      return null;
+    }
+
+    saveHome();
+    saveInventories();
+    saveWishLists();
+    print("Succsefull!! youve loaded the entire home ");
+    return true;
+  }
+
+  /*******************************************************************
    * ***********************Food Items related requests *************
    ******************************************************************/
 
-  Future<ListFoodItem> getFoodItems() async {
-    var json = await Requests.readFoodItems();
-    if (json == null) return null;
-    foodItems.updateFromList(json);
-    saveFoodItems();
-    for (int i = 0; i < foodItems.foodItems.length; i++) {
-      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+  Future<List<ObjFoodItem>> getFoodItemsFromInventory(
+      ObjInventory inventory) async {
+    var listJson = await Requests.readFoodItemsFromInventory(inventory.id);
+    if (listJson == null) return null;
+    inventory.foodItems = [];
+    for (var json in listJson) {
+      dynamic foodDTO = {
+        'id': json['id'],
+        'name': json['name'],
+        'quantity': json['quantity'],
+        'category': json['category'],
+        'dateCreated': json['date_created'],
+        'dateLastUpdated': json['date_last_update']
+      };
+      print(foodDTO);
+      inventory.foodItems.add(ObjFoodItem.fromJson(foodDTO));
     }
-    return foodItems;
+    saveInventories();
+    return inventory.foodItems;
+  }
+
+  Future<List<ObjFoodItem>> getFoodItemsFromWishList(
+      ObjWishList wishlist) async {
+    var listJson = await Requests.readFoodItemsFromWishList(wishlist.id);
+    if (listJson == null) return null;
+
+    wishlist.foodItems = [];
+    for (var json in listJson) {
+      dynamic foodDTO = {
+        'id': json['id'],
+        'name': json['name'],
+        'quantity': json['quantity'],
+        'category': json['category'],
+        'dateCreated': json['date_created'],
+        'dateLastUpdated': json['date_last_update']
+      };
+      print(foodDTO);
+      wishlist.foodItems.add(ObjFoodItem.fromJson(foodDTO));
+    }
+    saveWishLists();
+    return wishlist.foodItems;
   }
 
   /*******************************************************************
    * ***********************Inventories related requests *************
    ******************************************************************/
 
-  Future<ListInventory> getInventories() async {
-    var json = await Requests.readInventories();
-    if (json == null) return null;
-    inventories.updateFromList(json);
-    saveInventories();
-    for (int i = 0; i < inventories.inventories.length; i++)
-      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+  Future<ListInventory> getInventories(int homeID) async {
+    var listJson = await Requests.readInventoriesFromHome(homeID);
 
+    if (listJson == null) return null;
+
+    inventories.inventories = [];
+    for (var json in listJson) {
+      dynamic inventoryDTO = {
+        'id': json['id'],
+        'name': json['name'],
+        'ttype': json['ttype'],
+        'dateCreated': json['date_created'],
+        'dateLastUpdated': json['date_last_update']
+      };
+      print(inventoryDTO);
+      inventories.inventories.add(ObjInventory.fromJson(inventoryDTO));
+    }
+
+    saveInventories();
     return inventories;
+  }
+
+  Future<ObjInventory> getInventory(int id) async {
+    var json = await Requests.readInventory(id);
+    if (json == null) return null;
+
+    dynamic inventoryDTO = {
+      'id': json['id'],
+      'name': json['name'],
+      'ttype': json['ttype'],
+      'dateCreated': json['date_created'],
+      'dateLastUpdated': json['date_last_update']
+    };
+    ObjInventory inventory = ObjInventory.fromJson(json);
+    inventories.inventories.add(inventory);
+    saveInventories();
+    return inventory;
   }
 
   /*******************************************************************
    * ***********************Wishlists related requests *************
    ******************************************************************/
 
-  Future<ListWishList> getWishlists() async {
-    var json = await Requests.readWishLists();
-    if (json == null) return null;
-    wishlists.updateFromList(json);
-    saveWishLists();
-    for (int i = 0; i < wishlists.wishlists.length; i++)
-      print("food number $i has the name -> ${foodItems.foodItems[i].name}");
+  Future<ListWishList> getWishLists(int homeID) async {
+    var listJson = await Requests.readWishListsFromHome(homeID);
+
+    if (listJson == null) return null;
+
+    wishlists.wishlists = [];
+    for (var json in listJson) {
+      dynamic wishlistDTO = {
+        'id': json['id'],
+        'name': json['name'],
+        'dateCreated': json['date_created'],
+        'dateLastUpdated': json['date_last_update']
+      };
+      print(wishlistDTO);
+      wishlists.wishlists.add(ObjWishList.fromJson(wishlistDTO));
+    }
+
+    saveInventories();
     return wishlists;
   }
-
-
-
-
-
-
 
   /*******************************************************************
    *   ******************************************************************
@@ -81,7 +215,11 @@ class Manager extends ChangeNotifier {
    *   ******************************************************************
    ******************************************************************/
 
-  saveFoodItems() {
+  saveHome() {
+    fileHandler.writeToFile({'id': this.id, 'name': this.name}, "home.txt");
+  }
+
+   saveFoodItems() {
     fileHandler.writeToFile(foodItems, "foodItems.txt");
   }
 

@@ -225,7 +225,7 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
       ObjFoodItem newItem =
-          new ObjFoodItem(products[i]["name"], products[i]["quantity"], 1);
+          new ObjFoodItem(products[i]["name"], products[i]["quantity"], "categoria dengue 2",DateTime.now(), DateTime.now());
       manager.foodItems.foodItems.add(newItem);
       manager.inventories.inventories[1].foodItems.add(newItem);
     }
@@ -416,7 +416,7 @@ class InventoryAddState extends State<AddInventoryPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjInventory newFoodRepository = ObjInventory(1, ttype, "ei");
+          ObjInventory newFoodRepository = ObjInventory("ei", ttype, DateTime.now(), DateTime.now());
           manager.inventories.inventories.add(newFoodRepository);
           Navigator.of(context).pop();
         },

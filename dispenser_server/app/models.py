@@ -8,8 +8,8 @@ class Home(db.Model):
     __tablename__='home'
     id = db.Column(db.Integer, autoincrement = True, primary_key = True, nullable = False)
     name = db.Column(db.String(128), nullable = False)
-    date_created = db.Column(db.DateTime, default = datetime.now())
-    date_last_update = db.Column(db.DateTime, default = datetime.now())
+    date_created = db.Column(db.DateTime, default = datetime.now(), nullable = False)
+    date_last_update = db.Column(db.DateTime, default = datetime.now(), nullable = False)
     inventories = db.relationship("Inventory", backref = 'home', cascade = 'all, delete-orphan')
     wishlists = db.relationship("Wish_List", backref = 'home', cascade = 'all, delete-orphan')
     notes = db.relationship("Note", backref = 'home', cascade = 'all, delete-orphan')
@@ -29,8 +29,8 @@ class Inventory(db.Model):
     id = db.Column(db.Integer, autoincrement = True, primary_key = True, nullable = False)
     name = db.Column(db.String(128), nullable=False)
     ttype = db.Column(db.Integer, nullable=False)
-    date_created = db.Column(db.DateTime, default = datetime.now())
-    date_last_update = db.Column(db.DateTime,  default = datetime.now())
+    date_created = db.Column(db.DateTime, default = datetime.now(), nullable = False)
+    date_last_update = db.Column(db.DateTime,  default = datetime.now(), nullable = False)
     home_id = db.Column(db.Integer, db.ForeignKey('home.id'))
     food_items = db.relationship("Food_Item", backref = 'inventory', cascade = 'all')
 
@@ -49,8 +49,8 @@ class Wish_List(db.Model):
     __tablename__ = 'wish_list'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    date_created = db.Column(db.DateTime, default = datetime.now())
-    date_last_update = db.Column(db.DateTime, default = datetime.now())
+    date_created = db.Column(db.DateTime, default = datetime.now(), nullable = False)
+    date_last_update = db.Column(db.DateTime, default = datetime.now(), nullable = False)
     home_id = db.Column(db.Integer, db.ForeignKey('home.id'))
     food_items = db.relationship("Food_Item", backref = 'wish_list', cascade = 'all')
 
@@ -70,8 +70,8 @@ class Food_Item(db.Model):
     name = db.Column(db.String(128), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     category = db.Column(db.String(128), nullable = False)
-    date_created = db.Column(db.DateTime, default = datetime.now())
-    date_last_update = db.Column(db.DateTime, default = datetime.now())
+    date_created = db.Column(db.DateTime, default = datetime.now(), nullable = False)
+    date_last_update = db.Column(db.DateTime, default = datetime.now(), nullable = False)
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.id'))
     wish_list_id = db.Column(db.Integer, db.ForeignKey('wish_list.id'))
     def __repr__(self):
@@ -93,8 +93,8 @@ class Note(db.Model):
     title = db.Column(db.String(128), nullable = False)
     content = db.Column(db.String(2048), nullable = False)
     color = db.Column(db.String(64), nullable = False)
-    date_created = db.Column(db.DateTime,default = datetime.now())
-    date_last_update = db.Column(db.DateTime,default = datetime.now())
+    date_created = db.Column(db.DateTime,default = datetime.now(), nullable = False)
+    date_last_update = db.Column(db.DateTime,default = datetime.now(), nullable = False)
     house_id = db.Column(db.Integer, db.ForeignKey('home.id'))
 
     def __repr__(self):

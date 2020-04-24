@@ -6,6 +6,7 @@ from flask import request
 
 @app.route('/api/food_item/create', methods=['POST'])
 def create_food_item():
+    
     name = request.form.get('name')
     quantity = request.form.get('quantity')
     category = request.form.get('category')
@@ -14,13 +15,22 @@ def create_food_item():
 
     food_item = Food_Item( name = name, quantity = quantity, category = category)
     db.session.add(food_item)
+    db.session.flush()
     db.session.commit()
-    return {'success': True}, 201
+    return {'success': True, "id" : food_item.id}, 201
 
-@app.route('/api/food_item/read')
-def read_all_food_items():
-    food_items = Food_Item.query.all()
+@app.route('/api/food_item/read_from_inventory', methods=['POST'])
+def read_all_food_items_from_inventory():
+    inventory_id = request.form.get('inventory_id')
+    food_items = Food_Item.query.filter_by(inventory_id=inventory_id)
     return jsonify([food_item.to_json() for food_item in food_items]), 200
+
+@app.route('/api/food_item/read_from_wishlist', methods=['POST'])
+def read_all_food_items_from_wishlist():
+    wishlist_id = request.form.get('wishlist_id')
+    food_items = Food_Item.query.filter_by(wish_list_id=wishlist_id)
+    return jsonify([food_item.to_json() for food_item in food_items]), 200
+
 
 @app.route('/api/food_item/read/<int:food_item_id>', methods=['GET'])
 def read_food_item(food_item_id):

@@ -14,13 +14,15 @@ def create_inventory():
 
     inventory = Inventory(name = name, ttype = ttype)
     db.session.add(inventory)
+    db.session.flush()
     db.session.commit()
-    return {'success': True}, 201
+    return {'success': True, 'id' : inventory.id }, 201
 
 
-@app.route('/api/inventory/read')
-def read_all_inventories():
-    inventories = Inventory.query.all()
+@app.route('/api/inventory/read', methods=['POST'])
+def read_all_inventories_id():
+    home_id = request.form.get('homeId')
+    inventories = Inventory.query.filter_by(home_id=home_id)
     return jsonify([inventory.to_json() for inventory in inventories]), 200
 
 @app.route('/api/inventory/read/<int:inventory_id>', methods=['GET'])
@@ -36,7 +38,6 @@ def update_inventory(inventory_id):
 
     name = request.form.get('name')
     ttype = request.form.get('ttype')
-    foods_json = request.form.get('foods_json')
     if name is None or ttype is None:
         abort(400)  # missing arguments
 

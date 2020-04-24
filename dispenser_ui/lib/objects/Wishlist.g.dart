@@ -7,7 +7,8 @@ part of 'WishList.dart';
 // **************************************************************************
 
 ObjWishList _$ObjWishListFromJson(Map<String, dynamic> json) {
-  return ObjWishList(json['id'] as int, json['name'] as String)
+  return ObjWishList(json['name'] as String)
+    ..id = json['id'] as int
     ..foodItems = (json['foodItems'] as List)
         ?.map((e) =>
             e == null ? null : ObjFoodItem.fromJson(e as Map<String, dynamic>))

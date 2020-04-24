@@ -266,7 +266,7 @@ class _AddProductState extends State<AddProductToWishList> {
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
       ObjFoodItem newItem =
-          new ObjFoodItem(products[i]["name"], products[i]["quantity"], 1);
+          new ObjFoodItem(products[i]["name"], products[i]["quantity"], "categoria dengue", DateTime.now(), DateTime.now());
       //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
       manager.foodItems.foodItems.add(newItem);
       manager.wishlists.wishlists[wishlistsIndex].foodItems.add(newItem);
@@ -415,7 +415,7 @@ class _AddWishListState extends State<AddWishList> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjWishList newWishlist = ObjWishList(1, _nameController.text);
+          ObjWishList newWishlist = ObjWishList( _nameController.text);
           manager.wishlists.wishlists.add(newWishlist);
           Navigator.of(context).pop();
         },

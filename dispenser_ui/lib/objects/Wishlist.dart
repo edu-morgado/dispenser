@@ -11,8 +11,12 @@ class ObjWishList {
   List<ObjFoodItem> foodItems = List<ObjFoodItem>();
   
 
-  ObjWishList(this.id,this.name);
+  ObjWishList(this.name);
 
+  @override
+  String toString() {
+    return "wishlist id=${this.id} with name=${this.name}";
+  }
 
   factory ObjWishList.fromJson(Map<String, dynamic> json) => _$ObjWishListFromJson(json);
   Map<String, dynamic> toJson() => _$ObjWishListToJson(this);

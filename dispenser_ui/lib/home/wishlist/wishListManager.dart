@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:dispenser_ui/home/wishlist/wishlistItems.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
+import 'package:dispenser_ui/customizedwidgets/foodItems_column.dart';
 
 class WishListManager extends StatefulWidget {
   final Manager manager;
@@ -18,38 +19,25 @@ class WishListState extends State<WishListManager> {
   Manager manager;
   WishListState(this.manager);
 
+  List<bool> isSelected = List<bool>();
+  int isOpened = -1;
+
   @override
   void initState() {
     manager.loadWishListsFromFile().then((bool hasUpdated) {
-      if (manager.wishlists != null) {
-        print("we have loaded the wishlists from disk");
-        print(manager.wishlists.toJson());
-      }
-      if (mounted && hasUpdated)
-        setState(() {
-          print("now its setting state");
-        });
+      if (mounted && hasUpdated) setState(() {});
     });
     super.initState();
   }
-
-  List<bool> isSelected = List<bool>();
-
-  List<Color> mycolors = List<Color>();
 
   void initializeIsSelected(int size) {
     if (isSelected.length != size)
       for (int i = isSelected.length; i < size; i++) isSelected.add(false);
   }
 
-  void setEverythingToSelected() {
-    for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
-    setState(() {});
-  }
-
-  void setEverythingToNotSelected() {
-    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
-    setState(() {});
+  bool anySelected() {
+    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
+    return false;
   }
 
   void selected(int i) {
@@ -64,77 +52,10 @@ class WishListState extends State<WishListManager> {
     setState(() {});
   }
 
-  Widget deleteIconButton(Manager manager) {
-    return IconButton(
-      icon: Icon(Icons.delete_outline),
-      onPressed: () => deleteWishlist(manager),
-    );
-  }
-
-  void deleteWishlist(Manager manager) {
-    int i;
+  void updateFoodItems() {
     setState(() {
-      for (i = 0; i < isSelected.length; i++) {
-        if (isSelected[i]) {
-          manager.wishlists.wishlists.removeAt(i);
-          isSelected.removeAt(i);
-          i = -1;
-        }
-      }
+      print("SETSTATING FOR UPDATEING FOOD PRODUCTS");
     });
-  }
-
-  Widget selectAllIconButton() {
-    return Checkbox(
-        value: allSelected(),
-        onChanged: (bool value) {
-          print(allSelected());
-          if (!allSelected())
-            setEverythingToSelected();
-          else
-            setEverythingToNotSelected();
-        });
-  }
-
-  bool anySelected() {
-    for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) return true;
-    return false;
-  }
-
-  bool allSelected() {
-    for (int i = 0; i < isSelected.length; i++)
-      if (!isSelected[i]) return false;
-    return true;
-  }
-
-  Widget topBar(Manager manager) {
-    if (anySelected())
-      return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Wishlists")),
-        ),
-        Spacer(
-          flex: 2,
-        ),
-        selectAllIconButton(),
-        deleteIconButton(manager),
-      ]);
-    else
-      return Row(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: 50,
-          child: Center(child: godfathersNameStyle("Wishlists")),
-        ),
-      ]);
   }
 
   @override
@@ -143,40 +64,70 @@ class WishListState extends State<WishListManager> {
 
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        Container(height: 45),
-        topBar(manager),
+        TopBar(updateFoodItems, manager, context, isSelected),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
           child: ListView.builder(
             itemCount: manager.wishlists.wishlists.length,
             itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5.0),
               child: InkWell(
-                onLongPress: () => selected(index),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        WishListItems(manager.wishlists.wishlists[index]))),
-                child: Stack(alignment: Alignment.topRight, children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: godfathersNameStyle(
-                        'Wishlist ${manager.wishlists.wishlists[index].name}'),
-                  ),
-                  anySelected()
-                      ? Checkbox(
-                          value: isSelected[index],
-                          onChanged: (bool value) {
-                            selected(index);
-                          })
-                      : Container(),
-                ]),
-              ),
+                  child: Stack(alignment: Alignment.topLeft, children: [
+                index == isOpened
+                    ? Column(children: [
+                        GestureDetector(
+                          onLongPress: () => selected(index),
+                          onTap: () {
+                            setState(() {
+                              isOpened != index
+                                  ? isOpened = index
+                                  : isOpened = -1;
+                            });
+                          },
+                          child: Container(
+                            child: godfathersNameStyle(
+                                manager.wishlists.wishlists[index].name),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        FoodItemColumn(updateFoodItems,
+                            manager.wishlists.wishlists[index]),
+                      ])
+                    : GestureDetector(
+                        onLongPress: () => selected(index),
+                        onTap: () {
+                          setState(() {
+                            isOpened != index
+                                ? isOpened = index
+                                : isOpened = -1;
+                          });
+                        },
+                        child: Container(
+                          child: godfathersNameStyle(
+                              manager.wishlists.wishlists[index].name),
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.green),
+                        ),
+                      ),
+                anySelected()
+                    ? Checkbox(
+                        value: isSelected[index],
+                        onChanged: (bool value) {
+                          selected(index);
+                        })
+                    : Container(),
+              ])),
             ),
           ),
         ),

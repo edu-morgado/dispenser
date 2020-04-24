@@ -7,26 +7,12 @@ class ObjFoodItem {
   int id;
   String name;
   int quantity;
-  int category;
+  String category;
+  DateTime dateCreated;
+  DateTime dateLastUpdated;
 
-  ObjFoodItem.withId(this.id, this.name, this.quantity, this.category);
-  ObjFoodItem(this.name, this.quantity, this.category);
+  ObjFoodItem(this.name, this.quantity, this.category, this.dateCreated, this.dateLastUpdated);
 
-  String get foodname {
-    return this.name;
-  }
-
-  set foodname(String name) {
-    this.name = name;
-  }
-
-  int get foodquantity {
-    return this.quantity;
-  }
-
-  set foodquantity(int quantity){
-    this.quantity = quantity;
-  }
 
   @override
   String toString() {

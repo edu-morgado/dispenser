@@ -12,14 +12,16 @@ def create_category():
 
     wishlist = Wish_List( name = name)
     db.session.add(wishlist)
+    db.session.flush()
     db.session.commit()
-    return {'success': True}, 201
+    return {'success': True, 'id' : wishlist.id}, 201
 
 
-@app.route('/api/wishlist/read')
-def read_all_wishlists():
-    wishlists = Wish_List.query.all()
-    return jsonify([wishlist.to_json() for wishlist in wishlists]), 200
+@app.route('/api/wishlist/read', methods=['POST'])
+def read_all_wish_lists_id():
+    home_id = request.form.get('homeId')
+    wish_lists = Wish_List.query.filter_by(home_id=home_id)
+    return jsonify([wish_list.to_json() for wish_list in wish_lists]), 200
 
 @app.route('/api/wishlist/read/<int:wishlist_id>', methods=['GET'])
 def read_wishlist(wishlist_id):

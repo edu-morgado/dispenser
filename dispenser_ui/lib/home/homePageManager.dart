@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -37,14 +38,10 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   ScrollController scrollController;
   TabController _tabController;
   Manager manager;
-  List<Tab> _bottomBarItems = [
-    Tab(icon: Icon(Icons.home, size: 40)),
-    Tab(icon: Icon(Icons.add_shopping_cart, size: 40)),
-    Tab(icon: Icon(Icons.note, size: 40)),
-  ];
 
   TabBarPage(this.manager) {
     tabs = [
+      Inventory(manager),
       Inventory(manager),
       WishListManager(manager),
       StaggeredGridPage(notesViewType: notesViewType),
@@ -125,14 +122,40 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
     //manager.requestFoodItems();
     //manager.inventories.inventories = [];
-    // Requests.createFoodItem("food from app", 30, "categoria dos dengues")
-    //     .then((bool value) {
-    //   print("the value is $value");
-    // });
-    Requests.readFoodItems().then((dynamic food_items) {});
-    Requests.readInventories().then((dynamic inventories) {});
-    Requests.readWishLists().then((dynamic inventories) {});
 
+    // CREATE / UPDATE / DELETE WISHLIST IN DB
+    // ObjWishList wishlist = ObjWishList("dengue name");
+    // Requests.createWishList(wishlist).then((bool created) {
+    //   wishlist.name = "updating the name dengue";
+    //   Requests.updateWishList(wishlist).then( (dynamic s) {
+    //      Requests.deleteWishList(wishlist);
+    //   });
+    //  });
+
+    // CREATE / UPDATE / DeleteINVENTORY IN DB
+    // ObjInventory newInventory =
+    //     ObjInventory("Ivnentorio dengado", 2, DateTime.now(), DateTime.now());
+    // Requests.createInventory(newInventory).then((bool createdSucceful) {
+    //   newInventory.name = "updating from dengue meu drena";
+    //   Requests.updateInventory(newInventory).then((dynamic denuge) {
+    //     Requests.deleteInventory(newInventory);
+    //   });
+    // });
+
+    // CREATE / UPDATE / DELETE FoodItem IN DB
+    // ObjFoodItem item1 = ObjFoodItem("badjras item meu dengue", 6, "dengeu");
+    // Requests.createFoodItem(item1).then((bool dengue) {
+    //   item1.name = "updating from dengue meu dengue";
+    //   Requests.updateFoodItem(item1).then((dynamic dengue) {
+    //     Requests.deleteFoodItem(item1);
+    //   });
+    // });
+
+    //GET HOME
+    manager.getEntireHomeInformation(1);
+
+    // manager.getWishlists();
+    // manager.getFoodItems();
   }
 
   /*  
@@ -352,24 +375,27 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (firstTime) return Popup(clearPopUp);
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: _tabController.index == 2 ? _notesAppBar() : null,
-      body: SafeArea(
-          child: TabBarView(controller: _tabController, children: tabs)),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        height: 50.0,
-        child: TabBar(
+      appBar: AppBar(
+        title: Center(child: godfathersNameStyle("DISPENSER")),
+        backgroundColor: Colors.purple[200],
+        elevation: 20.0,
+        bottom: TabBar(
           controller: _tabController,
-          tabs: _bottomBarItems,
-          unselectedLabelColor: Colors.black,
-          labelColor: Theme.of(context).primaryColor,
-          indicatorColor: Theme.of(context).primaryColor,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              icon: Icon(choice.icon),
+            );
+          }).toList(),
         ),
       ),
-      bottomSheet: _tabController.index == 2 ? _bottomBar() : null,
+      body: SafeArea(
+          child: TabBarView(
+        controller: _tabController,
+        children: tabs,
+      )),
       floatingActionButton: floatingButton(),
     );
   }
@@ -401,3 +427,16 @@ class Popup extends StatelessWidget {
     );
   }
 }
+
+class Choice {
+  const Choice({this.title, this.icon});
+  final String title;
+  final IconData icon;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Home', icon: Icons.home),
+  const Choice(title: 'Inventory', icon: Icons.kitchen),
+  const Choice(title: 'Wishlist', icon: Icons.add_shopping_cart),
+  const Choice(title: 'Notes', icon: Icons.message),
+];

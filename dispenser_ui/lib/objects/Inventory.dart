@@ -9,11 +9,18 @@ class ObjInventory {
   int id;
   String name;
   int ttype;
+  DateTime dateCreated;
+  DateTime dateLastUpdated;
   List<ObjFoodItem> foodItems = List<ObjFoodItem>();
 
-  ObjInventory(this.id,this.ttype, this.name);
+  ObjInventory(this.name, this.ttype, this.dateCreated, this.dateLastUpdated);
 
- 
+  
+  @override
+  String toString() {
+    return "inventory" + "id ->" +
+        id.toString() +" $name ttype is $ttype, and it was created in ${dateCreated.toString()}";
+  }
   factory ObjInventory.fromJson(Map<String, dynamic> json) => _$ObjInventoryFromJson(json);
 
   Map<String, dynamic> toJson() => _$ObjInventoryToJson(this);

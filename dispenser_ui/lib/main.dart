@@ -1,13 +1,16 @@
-import 'package:dispenser_ui/home/homePageManager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:dispenser_ui/ObjManager.dart';
+import 'package:dispenser_ui/Request.dart';
+import 'package:dispenser_ui/home/homePageManager.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  Manager manager = new Manager();
+
+  final Manager manager = new Manager();
+
 
   @override
   Widget build(BuildContext context) {

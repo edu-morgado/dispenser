@@ -8,7 +8,15 @@ part of 'Inventory.dart';
 
 ObjInventory _$ObjInventoryFromJson(Map<String, dynamic> json) {
   return ObjInventory(
-      json['id'] as int, json['ttype'] as int, json['name'] as String)
+      json['name'] as String,
+      json['ttype'] as int,
+      json['dateCreated'] == null
+          ? null
+          : DateTime.parse(json['dateCreated'] as String),
+      json['dateLastUpdated'] == null
+          ? null
+          : DateTime.parse(json['dateLastUpdated'] as String))
+    ..id = json['id'] as int
     ..foodItems = (json['foodItems'] as List)
         ?.map((e) =>
             e == null ? null : ObjFoodItem.fromJson(e as Map<String, dynamic>))
@@ -20,6 +28,8 @@ Map<String, dynamic> _$ObjInventoryToJson(ObjInventory instance) =>
       'id': instance.id,
       'name': instance.name,
       'ttype': instance.ttype,
+      'dateCreated': instance.dateCreated?.toIso8601String(),
+      'dateLastUpdated': instance.dateLastUpdated?.toIso8601String(),
       'foodItems': instance.foodItems
     };
 
