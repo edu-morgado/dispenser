@@ -147,6 +147,14 @@ Widget godfathersNameStyle(String name) {
   );
 }
 
+Widget usersNameStyle(String name) {
+  return AutoSizeText(
+    name,
+    maxLines: 1,
+    style: TextStyle(  color: Colors.black87, fontSize: 40, fontWeight: FontWeight.w600, fontFamily: 'Relaway'),
+  );
+}
+
 Widget godfathersTextStyle(String text) {
   return AutoSizeText(
     text,
@@ -155,6 +163,13 @@ Widget godfathersTextStyle(String text) {
   );
 }
 
+Widget smallTextStyle(String text) {
+  return AutoSizeText(
+    text,
+    maxLines:1,
+    style: TextStyle(  color: Colors.black, fontSize: 20, fontWeight: FontWeight.w800),
+  );
+}
 /*****************Sponsors************************** */
 
 /****************************FAQS************************ */
