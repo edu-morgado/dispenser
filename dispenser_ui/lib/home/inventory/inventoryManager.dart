@@ -68,7 +68,7 @@ class InventoryState extends State<Inventory> {
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        TopBar(updateFoodItems, manager, context,isSelected ),
+        TopBar(updateFoodItems, manager, context,isSelected, "Inventories"),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(

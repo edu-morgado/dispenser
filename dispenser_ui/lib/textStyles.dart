@@ -143,14 +143,15 @@ Widget godfathersNameStyle(String name) {
   return AutoSizeText(
     name,
     maxLines: 1,
-    style: TextStyle(fontSize: 33, fontWeight: FontWeight.w800),
+    style: TextStyle( backgroundColor: Colors.black87,  color: Colors.white, fontSize: 33, fontWeight: FontWeight.w100, fontFamily: 'Relaway'),
   );
 }
 
 Widget godfathersTextStyle(String text) {
   return AutoSizeText(
     text,
-    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+    maxLines:1,
+    style: TextStyle(  color: Colors.white, fontSize: 33, fontWeight: FontWeight.w800),
   );
 }
 
