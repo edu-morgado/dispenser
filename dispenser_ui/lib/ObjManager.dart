@@ -43,21 +43,27 @@ class Manager extends ChangeNotifier {
   }
 
   Future<bool> getHomeWishLists() async {
+    print("\n******** Starting loading All Home WishLists with the Food in it\n\n");
+
+
     if (await getWishLists(this.id) == null) {
       print("Couldnt load WishLists from Home");
       return null;
     }
+
     for (int i = 0; i < this.wishlists.wishlists.length; i++) {
       if (await getFoodItemsFromWishList(this.wishlists.wishlists[i]) == null) {
         print("Couldnt load FoodItems from WishLists");
         return null;
       }
     }
-    print("******** Finished loading All Home WishLists with the Food in it");
+    print("\n******** Finished loading All Home WishLists with the Food in it\n\n");
     return true;
   }
 
   Future<bool> getHomeInventories() async {
+        print("\n******** Starting loading All Home Inventories with the Food in it\n\n");
+
     if (await getInventories(this.id) == null) {
       print("Couldnt load Inventories from Home");
       return null;
@@ -69,7 +75,7 @@ class Manager extends ChangeNotifier {
         return null;
       }
     }
-    print("******** Finished loading All Home Inventories with the Food in it");
+    print("\n******** Finished loading All Home Inventories with the Food in it\n\n");
     return true;
   }
 
@@ -112,7 +118,7 @@ class Manager extends ChangeNotifier {
         'dateCreated': json['date_created'],
         'dateLastUpdated': json['date_last_update']
       };
-      print(foodDTO);
+     // print(foodDTO);
       inventory.foodItems.add(ObjFoodItem.fromJson(foodDTO));
     }
     saveInventories();
@@ -134,7 +140,7 @@ class Manager extends ChangeNotifier {
         'dateCreated': json['date_created'],
         'dateLastUpdated': json['date_last_update']
       };
-      print(foodDTO);
+      //print(foodDTO);
       wishlist.foodItems.add(ObjFoodItem.fromJson(foodDTO));
     }
     saveWishLists();
@@ -159,7 +165,7 @@ class Manager extends ChangeNotifier {
         'dateCreated': json['date_created'],
         'dateLastUpdated': json['date_last_update']
       };
-      print(inventoryDTO);
+      //print(inventoryDTO);
       inventories.inventories.add(ObjInventory.fromJson(inventoryDTO));
     }
 
@@ -201,7 +207,7 @@ class Manager extends ChangeNotifier {
         'dateCreated': json['date_created'],
         'dateLastUpdated': json['date_last_update']
       };
-      print(wishlistDTO);
+      //print(wishlistDTO);
       wishlists.wishlists.add(ObjWishList.fromJson(wishlistDTO));
     }
 

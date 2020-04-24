@@ -10,10 +10,19 @@ def create_food_item():
     name = request.form.get('name')
     quantity = request.form.get('quantity')
     category = request.form.get('category')
+    inventory_id = request.form.get("inventory_id")
+    wish_list_id = request.form.get("wish_list_id")
+
     if name is None or quantity is None or category is None:
         abort(400)  # missing arguments
-
-    food_item = Food_Item( name = name, quantity = quantity, category = category)
+    if inventory_id is None and wish_list_id is None:
+        abort(400)
+    if inventory_id is not None and wish_list_id is not None:
+        abort(400) 
+    if inventory_id is None:
+        food_item = Food_Item( name = name, quantity = quantity, category = category, wish_list_id = wish_list_id)
+    if wish_list_id is None:
+        food_item = Food_Item( name = name, quantity = quantity, category = category, inventory_id = inventory_id)
     db.session.add(food_item)
     db.session.flush()
     db.session.commit()
@@ -29,6 +38,7 @@ def read_all_food_items_from_inventory():
 def read_all_food_items_from_wishlist():
     wishlist_id = request.form.get('wishlist_id')
     food_items = Food_Item.query.filter_by(wish_list_id=wishlist_id)
+    print(food_items)
     return jsonify([food_item.to_json() for food_item in food_items]), 200
 
 

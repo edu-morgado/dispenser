@@ -63,9 +63,8 @@ class Requests {
    * ***********************Food Items related requests *************
    ******************************************************************/
 
-
-
-  static Future<bool> createFoodItem(ObjFoodItem foodItem) async {
+  static Future<bool> createFoodItemForInventory(
+      ObjFoodItem foodItem, int inventoryID) async {
     http.Response response;
     try {
       response =
@@ -73,6 +72,31 @@ class Requests {
         "name": foodItem.name,
         "quantity": foodItem.quantity.toString(),
         "category": foodItem.category,
+        "inventory_id": inventoryID.toString(),
+      });
+    } catch (SocketException) {
+      print(SocketException.toString());
+      print("Exception: No internet!! Route: $serverURL/api/food_item/create");
+      return false;
+    }
+    print("Route: $serverURL/api/food_item/create -> ${response.statusCode}");
+    if (response.statusCode == 201) {
+      var responsejson = jsonDecode(response.body);
+      foodItem.id = responsejson['id'];
+    }
+    return response.statusCode == 201;
+  }
+
+  static Future<bool> createFoodItemForWishList(
+      ObjFoodItem foodItem, int wishlistID) async {
+    http.Response response;
+    try {
+      response =
+          await _post(Uri.encodeFull("$serverURL/api/food_item/create"), body: {
+        "name": foodItem.name,
+        "quantity": foodItem.quantity.toString(),
+        "category": foodItem.category,
+        "wish_list_id": wishlistID,
       });
     } catch (SocketException) {
       print(SocketException.toString());
@@ -111,13 +135,15 @@ class Requests {
     try {
       response = await _post(
           Uri.encodeFull("$serverURL/api/food_item/read_from_wishlist"),
-          body: {'wish_list_id': wishlistId.toString()});
+          body: {'wishlist_id': wishlistId.toString()});
     } catch (SocketException) {
       print(SocketException.toString());
       print(
           "Exception: No internet!! Route: $serverURL/api/food_item/read_from_wishlist");
       return null;
     }
+    print(
+        "Route: $serverURL/api/food_item/read_from_wishlist -> ${response.statusCode}");
     if (response.statusCode != 200) return null;
     return jsonDecode(response.body);
   }
@@ -291,7 +317,7 @@ class Requests {
   }
 
   static Future<List<dynamic>> readWishListsFromHome(int homeId) async {
-     http.Response response;
+    http.Response response;
     try {
       response =
           await _post(Uri.encodeFull("$serverURL/api/wishlist/read"), body: {

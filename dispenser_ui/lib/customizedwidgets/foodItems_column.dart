@@ -3,6 +3,8 @@ import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 
+import '../Request.dart';
+
 class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
   final dynamic repository;
@@ -32,12 +34,14 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         print("updating repository");
         foodItem.name = products[i]['name'];
         foodItem.quantity = products[i]['quantity'];
+        Requests.updateFoodItem(foodItem);
       }
     }
 
     for(int i =  widget.repository.foodItems.length; i < products.length ; i++) {
       ObjFoodItem newProduct = ObjFoodItem(products[i]['name'], products[i]['quantity'], "categoria dengada furira", DateTime.now(), DateTime.now());
       widget.repository.foodItems.add(newProduct);
+      Requests.createFoodItemForInventory(newProduct, widget.repository.id);
     }
   }
 
