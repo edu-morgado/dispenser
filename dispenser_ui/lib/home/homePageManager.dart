@@ -196,11 +196,11 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   Widget floatingButton() {
     setState(() {});
-    if (_tabController.index == 0)
+    if (_tabController.index == 1)
       return inventoryListSpeedDial();
-    else if (_tabController.index == 1)
+    else if (_tabController.index == 2)
       return wishListSpeedDial();
-    else if (_tabController.index == 2) return notesListSpeedDial();
+    else if (_tabController.index == 3) return notesListSpeedDial();
     return null;
   }
 
@@ -253,14 +253,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       curve: Curves.bounceIn,
       children: [
         SpeedDialChild(
-          child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddProductInventoryPage(context),
-          label: 'Add Product to inventory',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-        SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddInventoryPage(context),
@@ -268,6 +260,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
+        //add more buttons
       ],
     );
   }
@@ -284,16 +277,6 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       curve: Curves.bounceIn,
       children: [
         SpeedDialChild(
-          child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddProductWishlistPage(
-            context,
-          ),
-          label: 'Add Product to Wishlist',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-        SpeedDialChild(
           child: Icon(Icons.brush, color: Colors.white),
           backgroundColor: Colors.blue,
           onTap: () => loadAddWishlistPage(context),
@@ -301,6 +284,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.blue,
         ),
+        //add more buttons
       ],
     );
   }
@@ -379,7 +363,7 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Center(child:godfathersTextStyle("DISPENSER")),
+        title: Center(child: godfathersTextStyle("DISPENSER")),
         backgroundColor: Colors.purple[200],
         elevation: 20.0,
         bottom: TabBar(

@@ -1,6 +1,5 @@
 import 'package:dispenser_ui/ObjManager.dart';
-
-import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
+import 'package:flutter/services.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +16,15 @@ class _HomeManagerState extends State<HomeManager> {
   final FocusNode _descNode = FocusNode();
   _HomeManagerState(this.manager);
 
-  _doesN() {}
-
- 
   userName() {
     return Container(
       alignment: Alignment.centerLeft,
-      height: MediaQuery.of(context).size.height*0.1,
+      height: MediaQuery.of(context).size.height * 0.1,
       child: usersNameStyle("User: Dengue"),
     );
   }
-   userDescription() {
+
+  userDescription() {
     return Column(children: <Widget>[
       Container(
         width: MediaQuery.of(context).size.width,
@@ -44,34 +41,14 @@ class _HomeManagerState extends State<HomeManager> {
     ]);
   }
 
-
-  categoryColumn() {
-    return Column(
-      children: <Widget>[
-         smallTextStyle("Choose your Products Categories"),
-
-          smallTextStyle(" according to your local Supermarket:"),
-        Expanded(
-            child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, i) => Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      child: Center(
-                          child: godfathersNameStyle(categories[i].title)),
-                      decoration: BoxDecoration(
-                          color: Colors.purple[100],
-                          border: Border.all(color: Colors.black87)),
-                    ))),
-      ],
-    );
-  }
-
   List<Category> categories = [
     const Category(title: 'Meat'),
     const Category(title: 'Fish'),
-    const Category(title: 'Drinks'),
-    const Category(title: 'Freezed Meals'),
+    const Category(title: 'Drink'),
+    const Category(title: 'Fruit'),
+    const Category(title: 'Vegetables'),
+    const Category(title: 'Carbohydrates'),
+    const Category(title: 'Cleaning'),
     const Category(title: 'Clothes'),
   ];
 
@@ -79,32 +56,49 @@ class _HomeManagerState extends State<HomeManager> {
     setState(() {});
   }
 
+  _category(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.08,
+      decoration: BoxDecoration(
+          color: Colors.grey[200],
+          border: Border.all(color: Colors.purple),
+          borderRadius: BorderRadius.circular(30.0)),
+      child: Center(
+        child: usersNameStyle(categories[index].title),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: Column(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.25,
-          //r  alignment: Alignment.centerLeft,
-            child: Padding(
-                padding: EdgeInsets.all(0),
-                child: Column(
-                  children: <Widget>[
-                    userName(),
-                    userDescription(),
-                  ],
-                )),
-          ),
-          Expanded(
-                      child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: categoryColumn(),
-            ),
-          ),
-        ],
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        //r  alignment: Alignment.centerLeft,
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                userName(),
+                userDescription(),
+                Container(
+                  height: MediaQuery.of(context).size.height*0.05,
+                  child:
+                      smallTextStyle("This are your custom Categories:"),
+                ),
+                Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                        itemCount: categories.length,
+                        itemBuilder: (context, i) => _category(i)),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

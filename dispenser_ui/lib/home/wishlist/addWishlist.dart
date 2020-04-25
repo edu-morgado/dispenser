@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 
 class AddProductToWishList extends StatefulWidget {
   @override
@@ -265,8 +267,12 @@ class _AddProductState extends State<AddProductToWishList> {
 
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
-      ObjFoodItem newItem =
-          new ObjFoodItem(products[i]["name"], products[i]["quantity"], "categoria dengue", DateTime.now(), DateTime.now());
+      ObjFoodItem newItem = new ObjFoodItem(
+          products[i]["name"],
+          products[i]["quantity"],
+          "categoria dengue",
+          DateTime.now(),
+          DateTime.now());
       //TO DO OBJS BEEING SAVED HAVE ID AND SECTION HARDCODED
       manager.foodItems.foodItems.add(newItem);
       manager.wishlists.wishlists[wishlistsIndex].foodItems.add(newItem);
@@ -409,13 +415,13 @@ class _AddWishListState extends State<AddWishList> {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: Colors.purple[200],
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjWishList newWishlist = ObjWishList( _nameController.text);
+          ObjWishList newWishlist = ObjWishList(_nameController.text);
           manager.wishlists.wishlists.add(newWishlist);
           Navigator.of(context).pop();
         },
@@ -428,6 +434,11 @@ class _AddWishListState extends State<AddWishList> {
     );
   }
 
+   void update() {
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Manager manager = Provider.of<Manager>(context);
@@ -436,29 +447,19 @@ class _AddWishListState extends State<AddWishList> {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          Row(children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width * 0.1,
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+          Container(
+            width: MediaQuery.of(context).size.width ,
+            height: MediaQuery.of(context).size.height * 0.15,
+            alignment: Alignment.centerLeft,
+            color: Colors.purple[100],
+            child: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-          ]),
-          Row(
-            children: <Widget>[
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  margin: EdgeInsets.all(10),
-                  child: Center(
-                    child: Text(
-                      "Wishlist",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ))
-            ],
+          ),
+         TopBar(update, manager, context, [], "Add a new WIshlist"),
+          SizedBox(
+            height: 100,
           ),
           Center(
             child: Container(
@@ -469,15 +470,7 @@ class _AddWishListState extends State<AddWishList> {
             ),
           ),
           SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: descriptionInput(context),
-            ),
+            height: 200,
           ),
           Center(
             child: Container(
