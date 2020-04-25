@@ -15,12 +15,9 @@ migrate = Migrate(app, db)
 
 
 
-
 from app import routes, models
 
 from app.models import *
-
-
 
 
 if(len(Home.query.all()) == 0 ):

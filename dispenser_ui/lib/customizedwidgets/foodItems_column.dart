@@ -27,6 +27,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   FocusNode _nameNode = FocusNode();
 
   void updateRepository() {
+
+
     for (int i = 0; i < widget.repository.foodItems.length; i++) {
       ObjFoodItem foodItem = widget.repository.foodItems[i];
       if (products[i]['name'] != foodItem.name ||
@@ -217,7 +219,14 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           ),
           subtitle: Text("  Category:"),
           trailing: IconButton(
-            onPressed: () => print("need to delete it"),
+            onPressed: ()  {
+              print("deleting now");
+              products.removeAt(newIndex - 1);
+              widget.repository.foodItems.removeAt(newIndex - 1);
+              addTilesManager.removeAt(newIndex);
+              setState(() {
+              });
+            },
             icon: Icon(Icons.delete),
           ),
         ),

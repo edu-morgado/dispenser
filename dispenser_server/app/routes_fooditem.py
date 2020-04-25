@@ -38,7 +38,6 @@ def read_all_food_items_from_inventory():
 def read_all_food_items_from_wishlist():
     wishlist_id = request.form.get('wishlist_id')
     food_items = Food_Item.query.filter_by(wish_list_id=wishlist_id)
-    print(food_items)
     return jsonify([food_item.to_json() for food_item in food_items]), 200
 
 
