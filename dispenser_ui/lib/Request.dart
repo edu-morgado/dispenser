@@ -197,7 +197,7 @@ class Requests {
       return false;
     }
     print(
-        "Route: $serverURL/api/foodItem/update/${foodItem.id} -> ${response.statusCode}");
+        "Route: $serverURL/api/foodItem/delete/${foodItem.id} -> ${response.statusCode}");
     return response.statusCode == 204;
   }
 

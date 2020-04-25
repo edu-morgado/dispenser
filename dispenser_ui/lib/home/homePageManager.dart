@@ -197,9 +197,9 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   Widget floatingButton() {
     setState(() {});
     if (_tabController.index == 1)
-      return inventoryListSpeedDial();
+      return inventoryListFloatingButton();
     else if (_tabController.index == 2)
-      return wishListSpeedDial();
+      return wishListFloatingButton();
     else if (_tabController.index == 3) return notesListSpeedDial();
     return null;
   }
@@ -211,81 +211,29 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget notesListSpeedDial() {
-    return SpeedDial(
+    return FloatingActionButton(
       tooltip: 'add',
       heroTag: "notes",
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.accessibility, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddProductWishlistPage(context),
-          label: 'Load a product',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddWishlistPage(context),
-          label: 'Add a Note not working yet',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-      ],
+      onPressed: () => print("supose to add new note"),
+      child: Icon(Icons.add, color: Colors.white),
     );
   }
 
-  Widget inventoryListSpeedDial() {
-    return SpeedDial(
+  Widget inventoryListFloatingButton() {
+    return FloatingActionButton(
       tooltip: 'add',
       heroTag: "inventory",
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddInventoryPage(context),
-          label: 'Add Inventory',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-        //add more buttons
-      ],
+      onPressed: () => loadAddInventoryPage(context),
+      child: Icon(Icons.add, color: Colors.white),
     );
   }
 
-  Widget wishListSpeedDial() {
-    return SpeedDial(
+  Widget wishListFloatingButton() {
+    return FloatingActionButton(
       tooltip: 'add',
       heroTag: "wishList",
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.brush, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: () => loadAddWishlistPage(context),
-          label: 'Add Wishlist',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.blue,
-        ),
-        //add more buttons
-      ],
+      onPressed: () => loadAddWishlistPage(context),
+      child: Icon(Icons.add, color: Colors.white),
     );
   }
 

@@ -20,7 +20,7 @@ class FoodItemColumn extends StatefulWidget {
 
 class FoodItemColumnState extends State<FoodItemColumn> {
   num quantity = 1;
-  int openedTile = -1;
+  int openedTileIndex = -1;
   List<bool> isChecked = List<bool>();
   List<dynamic> products = [];
   List<Widget> addTilesManager = new List<Widget>();
@@ -29,8 +29,6 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   FocusNode _nameNode = FocusNode();
 
   void updateRepository() {
-
-
     for (int i = 0; i < widget.repository.foodItems.length; i++) {
       ObjFoodItem foodItem = widget.repository.foodItems[i];
       if (products[i]['name'] != foodItem.name ||
@@ -56,63 +54,49 @@ class FoodItemColumnState extends State<FoodItemColumn> {
 
   void initializeAddTilesManager(BuildContext context) {
     if (addTilesManager.length == 0) {
-      addTilesManager.add(Divider(
-          thickness:
-              3)); // cute UI feature that fucks the indexes up (not best way to do probably)
-
       for (int i = 0; i < widget.repository.foodItems.length; i++) {
         products.add({
           'name': widget.repository.foodItems[i].name,
           'quantity': widget.repository.foodItems[i].quantity
         });
-        addTilesManager.add(addClosedTile(products[i], i + 1, context));
+        addTilesManager.add(addClosedTile(products[i], i , context));
       }
-
-      addTilesManager.add(Container(
-          child: ListTile(
-            onTap: () => addTileToTiles(context),
-            title: Text(
-              "Add ",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Montserrat'),
-            ),
-          ),
-          decoration: BoxDecoration(color: Colors.black12)));
     }
   }
 
   void addTileToTiles(BuildContext context) {
-    if (products.length != 0 && openedTile != -1) {
-      products[openedTile - 1] = {
+    if (products.length != 0 && openedTileIndex != -1) {
+      products[openedTileIndex] = {
         'name': _nameController.text,
         'quantity': quantity,
       };
       updateRepository();
-      addTilesManager[openedTile] =
-          addClosedTile(products[openedTile - 1], openedTile, context);
+      addTilesManager[openedTileIndex] =
+          addClosedTile(products[openedTileIndex], openedTileIndex, context);
     }
     //save previous countent and turns it into a closed tile (about to open a tile and its a new one)
 
     quantity = 1;
     _nameController.text = "New Product";
     products.add({'name': _nameController.text, 'quantity': quantity});
-    addTilesManager.add(addTile(context));
-    // adding a new product element for new input information, adding an ADD tile to the end of widget list
 
-    addTilesManager[addTilesManager.length - 2] = addOpenedTile(
-        products[products.length - 1], addTilesManager.length - 2, context);
+    int lastElementIndex = products.length - 1;
+
+    // adding a new product element for new input information, adding a n ADD tile to the end of widget list
+
+    addTilesManager.add(addOpenedTile(
+        products[lastElementIndex] , lastElementIndex, context));
+
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
 
-    openedTile = addTilesManager.length - 2;
+    openedTileIndex = lastElementIndex;
     // opened tile before-than-last in widget list is now opened Tile
     widget.updateParentState();
   }
 
   Widget addTile(BuildContext context) {
+    quantity = 1;
     return Container(
         child: ListTile(
           onTap: () => addTileToTiles(context),
@@ -147,15 +131,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             ),
             onPressed: () {
               setState(() {
-                products[openedTile - 1] = {
+                products[ownIndex ] = {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
                 updateRepository();
 
                 addTilesManager[ownIndex] =
-                    addClosedTile(products[openedTile - 1], ownIndex, context);
-                openedTile = -1;
+                    addClosedTile(products[ownIndex], ownIndex, context);
+                openedTileIndex = -1;
               });
             },
           )
@@ -163,38 +147,42 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         SizedBox(
           height: 10,
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-             height: MediaQuery.of(context).size.height * 0.11,
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-                color: Colors.cyan[300],
-                borderRadius: BorderRadius.circular(30.0)),
-            child: Center(child: counter(tileInfo['quantity'])),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-            height: MediaQuery.of(context).size.height * 0.11,
-            alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
-                color: Colors.cyan[200],
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.11,
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    color: Colors.cyan[300],
+                    borderRadius: BorderRadius.circular(30.0)),
+                child: Center(child: counter(tileInfo['quantity'])),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.11,
+                alignment: Alignment.centerRight,
+                decoration: BoxDecoration(
+                  color: Colors.cyan[200],
                 ),
-            child: Form(
-              key: formKey,
-              child: Container(
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(16),
-                child: FindDropdown(
-                  items: ["Custom", "Fridge", "Freezer", "Storage"],
-                  onChanged: (String item) => print(item),
-                  selectedItem: "Custom",
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: EdgeInsets.all(16),
+                    child: FindDropdown(
+                      items: ["Custom", "Fridge", "Freezer", "Storage"],
+                      onChanged: (String item) => print(item),
+                      selectedItem: "Custom",
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ]),
-        SizedBox(height: 20,)
+            ]),
+        SizedBox(
+          height: 20,
+        )
       ],
     );
   }
@@ -212,24 +200,24 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
-          if (openedTile != -1) {
-            products[openedTile - 1] = {
+          if (openedTileIndex != -1) {
+            products[openedTileIndex] = {
               'name': _nameController.text,
               'quantity': quantity,
             };
             updateRepository();
 
-            addTilesManager[openedTile] =
-                addClosedTile(products[openedTile - 1], openedTile, context);
+            addTilesManager[openedTileIndex] =
+                addClosedTile(products[openedTileIndex], openedTileIndex, context);
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex - 1], newIndex, context);
-            _nameController.text = products[newIndex - 1]["name"];
-            quantity = products[newIndex - 1]["quantity"];
+                addOpenedTile(products[newIndex ], newIndex, context);
+            _nameController.text = products[newIndex]["name"];
+            quantity = products[newIndex]["quantity"];
           } else {
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex - 1], newIndex, context);
+                addOpenedTile(products[newIndex], newIndex, context);
           }
-          openedTile = newIndex;
+          openedTileIndex = newIndex;
           widget.updateParentState();
         },
         child: ListTile(
@@ -251,13 +239,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           ),
           subtitle: Text("  Category:"),
           trailing: IconButton(
-            onPressed: ()  {
+            onPressed: () {
               print("deleting now");
-              products.removeAt(newIndex - 1);
-              widget.repository.foodItems.removeAt(newIndex - 1);
-              addTilesManager.removeAt(newIndex);
-              setState(() {
-              });
+              // Remove info from products, widget from addTilesManager, remove from local storage and in data base
+              Requests.deleteFoodItem(widget.repository.foodItems[newIndex]);
+              widget.repository.foodItems.removeAt(newIndex);
+              openedTileIndex = -1;
+              setState(() {              
+                addTilesManager = [];
+              products = [];});
             },
             icon: Icon(Icons.delete),
           ),
@@ -267,6 +257,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   }
 
   Widget counter(int initialValue) {
+    quantity = initialValue;
     return Counter(
       initialValue: initialValue,
       selectedValue: initialValue,
@@ -277,9 +268,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;
-        setState(() {
-          
-        });
+        setState(() {});
       },
     );
   }
@@ -304,7 +293,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
-        inputFormatters: [new LengthLimitingTextInputFormatter(20)],
+        inputFormatters: [new LengthLimitingTextInputFormatter(35)],
       ),
     );
   }
@@ -312,10 +301,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   @override
   Widget build(BuildContext context) {
     initializeAddTilesManager(context);
-    return SafeArea(
-      child: ColumnBuilder(
-          itemCount: addTilesManager.length,
-          itemBuilder: (context, i) => addTilesManager[i]),
-    );
+    return Column(children: [
+      SafeArea(
+        child: ColumnBuilder(
+            itemCount: addTilesManager.length,
+            itemBuilder: (context, i) => addTilesManager[i]),
+      ),
+      addTile(context)
+    ]);
   }
 }
