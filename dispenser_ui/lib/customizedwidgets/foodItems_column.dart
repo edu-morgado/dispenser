@@ -3,6 +3,7 @@ import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/services.dart';
+import 'package:find_dropdown/find_dropdown.dart';
 
 import '../Request.dart';
 
@@ -39,8 +40,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       }
     }
 
-    for(int i =  widget.repository.foodItems.length; i < products.length ; i++) {
-      ObjFoodItem newProduct = ObjFoodItem(products[i]['name'], products[i]['quantity'], "categoria dengada furira", DateTime.now(), DateTime.now());
+    for (int i = widget.repository.foodItems.length; i < products.length; i++) {
+      ObjFoodItem newProduct = ObjFoodItem(
+          products[i]['name'],
+          products[i]['quantity'],
+          "categoria dengada furira",
+          DateTime.now(),
+          DateTime.now());
       widget.repository.foodItems.add(newProduct);
       Requests.createFoodItemForInventory(newProduct, widget.repository.id);
     }
@@ -155,18 +161,43 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         SizedBox(
           height: 10,
         ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: 40,
-          decoration: BoxDecoration(
-              color: Colors.cyan[300],
-              borderRadius: BorderRadius.circular(30.0)),
-          child: Center(child: counter(tileInfo['quantity'])),
-        ),
-        SizedBox(height: 20)
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width * 0.45,
+             height: MediaQuery.of(context).size.height * 0.11,
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+                color: Colors.cyan[300],
+                borderRadius: BorderRadius.circular(30.0)),
+            child: Center(child: counter(tileInfo['quantity'])),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.45,
+            height: MediaQuery.of(context).size.height * 0.11,
+            alignment: Alignment.centerRight,
+            decoration: BoxDecoration(
+                color: Colors.cyan[200],
+                ),
+            child: Form(
+              key: formKey,
+              child: Container(
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(16),
+                child: FindDropdown(
+                  items: ["Custom", "Fridge", "Freezer", "Storage"],
+                  onChanged: (String item) => print(item),
+                  selectedItem: "Custom",
+                ),
+              ),
+            ),
+          ),
+        ]),
+        SizedBox(height: 20,)
       ],
     );
   }
+
+  final formKey = new GlobalKey<FormState>();
 
   Widget addClosedTile(dynamic tileInfo, int newIndex, BuildContext context) {
     return Container(
@@ -233,9 +264,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       minValue: 1,
       maxValue: 1000,
       step: 1,
+      buttonSize: 50,
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;
+        setState(() {
+          
+        });
       },
     );
   }
@@ -260,9 +295,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
-        inputFormatters: [
-          new LengthLimitingTextInputFormatter(20)
-        ],
+        inputFormatters: [new LengthLimitingTextInputFormatter(20)],
       ),
     );
   }

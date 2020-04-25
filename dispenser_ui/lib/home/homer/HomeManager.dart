@@ -59,7 +59,7 @@ class _HomeManagerState extends State<HomeManager> {
   _category(index) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
           color: Colors.grey[200],
           border: Border.all(color: Colors.purple),
