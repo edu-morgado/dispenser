@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
+import 'package:flutter/services.dart';
 
 import '../Request.dart';
 
@@ -259,6 +260,9 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
+        inputFormatters: [
+          new LengthLimitingTextInputFormatter(20)
+        ],
       ),
     );
   }

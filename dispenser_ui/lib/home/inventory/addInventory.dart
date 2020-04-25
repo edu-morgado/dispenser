@@ -7,6 +7,8 @@ import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
+import 'package:find_dropdown/find_dropdown.dart';
+import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 
 class AddProductToInventory extends StatefulWidget {
   @override
@@ -14,7 +16,6 @@ class AddProductToInventory extends StatefulWidget {
 }
 
 class _AddProductToInventoryState extends State<AddProductToInventory> {
-
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameNode = FocusNode();
 
@@ -198,7 +199,6 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
     );
   }
 
-
   Widget addProductInventoryButton(BuildContext context, Manager manager) {
     return Material(
       elevation: 5.0,
@@ -224,8 +224,12 @@ class _AddProductToInventoryState extends State<AddProductToInventory> {
 
   void saveNewFoodItems(Manager manager) {
     for (int i = 0; i < products.length; i++) {
-      ObjFoodItem newItem =
-          new ObjFoodItem(products[i]["name"], products[i]["quantity"], "categoria dengue 2",DateTime.now(), DateTime.now());
+      ObjFoodItem newItem = new ObjFoodItem(
+          products[i]["name"],
+          products[i]["quantity"],
+          "categoria dengue 2",
+          DateTime.now(),
+          DateTime.now());
       manager.foodItems.foodItems.add(newItem);
       manager.inventories.inventories[1].foodItems.add(newItem);
     }
@@ -382,23 +386,11 @@ class InventoryAddState extends State<AddInventoryPage> {
         children: [
           Container(
             padding: EdgeInsets.all(16),
-            child: DropDownFormField(
-              titleText: 'Choose a type',
-              hintText: 'Please choose one',
-              value: ttype,
-              onSaved: (value) {
-                setState(() {
-                  ttype = value;
-                });
-              },
-              onChanged: (value) {
-                setState(() {
-                  ttype = value;
-                });
-              },
-              dataSource: choices,
-              textField: 'display',
-              valueField: 'value',
+            child: FindDropdown(
+              items: ["Custom","Fridge", "Freezer", "Storage"],
+              label: "Type of Inventory",
+              onChanged: (String item) => print(item),
+              selectedItem: "Custom",
             ),
           ),
         ],
@@ -410,13 +402,14 @@ class InventoryAddState extends State<AddInventoryPage> {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: Colors.purple,
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          ObjInventory newFoodRepository = ObjInventory("ei", ttype, DateTime.now(), DateTime.now());
+          ObjInventory newFoodRepository =
+              ObjInventory("ei", ttype, DateTime.now(), DateTime.now());
           manager.inventories.inventories.add(newFoodRepository);
           Navigator.of(context).pop();
         },
@@ -427,6 +420,11 @@ class InventoryAddState extends State<AddInventoryPage> {
         ),
       ),
     );
+  }
+
+   void update() {
+    setState(() {
+    });
   }
 
   @override
@@ -440,28 +438,17 @@ class InventoryAddState extends State<AddInventoryPage> {
         children: [
           Row(children: [
             Container(
-              width: MediaQuery.of(context).size.width * 0.1,
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.15,
+              color: Colors.purple[100],
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ]),
-          Row(
-            children: [
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  margin: EdgeInsets.all(10),
-                  child: Center(
-                    child: Text(
-                      "Inventory",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ))
-            ],
-          ),
+          TopBar(update, manager, context, [] , "Add new Inventory"),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
@@ -471,15 +458,7 @@ class InventoryAddState extends State<AddInventoryPage> {
             ),
           ),
           SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: descriptionInput(context),
-            ),
+            height: 20,
           ),
           Center(
             child: Container(
@@ -488,6 +467,7 @@ class InventoryAddState extends State<AddInventoryPage> {
                 alignment: Alignment.topLeft,
                 child: dropDownFormField()),
           ),
+          SizedBox(height:100),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
