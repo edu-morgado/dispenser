@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
-import 'package:dispenser_ui/customizedwidgets/foodItems_column.dart';
+import 'package:dispenser_ui/home/wishlist/wishlistItemColumn.dart';
 
 class WishListManager extends StatefulWidget {
   final Manager manager;

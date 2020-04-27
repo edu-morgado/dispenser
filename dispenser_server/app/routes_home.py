@@ -15,7 +15,7 @@ def create_home():
     home = Home(name = name)
     db.session.add(home)
     db.session.commit()
-    return {'success': True}, 201
+    return {'success': True, "id" : home.id}, 201
 
 
 @app.route('/api/home/read')

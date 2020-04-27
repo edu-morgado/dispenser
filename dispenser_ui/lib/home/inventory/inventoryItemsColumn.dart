@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
@@ -5,12 +6,12 @@ import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:flutter/services.dart';
 import 'package:find_dropdown/find_dropdown.dart';
 
-import '../Request.dart';
+import 'package:dispenser_ui/Request.dart';
 
 class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
-  final dynamic repository;
-  FoodItemColumn(this.updateParentState, this.repository);
+  final ObjInventory inventory;
+  FoodItemColumn(this.updateParentState, this.inventory);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,36 +29,37 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameNode = FocusNode();
 
-  void updateRepository() {
-    for (int i = 0; i < widget.repository.foodItems.length; i++) {
-      ObjFoodItem foodItem = widget.repository.foodItems[i];
+  void updateInventory() {
+    for (int i = 0; i < widget.inventory.foodItems.length; i++) {
+      ObjFoodItem foodItem = widget.inventory.foodItems[i];
       if (products[i]['name'] != foodItem.name ||
           products[i]['quantity'] != foodItem.quantity) {
-        print("updating repository");
+        print("updating Inventory");
         foodItem.name = products[i]['name'];
         foodItem.quantity = products[i]['quantity'];
         Requests.updateFoodItem(foodItem);
       }
     }
 
-    for (int i = widget.repository.foodItems.length; i < products.length; i++) {
+    for (int i = widget.inventory.foodItems.length; i < products.length; i++) {
       ObjFoodItem newProduct = ObjFoodItem(
           products[i]['name'],
           products[i]['quantity'],
           "categoria dengada furira",
           DateTime.now(),
           DateTime.now());
-      widget.repository.foodItems.add(newProduct);
-      Requests.createFoodItemForInventory(newProduct, widget.repository.id);
+      widget.inventory.foodItems.add(newProduct);
+      print("Inventory id is ->${widget.inventory.id}");
+      Requests.createFoodItemForInventory(newProduct, widget.inventory.id);
     }
   }
 
   void initializeAddTilesManager(BuildContext context) {
     if (addTilesManager.length == 0) {
-      for (int i = 0; i < widget.repository.foodItems.length; i++) {
+      for (int i = 0; i < widget.inventory.foodItems.length; i++) {
         products.add({
-          'name': widget.repository.foodItems[i].name,
-          'quantity': widget.repository.foodItems[i].quantity
+          'name': widget.inventory.foodItems[i].name,
+          'quantity': widget.inventory.foodItems[i].quantity
         });
         addTilesManager.add(addClosedTile(products[i], i , context));
       }
@@ -70,7 +72,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         'name': _nameController.text,
         'quantity': quantity,
       };
-      updateRepository();
+      updateInventory();
       addTilesManager[openedTileIndex] =
           addClosedTile(products[openedTileIndex], openedTileIndex, context);
     }
@@ -135,7 +137,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
-                updateRepository();
+                updateInventory();
 
                 addTilesManager[ownIndex] =
                     addClosedTile(products[ownIndex], ownIndex, context);
@@ -205,7 +207,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
               'name': _nameController.text,
               'quantity': quantity,
             };
-            updateRepository();
+            updateInventory();
 
             addTilesManager[openedTileIndex] =
                 addClosedTile(products[openedTileIndex], openedTileIndex, context);
@@ -242,8 +244,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             onPressed: () {
               print("deleting now");
               // Remove info from products, widget from addTilesManager, remove from local storage and in data base
-              Requests.deleteFoodItem(widget.repository.foodItems[newIndex]);
-              widget.repository.foodItems.removeAt(newIndex);
+              Requests.deleteFoodItem(widget.inventory.foodItems[newIndex]);
+              widget.inventory.foodItems.removeAt(newIndex);
               openedTileIndex = -1;
               setState(() {              
                 addTilesManager = [];

@@ -2,7 +2,6 @@ import 'package:dispenser_ui/home/homer/HomeManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:dispenser_ui/home/inventory/addInventory.dart';
 import 'package:dispenser_ui/home/inventory/inventoryManager.dart';
 import 'package:dispenser_ui/home/wishlist/wishListManager.dart';
@@ -12,13 +11,7 @@ import 'package:dispenser_ui/home/notes/StaggeredPage.dart';
 
 import 'package:dispenser_ui/objects/Home.dart';
 import 'package:dispenser_ui/objects/Note.dart';
-import 'package:dispenser_ui/objects/FoodItem.dart';
-import 'package:dispenser_ui/objects/WishList.dart';
-import 'package:dispenser_ui/objects/Inventory.dart';
-import 'package:provider/provider.dart';
-
 import 'package:dispenser_ui/ObjManager.dart';
-
 import '../Request.dart';
 
 enum viewType { List, Staggered }
@@ -36,7 +29,7 @@ class Home extends StatefulWidget {
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   List<Widget> tabs;
   bool dialVisible = true;
-  bool needsLogIn;
+  bool needsLogIn = true;
   var notesViewType;
   ScrollController scrollController;
   TabController _tabController;
@@ -69,11 +62,26 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       });
     notesViewType = viewType.Staggered;
 
-    
-    manager.loadHomesFromFile().then((bool hasFile) {
-      this.needsLogIn = !hasFile;
-      print("does it need login? ->$needsLogIn");
-      setState(() {});
+    manager.loadHomesFromFile().then((bool exists) {
+      if (!exists) {
+        print("doenst have a home and needs join or create home");
+
+        needsLogIn = true;
+      } else {
+        needsLogIn = false;
+
+        manager.loadFoodItemsFromFile().then((bool exists) {
+          manager.loadInventoriesFromFile().then((bool exists) {
+            manager.loadWishListsFromFile().then((bool exists) {
+              manager.loadNotesFromFile().then((bool exists) {
+                setState(() {
+                  print("has a home and loaded everything from file");
+                });
+              });
+            });
+          });
+        });
+      }
     });
   }
 
@@ -88,27 +96,15 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void loadAddProductInventoryPage(BuildContext context) {
-    var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddProductToInventory());
-    Navigator.of(context).push(route);
-  }
-
   void loadAddInventoryPage(BuildContext context) {
     var route = MaterialPageRoute(
         builder: (BuildContext context) => AddInventoryPage());
     Navigator.of(context).push(route);
   }
 
-  void loadAddProductWishlistPage(BuildContext context) {
-    var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddProductToWishList());
-    Navigator.of(context).push(route);
-  }
-
   void loadAddWishlistPage(BuildContext context) {
     var route =
-        MaterialPageRoute(builder: (BuildContext context) => AddWishList());
+        MaterialPageRoute(builder: (BuildContext context) => AddWishListPage());
     Navigator.of(context).push(route);
   }
 
@@ -220,15 +216,13 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   logIn() {
-    manager.getEntireHomeInformation(manager.homes.homes[0], manager.homes.homes[0].id);
-    setState(() {
-    });
+    needsLogIn = false;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (manager.homes == null)
-      return NoHomeIsSelected(manager, logIn);
+    if (needsLogIn == true) return NoHomeIsSelected(manager, logIn);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -288,19 +282,56 @@ class NoHomeIsSelected extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
+            ObjHome newHome = ObjHome.getExistingHome();
             manager
-                .getHomeInfo(
-                    ObjHome.getExistingHome(), int.parse(homeController.text))
+                .getEntireHomeInformation(
+                    newHome, int.parse(homeController.text))
                 .then((bool loadedHome) {
-                  loadedHome? print("home sucessfully loaded") : print("Couldnt fine a home with that id");
-                  updateParent();
-                });
+              if (loadedHome)
+                updateParent();
+              else
+                print("coulndt load this existing home");
+            });
           },
           child: Container(
             height: 70,
             width: 150,
             color: Colors.blue,
-            child: Center(child: Text("Get Your home button")),
+            child: Center(child: Text("Join a home button")),
+          ),
+        ),
+        SizedBox(height: 30),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          child: Container(child: Center(child: Text("Or create a new one."))),
+        ),
+        Container(child: Text("what name do you want for your home?")),
+        Center(
+          child: Container(
+            width: 250,
+            child: TextFormField(
+              controller: homeController,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        GestureDetector(
+          onTap: () {
+            ObjHome newHome = ObjHome(homeController.text);
+            Requests.createHome(newHome).then((bool created) {
+              if (created)
+                updateParent();
+              else
+                print("not able to create home");
+            });
+          },
+          child: Container(
+            height: 70,
+            width: 150,
+            color: Colors.blue,
+            child: Center(child: Text("Create a home button")),
           ),
         ),
       ]),

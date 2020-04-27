@@ -7,7 +7,14 @@ part of 'WishList.dart';
 // **************************************************************************
 
 ObjWishList _$ObjWishListFromJson(Map<String, dynamic> json) {
-  return ObjWishList(json['name'] as String)
+  return ObjWishList(
+      json['name'] as String,
+      json['dateCreated'] == null
+          ? null
+          : DateTime.parse(json['dateCreated'] as String),
+      json['dateLastUpdated'] == null
+          ? null
+          : DateTime.parse(json['dateLastUpdated'] as String))
     ..id = json['id'] as int
     ..foodItems = (json['foodItems'] as List)
         ?.map((e) =>
@@ -19,6 +26,8 @@ Map<String, dynamic> _$ObjWishListToJson(ObjWishList instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'dateCreated': instance.dateCreated?.toIso8601String(),
+      'dateLastUpdated': instance.dateLastUpdated?.toIso8601String(),
       'foodItems': instance.foodItems
     };
 

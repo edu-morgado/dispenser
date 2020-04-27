@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dispenser_ui/objects/Inventory.dart';
 import 'package:http/http.dart' as http;
 
 import 'objects/FoodItem.dart';
 import 'objects/WishList.dart';
+import 'objects/Inventory.dart';
+import 'objects/Home.dart';
 
 class Requests {
   static final String serverURL = "http://192.168.1.78:5000";
@@ -44,6 +45,27 @@ class Requests {
   /*******************************************************************
    * ***************************Home related requests ****************
    *******************************************************************/
+
+ static Future<bool> createHome(ObjHome home) async {
+    http.Response response;
+    try {
+      response =
+          await _post(Uri.encodeFull("$serverURL/api/home/create"), body: {
+        "name": home.name,
+      });
+    } catch (SocketException) {
+      print(SocketException.toString());
+      print("Exception: No internet!! Route: $serverURL/api/home/create");
+      return false;
+    }
+    print("Route: $serverURL/api/home/create -> ${response.statusCode}");
+    if (response.statusCode == 201) {
+      var responsejson = jsonDecode(response.body);
+      home.id = responsejson['id'];
+    }
+    return response.statusCode == 201;
+  }
+
 
   static Future<dynamic> readHome(int id) async {
     http.Response response;
@@ -96,7 +118,7 @@ class Requests {
         "name": foodItem.name,
         "quantity": foodItem.quantity.toString(),
         "category": foodItem.category,
-        "wish_list_id": wishlistID,
+        "wish_list_id": wishlistID.toString(),
       });
     } catch (SocketException) {
       print(SocketException.toString());
