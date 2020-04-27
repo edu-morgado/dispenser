@@ -20,12 +20,12 @@ def create_category():
 @app.route('/api/wishlist/read', methods=['POST'])
 def read_all_wish_lists_id():
     home_id = request.form.get('homeId')
-    wish_lists = Wish_List.query.filter_by(home_id=home_id)
+    wish_lists = Wish_List.query.with_for_update(read=True).filter_by(home_id=home_id)
     return jsonify([wish_list.to_json() for wish_list in wish_lists]), 200
 
 @app.route('/api/wishlist/read/<int:wishlist_id>', methods=['GET'])
 def read_wishlist(wishlist_id):
-    wishlist = Wish_List.query.get(wishlist_id)
+    wishlist = Wish_List.query.with_for_update(read=True).get(wishlist_id)
     if wishlist is None:
         abort(404)
     else:
@@ -38,7 +38,7 @@ def update_wishlist(wishlist_id):
     if name is None :
         abort(400)  # missing arguments
 
-    wishlist = Wish_List.query.get(wishlist_id)
+    wishlist = Wish_List.query.with_for_update().get(wishlist_id)
     if wishlist is None:
         abort(404)
     wishlist.name = name
@@ -49,7 +49,7 @@ def update_wishlist(wishlist_id):
 @app.route('/api/wishlist/delete/<int:wishlist_id>', methods=['DELETE'])
 def delete_wishlist(wishlist_id):
 
-    wishlist = Wish_List.query.get(wishlist_id)
+    wishlist = Wish_List.query.with_for_update().get(wishlist_id)
     if wishlist is None:
         abort(404)
     db.session.delete(wishlist)

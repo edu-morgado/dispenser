@@ -9,6 +9,8 @@ import 'package:dispenser_ui/home/wishlist/wishListManager.dart';
 import 'package:dispenser_ui/home/wishlist/addWishList.dart';
 import 'package:dispenser_ui/home/notes/notePage.dart';
 import 'package:dispenser_ui/home/notes/StaggeredPage.dart';
+
+import 'package:dispenser_ui/objects/Home.dart';
 import 'package:dispenser_ui/objects/Note.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
 import 'package:dispenser_ui/objects/WishList.dart';
@@ -34,7 +36,7 @@ class Home extends StatefulWidget {
 class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   List<Widget> tabs;
   bool dialVisible = true;
-  bool firstTime = false;
+  bool needsLogIn;
   var notesViewType;
   ScrollController scrollController;
   TabController _tabController;
@@ -153,7 +155,17 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     // });
 
     //GET HOME
-    manager.getEntireHomeInformation(1);
+
+
+    manager.deleteFoodItems();
+    manager.deleteHomes();
+    manager.deleteWishLists();
+    manager.deleteInventories();
+    manager.loadHomesFromFile().then((bool hasFile) {
+      this.needsLogIn = !hasFile;
+      print("does it need login? ->$needsLogIn");
+      setState(() {});
+    });
 
     // manager.getWishlists();
     // manager.getFoodItems();
@@ -301,13 +313,16 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
-  clearPopUp() {
-    setState(() => (firstTime = false));
+  logIn() {
+    manager.getEntireHomeInformation(manager.homes.homes[0], manager.homes.homes[0].id);
+    setState(() {
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (firstTime) return Popup(clearPopUp);
+    if (manager.homes == null)
+      return NoHomeIsSelected(manager, logIn);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -334,26 +349,52 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
   }
 }
 
-class Popup extends StatelessWidget {
-  final Function _clearPopUp;
+class NoHomeIsSelected extends StatelessWidget {
+  final Manager manager;
+  final Function updateParent;
+  NoHomeIsSelected(this.manager, this.updateParent);
 
-  Popup(clearPopUp) : _clearPopUp = clearPopUp;
+  final TextEditingController homeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.red,
+      body: Column(children: [
+        SizedBox(
+          height: 30,
         ),
-        Positioned(
-          right: 15.0,
-          top: 25.0,
-          child: IconButton(
-            icon: Icon(Icons.cancel, size: 20),
-            onPressed: () => _clearPopUp(),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+            child: Container(
+                child: Center(
+                    child: Text(
+                        "You dont Own a home yet. Please provide you home id to join it.")))),
+        Center(
+          child: Container(
+            width: 250,
+            child: TextFormField(
+              controller: homeController,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        GestureDetector(
+          onTap: () {
+            manager
+                .getHomeInfo(
+                    ObjHome.getExistingHome(), int.parse(homeController.text))
+                .then((bool loadedHome) {
+                  loadedHome? print("home sucessfully loaded") : print("Couldnt fine a home with that id");
+                  updateParent();
+                });
+          },
+          child: Container(
+            height: 70,
+            width: 150,
+            color: Colors.blue,
+            child: Center(child: Text("Get Your home button")),
           ),
         ),
       ]),

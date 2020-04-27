@@ -15,9 +15,7 @@ import 'package:dispenser_ui/objects/Note.dart';
 class Manager extends ChangeNotifier {
   FileHandler fileHandler = FileHandler();
 
-  int id;
-  String name;
-
+  ListHome homes = ListHome();
   ListWishList wishlists = ListWishList();
   ListFoodItem foodItems = ListFoodItem();
   ListInventory inventories = ListInventory();
@@ -32,21 +30,24 @@ class Manager extends ChangeNotifier {
    * ***************************Home related requests *************
    ******************************************************************/
 
-  Future<bool> getHomeInfo(int id) async {
+  Future<bool> getHomeInfo(ObjHome home, int id) async {
     var json = await Requests.readHome(id);
+    if (json == null) return false;
+    if(homes == null) 
+      homes = ListHome();
 
-    if (json == null) return null;
-
-    this.id = json['id'];
-    this.name = json['name'];
+    home.id = json['id'];
+    home.name = json['name'];
+    homes.homes.add(home);
+    saveHome();
     return true;
   }
 
-  Future<bool> getHomeWishLists() async {
+  Future<bool> getHomeWishLists(ObjHome home) async {
     print("\n******** Starting loading All Home WishLists with the Food in it\n\n");
 
 
-    if (await getWishLists(this.id) == null) {
+    if (await getWishLists(home.id) == null) {
       print("Couldnt load WishLists from Home");
       return null;
     }
@@ -58,13 +59,14 @@ class Manager extends ChangeNotifier {
       }
     }
     print("\n******** Finished loading All Home WishLists with the Food in it\n\n");
+    saveWishLists();
     return true;
   }
 
-  Future<bool> getHomeInventories() async {
+  Future<bool> getHomeInventories(ObjHome home) async {
         print("\n******** Starting loading All Home Inventories with the Food in it\n\n");
 
-    if (await getInventories(this.id) == null) {
+    if (await getInventories(home.id) == null) {
       print("Couldnt load Inventories from Home");
       return null;
     }
@@ -76,26 +78,23 @@ class Manager extends ChangeNotifier {
       }
     }
     print("\n******** Finished loading All Home Inventories with the Food in it\n\n");
+    saveInventories();
     return true;
   }
 
-  Future<bool> getEntireHomeInformation(int j) async {
-    if (await getHomeInfo(j) == null) {
+  Future<bool> getEntireHomeInformation(ObjHome home, int id) async {
+    if (await getHomeInfo(home, id) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
-    if (await getHomeWishLists() == null) {
+    if (await getHomeWishLists(home) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
-    if (await getHomeInventories() == null) {
+    if (await getHomeInventories(home) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
-
-    saveHome();
-    saveInventories();
-    saveWishLists();
     print("Succsefull!! youve loaded the entire home ");
     return true;
   }
@@ -155,6 +154,8 @@ class Manager extends ChangeNotifier {
     var listJson = await Requests.readInventoriesFromHome(homeID);
 
     if (listJson == null) return null;
+    if(inventories == null)
+      inventories = ListInventory();
 
     inventories.inventories = [];
     for (var json in listJson) {
@@ -176,6 +177,8 @@ class Manager extends ChangeNotifier {
   Future<ObjInventory> getInventory(int id) async {
     var json = await Requests.readInventory(id);
     if (json == null) return null;
+    if(inventories == null)
+      inventories = ListInventory();
 
     dynamic inventoryDTO = {
       'id': json['id'],
@@ -198,6 +201,8 @@ class Manager extends ChangeNotifier {
     var listJson = await Requests.readWishListsFromHome(homeID);
 
     if (listJson == null) return null;
+    if(wishlists == null)
+      wishlists = ListWishList();
 
     wishlists.wishlists = [];
     for (var json in listJson) {
@@ -211,7 +216,7 @@ class Manager extends ChangeNotifier {
       wishlists.wishlists.add(ObjWishList.fromJson(wishlistDTO));
     }
 
-    saveInventories();
+    saveWishLists();
     return wishlists;
   }
 
@@ -222,7 +227,20 @@ class Manager extends ChangeNotifier {
    ******************************************************************/
 
   saveHome() {
-    fileHandler.writeToFile({'id': this.id, 'name': this.name}, "home.txt");
+    fileHandler.writeToFile(homes , "homes.txt");
+  }
+
+  Future<bool> loadHomesFromFile() async {
+    var json = await fileHandler.readFromFile("homes.txt");
+    if(json == null) return false;
+    homes = ListHome.fromJson(json);
+    return true;
+  }
+
+  Future<bool> deleteHomes() async {
+    await fileHandler.delete("homes.txt");
+    homes = null;
+    return true;
   }
 
    saveFoodItems() {
@@ -270,7 +288,7 @@ class Manager extends ChangeNotifier {
     return true;
   }
 
-  Future<bool> deleteWishList() async {
+  Future<bool> deleteWishLists() async {
     await fileHandler.delete("wishlists.txt");
     wishlists = null;
     return true;

@@ -7,25 +7,19 @@ part of 'Home.dart';
 // **************************************************************************
 
 ObjHome _$ObjHomeFromJson(Map<String, dynamic> json) {
-  return ObjHome(
-      json['notes'] == null
-          ? null
-          : ListNote.fromJson(json['notes'] as Map<String, dynamic>),
-      json['foodItems'] == null
-          ? null
-          : ListFoodItem.fromJson(json['foodItems'] as Map<String, dynamic>),
-      json['categories'] == null
-          ? null
-          : ListWishList.fromJson(json['categories'] as Map<String, dynamic>),
-      json['inventories'] == null
-          ? null
-          : ListInventory.fromJson(
-              json['inventories'] as Map<String, dynamic>));
+  return ObjHome(json['name'] as String)..id = json['id'] as int;
 }
 
-Map<String, dynamic> _$ObjHomeToJson(ObjHome instance) => <String, dynamic>{
-      'notes': instance.notes,
-      'foodItems': instance.foodItems,
-      'categories': instance.categories,
-      'inventories': instance.inventories
-    };
+Map<String, dynamic> _$ObjHomeToJson(ObjHome instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
+
+ListHome _$ListHomeFromJson(Map<String, dynamic> json) {
+  return ListHome()
+    ..homes = (json['homes'] as List)
+        ?.map((e) =>
+            e == null ? null : ObjHome.fromJson(e as Map<String, dynamic>))
+        ?.toList();
+}
+
+Map<String, dynamic> _$ListHomeToJson(ListHome instance) =>
+    <String, dynamic>{'homes': instance.homes};

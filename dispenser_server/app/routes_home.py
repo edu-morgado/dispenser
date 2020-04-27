@@ -20,12 +20,12 @@ def create_home():
 
 @app.route('/api/home/read')
 def read_all_homes():
-    homes = Home.query.all()
+    homes = Home.query.with_for_update(read=True).all()
     return jsonify([home.to_json() for home in homes]), 200
 
 @app.route('/api/home/read/<int:home_id>', methods=['GET'])
 def read_home(home_id):
-    home = Home.query.get(home_id)
+    home = Home.query.with_for_update(read=True).get(home_id)
     if home is None:
         abort(404)
     else:
@@ -38,7 +38,7 @@ def update_home(home_id):
     if name is None:
         abort(400)  # missing arguments
 
-    home = Home.query.get(home_id)
+    home = Home.query.with_for_update().get(home_id)
     if home is None:
         abort(404)
 
@@ -49,7 +49,7 @@ def update_home(home_id):
 @app.route('/api/home/delete/<int:home_id>', methods=['DELETE'])
 def delete_home(home_id):
 
-    home = Home.query.get(home_id)
+    home = Home.query.with_for_update().get(home_id)
     if home is None:
         abort(404)
     db.session.delete(home)
