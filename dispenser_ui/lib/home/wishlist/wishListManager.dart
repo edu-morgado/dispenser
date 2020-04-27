@@ -4,6 +4,7 @@ import 'package:dispenser_ui/textStyles.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 import 'package:dispenser_ui/home/wishlist/wishlistItemColumn.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class WishListManager extends StatefulWidget {
   final Manager manager;
@@ -42,20 +43,21 @@ class WishListState extends State<WishListManager> {
 
   void selected(int i) {
     if (isSelected[i]) {
-      print("INDEX -> $i not selected for deletion");
       isSelected[i] = false;
     } else {
       isSelected[i] = true;
-      print("INDEX -> $i  selected for deletion");
     }
     print(isSelected);
     setState(() {});
   }
 
   void updateFoodItems() {
-    setState(() {
-      print("SETSTATING FOR UPDATEING FOOD PRODUCTS");
-    });
+    setState(() {});
+  }
+
+  Future<void> updateWishList() async {
+    await manager.loadFoodItemsFromFile();
+    print("dengueeeeee");
   }
 
   @override
@@ -65,72 +67,78 @@ class WishListState extends State<WishListManager> {
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
         TopBar(updateFoodItems, manager, context, isSelected, "Wishlists"),
-        SizedBox(width: 75),
-        Container(height: 20),
         Expanded(
-          child: ListView.builder(
-            itemCount: manager.wishlists.wishlists.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.all(5.0),
-              child: InkWell(
-                  child: Stack(alignment: Alignment.topLeft, children: [
-                index == isOpened
-                    ? Column(children: [
-                        GestureDetector(
-                          onLongPress: () => selected(index),
-                          onTap: () {
-                            setState(() {
-                              isOpened != index
-                                  ? isOpened = index
-                                  : isOpened = -1;
-                            });
-                          },
-                          child: Container(
-                            child: godfathersNameStyle(
-                                manager.wishlists.wishlists[index].name),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Colors.red,
+          child: FutureBuilder(
+            future: manager.loadWishListsFromFile(),
+            builder: (context, snapshot) => LiquidPullToRefresh(
+              springAnimationDurationInMilliseconds: 100,
+              onRefresh: () => updateWishList(),
+              child: ListView.builder(
+                itemCount: manager.wishlists.wishlists.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: InkWell(
+                      child: Stack(alignment: Alignment.topLeft, children: [
+                    index == isOpened
+                        ? Column(children: [
+                            GestureDetector(
+                              onLongPress: () => selected(index),
+                              onTap: () {
+                                setState(() {
+                                  isOpened != index
+                                      ? isOpened = index
+                                      : isOpened = -1;
+                                });
+                              },
+                              child: Container(
+                                child: godfathersNameStyle(
+                                    manager.wishlists.wishlists[index].name),
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.15,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            FoodItemColumn(updateFoodItems,
+                                manager.wishlists.wishlists[index]),
+                          ])
+                        : GestureDetector(
+                            onLongPress: () => selected(index),
+                            onTap: () {
+                              setState(() {
+                                isOpened != index
+                                    ? isOpened = index
+                                    : isOpened = -1;
+                              });
+                            },
+                            child: Container(
+                              child: godfathersNameStyle(
+                                  manager.wishlists.wishlists[index].name),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Colors.green),
                             ),
                           ),
-                        ),
-                        FoodItemColumn(updateFoodItems,
-                            manager.wishlists.wishlists[index]),
-                      ])
-                    : GestureDetector(
-                        onLongPress: () => selected(index),
-                        onTap: () {
-                          setState(() {
-                            isOpened != index
-                                ? isOpened = index
-                                : isOpened = -1;
-                          });
-                        },
-                        child: Container(
-                          child: godfathersNameStyle(
-                              manager.wishlists.wishlists[index].name),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Colors.green),
-                        ),
-                      ),
-                anySelected()
-                    ? Checkbox(
-                        value: isSelected[index],
-                        onChanged: (bool value) {
-                          selected(index);
-                        })
-                    : Container(),
-              ])),
+                    anySelected()
+                        ? Checkbox(
+                            value: isSelected[index],
+                            onChanged: (bool value) {
+                              selected(index);
+                            })
+                        : Container(),
+                  ])),
+                ),
+              ),
             ),
           ),
-        ),
+        )
       ]),
     );
   }

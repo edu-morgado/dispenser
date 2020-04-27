@@ -266,7 +266,6 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       minValue: 1,
       maxValue: 1000,
       step: 1,
-      buttonSize: 50,
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;

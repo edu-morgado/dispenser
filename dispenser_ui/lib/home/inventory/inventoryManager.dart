@@ -2,8 +2,9 @@ import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
-import 'package:provider/provider.dart';
 import 'package:dispenser_ui/home/inventory/inventoryItemsColumn.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
 class Inventory extends StatefulWidget {
   final Manager manager;
 
@@ -24,12 +25,6 @@ class InventoryState extends State<Inventory> {
 
   @override
   void initState() {
-    manager.loadInventoriesFromFile().then((bool hasUpdated) {
-      if (mounted && hasUpdated)
-        setState(() {
-
-        });
-    });
     super.initState();
   }
 
@@ -45,21 +40,21 @@ class InventoryState extends State<Inventory> {
 
   void selected(int i) {
     if (isSelected[i]) {
-      print("INDEX -> $i not selected for deletion");
       isSelected[i] = false;
     } else {
       isSelected[i] = true;
-      print("INDEX -> $i  selected for deletion");
     }
     print(isSelected);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   void updateFoodItems() {
-    setState(() {
-    });
+    setState(() {});
+  }
+
+  Future<void> updateInventories() async {
+    await manager.loadFoodItemsFromFile();
+    print("dengueeeeee");
   }
 
   @override
@@ -67,16 +62,19 @@ class InventoryState extends State<Inventory> {
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        TopBar(updateFoodItems, manager, context,isSelected, "Inventories"),
-        SizedBox(width: 75),
-        Container(height: 20),
+        TopBar(updateFoodItems, manager, context, isSelected, "Inventories"),
         Expanded(
-          child: ListView.builder(
-            itemCount: manager.inventories.inventories.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.all(5.0),
-              child: InkWell(
-                  child: Stack(alignment: Alignment.topLeft, children: [
+          child: FutureBuilder(
+            future: manager.loadInventoriesFromFile(),
+            builder: (context, snapshot) => LiquidPullToRefresh(
+              springAnimationDurationInMilliseconds: 100,
+              onRefresh: () => updateInventories(),
+              child: ListView.builder(
+                itemCount: manager.inventories.inventories.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: InkWell(
+                      child: Stack(alignment: Alignment.topLeft, children: [
                     index == isOpened
                         ? Column(children: [
                             GestureDetector(
@@ -105,7 +103,8 @@ class InventoryState extends State<Inventory> {
                                 ),
                               ),
                             ),
-                            FoodItemColumn(updateFoodItems, manager.inventories.inventories[index])
+                            FoodItemColumn(updateFoodItems,
+                                manager.inventories.inventories[index])
                           ])
                         : GestureDetector(
                             onLongPress: () => selected(index),
@@ -140,6 +139,8 @@ class InventoryState extends State<Inventory> {
                             })
                         : Container(),
                   ])),
+                ),
+              ),
             ),
           ),
         ),

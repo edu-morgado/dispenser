@@ -62,7 +62,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           'name': widget.wishlist.foodItems[i].name,
           'quantity': widget.wishlist.foodItems[i].quantity
         });
-        addTilesManager.add(addClosedTile(products[i], i , context));
+        addTilesManager.add(addClosedTile(products[i], i, context));
       }
     }
   }
@@ -87,14 +87,14 @@ class FoodItemColumnState extends State<FoodItemColumn> {
 
     // adding a new product element for new input information, adding a n ADD tile to the end of widget list
 
-    addTilesManager.add(addOpenedTile(
-        products[lastElementIndex] , lastElementIndex, context));
-
+    addTilesManager.add(
+        addOpenedTile(products[lastElementIndex], lastElementIndex, context));
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
 
     openedTileIndex = lastElementIndex;
     // opened tile before-than-last in widget list is now opened Tile
+    FocusScope.of(context).requestFocus(_nameNode);
     widget.updateParentState();
   }
 
@@ -134,7 +134,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             ),
             onPressed: () {
               setState(() {
-                products[ownIndex ] = {
+                products[ownIndex] = {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
@@ -210,10 +210,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             };
             updateWishList();
 
-            addTilesManager[openedTileIndex] =
-                addClosedTile(products[openedTileIndex], openedTileIndex, context);
+            addTilesManager[openedTileIndex] = addClosedTile(
+                products[openedTileIndex], openedTileIndex, context);
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex ], newIndex, context);
+                addOpenedTile(products[newIndex], newIndex, context);
             _nameController.text = products[newIndex]["name"];
             quantity = products[newIndex]["quantity"];
           } else {
@@ -248,9 +248,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
               Requests.deleteFoodItem(widget.wishlist.foodItems[newIndex]);
               widget.wishlist.foodItems.removeAt(newIndex);
               openedTileIndex = -1;
-              setState(() {              
+              setState(() {
                 addTilesManager = [];
-              products = [];});
+                products = [];
+              });
             },
             icon: Icon(Icons.delete),
           ),
@@ -267,7 +268,6 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       minValue: 1,
       maxValue: 1000,
       step: 1,
-      buttonSize: 50,
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;
@@ -280,13 +280,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     _nameController.text = name;
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
-      child: TextFormField(
+      child: TextField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
         controller: _nameController,
-        onEditingComplete: () {
-          //loadHomePage(context);
-        },
         decoration: new InputDecoration(
           hasFloatingPlaceholder: false,
           labelText: 'Product Name',

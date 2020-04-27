@@ -71,12 +71,15 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
         needsLogIn = false;
 
         manager.loadFoodItemsFromFile().then((bool exists) {
-          manager.loadInventoriesFromFile().then((bool exists) {
-            manager.loadWishListsFromFile().then((bool exists) {
-              manager.loadNotesFromFile().then((bool exists) {
-                setState(() {
-                  print("has a home and loaded everything from file");
-                });
+          setState(() {
+            print("has a home ");
+          });
+        });
+        manager.loadInventoriesFromFile().then((bool exists) {
+          manager.loadWishListsFromFile().then((bool exists) {
+            manager.loadNotesFromFile().then((bool exists) {
+              setState(() {
+                print("loaded everything from file");
               });
             });
           });
@@ -98,8 +101,13 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
 
   void loadAddInventoryPage(BuildContext context) {
     var route = MaterialPageRoute(
-        builder: (BuildContext context) => AddInventoryPage());
+        builder: (BuildContext context) => AddInventoryPage(updateHomePage));
     Navigator.of(context).push(route);
+  }
+
+  void updateHomePage() {
+    setState(() {
+    });
   }
 
   void loadAddWishlistPage(BuildContext context) {

@@ -17,7 +17,7 @@ class Counter extends StatefulWidget {
     this.color,
     this.textStyle,
     this.step,
-    this.buttonSize = 30,
+    this.buttonSize = 25,
   }) ;
         
 
@@ -131,7 +131,7 @@ class CounterState extends State<Counter>{
     final ThemeData themeData = Theme.of(context);
     color = color ?? themeData.accentColor;
     textStyle = textStyle ?? new TextStyle(
-      fontSize: 25.0,
+      fontSize: 16.0,
     );
 
     return new Container(
