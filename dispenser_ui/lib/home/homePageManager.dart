@@ -69,106 +69,12 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
       });
     notesViewType = viewType.Staggered;
 
-    // ObjFoodItem item1 = ObjFoodItem("leite", 6, 12);
-    // ObjFoodItem item2 = ObjFoodItem("badjoraz", 2, 12);
-    // ObjFoodItem item3 = ObjFoodItem("degnue", 7, 12);
-    // ObjFoodItem item4 = ObjFoodItem("carne", 12, 12);
-    // ObjFoodItem item5 = ObjFoodItem("peixe", 11, 12);
-    // ObjFoodItem item6 = ObjFoodItem("bolachas", 8, 12);
-    // ObjFoodItem item7 = ObjFoodItem("dengues", 4, 12);
-    // ObjFoodItem item8 = ObjFoodItem("batatas", 3, 12);
-    // ObjNote note1 = ObjNote(
-    //     1,
-    //     "nota one dengue",
-    //     "some note juicy ass content fo yo ass",
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     Colors.red);
-    // ObjNote note2 = ObjNote(
-    //     2,
-    //     "nota dois dengue",
-    //     "some mo juicy ass content fo yo ass",
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     Colors.blue);
-    // ObjNote note3 = ObjNote(
-    //     3,
-    //     "nota one dengue",
-    //     "wake yo fatass traca fatigated master youre sleeping behind me right now",
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     DateTime(2000, 1, 1, 1, 1),
-    //     Colors.green);
-
-    // manager.inventories.inventories.add(ObjInventory(1, 3, "Items Not Stored"));
-    // manager.inventories.inventories.add(ObjInventory(2, 1, "Fridge"));
-    // manager.inventories.inventories.add(ObjInventory(3, 2, "Freezer"));
-    // manager.inventories.inventories.add(ObjInventory(4, 3, "Storage"));
-    // manager.wishlists.wishlists.add(ObjWishList(1, "All Items"));
-    // manager.inventories.inventories[0].foodItems.add(item1);
-    // manager.inventories.inventories[0].foodItems.add(item2);
-    // manager.inventories.inventories[0].foodItems.add(item3);
-    // manager.inventories.inventories[1].foodItems.add(item1);
-    // manager.inventories.inventories[1].foodItems.add(item4);
-    // manager.inventories.inventories[1].foodItems.add(item7);
-    // manager.inventories.inventories[2].foodItems.add(item8);
-    // manager.inventories.inventories[2].foodItems.add(item6);
-    // manager.inventories.inventories[2].foodItems.add(item5);
-    // manager.inventories.inventories[3].foodItems.add(item3);
-    // manager.inventories.inventories[3].foodItems.add(item6);
-    // manager.inventories.inventories[3].foodItems.add(item5);
-    // manager.wishlists.wishlists[0].foodItems.add(item1);
-    // manager.wishlists.wishlists[0].foodItems.add(item3);
-    // manager.wishlists.wishlists[0].foodItems.add(item2);
-    // manager.notes.notes.add(note1);
-    // manager.notes.notes.add(note2);
-    // manager.notes.notes.add(note3);
-
-    //manager.requestFoodItems();
-    //manager.inventories.inventories = [];
-
-    // CREATE / UPDATE / DELETE WISHLIST IN DB
-    // ObjWishList wishlist = ObjWishList("dengue name");
-    // Requests.createWishList(wishlist).then((bool created) {
-    //   wishlist.name = "updating the name dengue";
-    //   Requests.updateWishList(wishlist).then( (dynamic s) {
-    //      Requests.deleteWishList(wishlist);
-    //   });
-    //  });
-
-    // CREATE / UPDATE / DeleteINVENTORY IN DB
-    // ObjInventory newInventory =
-    //     ObjInventory("Ivnentorio dengado", 2, DateTime.now(), DateTime.now());
-    // Requests.createInventory(newInventory).then((bool createdSucceful) {
-    //   newInventory.name = "updating from dengue meu drena";
-    //   Requests.updateInventory(newInventory).then((dynamic denuge) {
-    //     Requests.deleteInventory(newInventory);
-    //   });
-    // });
-
-    // CREATE / UPDATE / DELETE FoodItem IN DB
-    // ObjFoodItem item1 = ObjFoodItem("badjras item meu dengue", 6, "dengeu");
-    // Requests.createFoodItem(item1).then((bool dengue) {
-    //   item1.name = "updating from dengue meu dengue";
-    //   Requests.updateFoodItem(item1).then((dynamic dengue) {
-    //     Requests.deleteFoodItem(item1);
-    //   });
-    // });
-
-    //GET HOME
-
-
-    manager.deleteFoodItems();
-    manager.deleteHomes();
-    manager.deleteWishLists();
-    manager.deleteInventories();
+    
     manager.loadHomesFromFile().then((bool hasFile) {
       this.needsLogIn = !hasFile;
       print("does it need login? ->$needsLogIn");
       setState(() {});
     });
-
-    // manager.getWishlists();
-    // manager.getFoodItems();
   }
 
   /*  
