@@ -4,7 +4,8 @@ import '../ObjManager.dart';
 import '../textStyles.dart';
 
 class TopBar extends StatelessWidget {
-  TopBar(this.updateParent, this.manager, this.context, this.isSelected, this.name);
+  TopBar(this.updateParent, this.manager, this.context, this.isSelected,
+      this.name);
   Function updateParent;
   Manager manager;
   List<bool> isSelected;
@@ -30,18 +31,17 @@ class TopBar extends StatelessWidget {
     }
     updateParent();
   }
-    
+
   void setEverythingToSelected() {
     for (int i = 0; i < isSelected.length; i++) isSelected[i] = true;
-   updateParent();
+    updateParent();
   }
 
   void setEverythingToNotSelected() {
     for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
-   updateParent();
+    updateParent();
   }
 
-  
   bool allSelected() {
     for (int i = 0; i < isSelected.length; i++)
       if (!isSelected[i]) return false;
@@ -64,7 +64,6 @@ class TopBar extends StatelessWidget {
     return false;
   }
 
-
   int inventoryNumbSelected() {
     int n = 0;
     for (int i = 0; i < isSelected.length; i++) if (isSelected[i]) n++;
@@ -73,39 +72,14 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (anySelected())
-      return Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: Center(child: godfathersTextStyle("$name")),
-            decoration: BoxDecoration(
-              color: Colors.purple[50],
-              borderRadius: new BorderRadius.vertical(
-                bottom: new Radius.circular(20.0),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: selectAllIconButton()),
-              dispenserDescription(
-                  "${inventoryNumbSelected()} $name Selected"),
-              Expanded(child: Container()),
-              deleteIconButton(manager),
-            ],
-          ),
-        ],
-      );
-    else
-      return Row(children: [
-        Container(
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: <Widget>[
+        AnimatedContainer(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.1 ,
+          height: anySelected() ? MediaQuery.of(context).size.height * 0.15 : 0,
+          duration: Duration(milliseconds: 300,),
+          curve: Curves.fastOutSlowIn,
           child: Center(child: godfathersTextStyle("$name")),
           decoration: BoxDecoration(
             color: Colors.purple[100],
@@ -113,7 +87,26 @@ class TopBar extends StatelessWidget {
               bottom: new Radius.circular(20.0),
             ),
           ),
-        )
-      ]);
+        ),
+        if (anySelected())
+          AnimatedContainer(
+            width: MediaQuery.of(context).size.width,
+            height: anySelected() ? MediaQuery.of(context).size.height * 0.05 : 0,
+            duration: Duration(seconds: 2),
+            curve: Curves.fastOutSlowIn,
+            child: Row(
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: selectAllIconButton()),
+                dispenserDescription(
+                    "${inventoryNumbSelected()} $name Selected"),
+                Expanded(child: Container()),
+                deleteIconButton(manager),
+              ],
+            ),
+          ),
+      ],
+    );
   }
 }

@@ -26,10 +26,7 @@ class InventoryState extends State<Inventory> {
   @override
   void initState() {
     manager.loadInventoriesFromFile().then((bool hasUpdated) {
-      if (mounted && hasUpdated)
-        setState(() {
-
-        });
+      if (mounted && hasUpdated) setState(() {});
     });
     super.initState();
   }
@@ -53,22 +50,21 @@ class InventoryState extends State<Inventory> {
       print("INDEX -> $i  selected for deletion");
     }
     print(isSelected);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   void updateFoodItems() {
-    setState(() {
-    });
+    setState(() {});
   }
+
+  bool open = false;
 
   @override
   Widget build(BuildContext context) {
     initializeIsSelected(manager.inventories.inventories.length);
     return Scaffold(
       body: Flex(direction: Axis.vertical, children: [
-        TopBar(updateFoodItems, manager, context,isSelected, "Inventories"),
+        TopBar(updateFoodItems, manager, context, isSelected, "Inventories"),
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
@@ -78,69 +74,77 @@ class InventoryState extends State<Inventory> {
               padding: EdgeInsets.all(5.0),
               child: InkWell(
                   child: Stack(alignment: Alignment.topLeft, children: [
-                    index == isOpened
-                        ? Column(children: [
-                            GestureDetector(
-                              onLongPress: () => selected(index),
-                              onTap: () {
-                                setState(() {
-                                  isOpened != index
-                                      ? isOpened = index
-                                      : isOpened = -1;
-                                });
-                              },
-                              child: Container(
-                                child: godfathersNameStyle(manager
-                                    .inventories.inventories[index].name),
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.15,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            FoodItemColumn(updateFoodItems, manager.inventories.inventories[index])
-                          ])
-                        : GestureDetector(
-                            onLongPress: () => selected(index),
-                            onTap: () {
-                              setState(() {
-                                isOpened != index
-                                    ? isOpened = index
-                                    : isOpened = -1;
-                              });
-                            },
-                            child: Container(
-                              child: godfathersNameStyle(
-                                  manager.inventories.inventories[index].name),
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                                  fit: BoxFit.cover,
-                                ),
+                index == isOpened
+                    ? Column(children: [
+                        GestureDetector(
+                          onLongPress: () => selected(index),
+                          onTap: () {
+                            setState(() {
+                              isOpened != index
+                                  ? isOpened = index
+                                  : isOpened = -1;
+                            });
+                          },
+                          child: Container(
+                            child: godfathersNameStyle(
+                                manager.inventories.inventories[index].name),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                    anySelected()
-                        ? Checkbox(
-                            value: isSelected[index],
-                            onChanged: (bool value) {
-                              selected(index);
-                            })
-                        : Container(),
-                  ])),
+                        ),
+                        AnimatedContainer(
+                            width:
+                                (open) ? MediaQuery.of(context).size.width: 0,
+                            duration: Duration(
+                              milliseconds: 1000,
+                            ),
+                            curve: Curves.fastOutSlowIn,
+                            child: FoodItemColumn(updateFoodItems,
+                                manager.inventories.inventories[index]))
+                      ])
+                    : GestureDetector(
+                        onLongPress: () => selected(index),
+                        onTap: () {
+                          setState(() {
+                            open = true;
+                            isOpened != index
+                                ? isOpened = index
+                                : isOpened = -1;
+                          });
+                        },
+                        child: Container(
+                          child: godfathersNameStyle(
+                              manager.inventories.inventories[index].name),
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                anySelected()
+                    ? Checkbox(
+                        value: isSelected[index],
+                        onChanged: (bool value) {
+                          selected(index);
+                        })
+                    : Container(),
+              ])),
             ),
           ),
         ),

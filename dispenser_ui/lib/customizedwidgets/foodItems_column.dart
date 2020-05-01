@@ -161,38 +161,42 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         SizedBox(
           height: 10,
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-             height: MediaQuery.of(context).size.height * 0.11,
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-                color: Colors.cyan[300],
-                borderRadius: BorderRadius.circular(30.0)),
-            child: Center(child: counter(tileInfo['quantity'])),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-            height: MediaQuery.of(context).size.height * 0.11,
-            alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
-                color: Colors.cyan[200],
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.11,
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    color: Colors.cyan[300],
+                    borderRadius: BorderRadius.circular(30.0)),
+                child: Center(child: counter(tileInfo['quantity'])),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.11,
+                alignment: Alignment.centerRight,
+                decoration: BoxDecoration(
+                  color: Colors.cyan[200],
                 ),
-            child: Form(
-              key: formKey,
-              child: Container(
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(16),
-                child: FindDropdown(
-                  items: ["Custom", "Fridge", "Freezer", "Storage"],
-                  onChanged: (String item) => print(item),
-                  selectedItem: "Custom",
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: EdgeInsets.all(16),
+                    child: FindDropdown(
+                      items: ["Custom", "Fridge", "Freezer", "Storage"],
+                      onChanged: (String item) => print(item),
+                      selectedItem: "Custom",
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ]),
-        SizedBox(height: 20,)
+            ]),
+        SizedBox(
+          height: 20,
+        )
       ],
     );
   }
@@ -268,9 +272,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;
-        setState(() {
-          
-        });
+        setState(() {});
       },
     );
   }
@@ -304,9 +306,11 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   Widget build(BuildContext context) {
     initializeAddTilesManager(context);
     return SafeArea(
-      child: ColumnBuilder(
-          itemCount: addTilesManager.length,
-          itemBuilder: (context, i) => addTilesManager[i]),
+      child: Container(
+        child: ColumnBuilder(
+            itemCount: addTilesManager.length,
+            itemBuilder: (context, i) => addTilesManager[i]),
+      ),
     );
   }
 }
