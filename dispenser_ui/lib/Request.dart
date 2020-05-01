@@ -9,7 +9,7 @@ import 'objects/Inventory.dart';
 import 'objects/Home.dart';
 
 class Requests {
-  static final String serverURL = "http://192.168.1.229:5000";
+  static final String serverURL = "http://192.168.1.78:5000";
   static http.Client client;
 
   // Use when multiple requests necessary
@@ -70,7 +70,9 @@ class Requests {
   static Future<dynamic> readHome(int id) async {
     http.Response response;
     try {
+      print("dengu5e");
       response = await _get(Uri.encodeFull("$serverURL/api/home/read/$id"));
+      print("dengu6e");
     } catch (SocketException) {
       print(SocketException.toString());
       print("Exception: No internet!! Route: $serverURL/api/home/read/$id");

@@ -295,6 +295,7 @@ class NoHomeIsSelected extends StatelessWidget {
                 .getEntireHomeInformation(
                     newHome, int.parse(homeController.text))
                 .then((bool loadedHome) {
+                  print("ola");
               if (loadedHome)
                 updateParent();
               else

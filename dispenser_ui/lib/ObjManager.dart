@@ -83,18 +83,22 @@ class Manager extends ChangeNotifier {
   }
 
   Future<bool> getEntireHomeInformation(ObjHome home, int id) async {
+    print("dengue1");
     if (await getHomeInfo(home, id) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
+    print("dengue2");
     if (await getHomeWishLists(home) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
+    print("dengue3");
     if (await getHomeInventories(home) == null) {
       print("Not possible to sucessfully load all home items");
       return null;
     }
+    print("dengue4");
     print("Succsefull!! youve loaded the entire home ");
     return true;
   }
