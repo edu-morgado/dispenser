@@ -8,9 +8,7 @@ import 'package:dispenser_ui/home/homePageManager.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   final Manager manager = new Manager();
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +20,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
               primarySwatch: Colors.blue, secondaryHeaderColor: Colors.white),
-          home: Home(manager),
+          home:  Home(manager)
         );
       }),
     );
   }
 }
+
+

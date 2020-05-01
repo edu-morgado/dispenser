@@ -27,6 +27,7 @@ dev_dependencies:
   provider: ^4.0.5
   http: ^0.12.0+4
 
+  liquid_pull_to_refresh: ^1.1.2
   auto_size_text: ^1.1.2
   dropdown_formfield: ^0.1.1
   rflutter_alert: ^1.0.3

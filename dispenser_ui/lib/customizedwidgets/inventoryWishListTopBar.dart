@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../ObjManager.dart';
+import '../Request.dart';
 import '../textStyles.dart';
 
 class TopBar extends StatelessWidget {
@@ -24,6 +25,7 @@ class TopBar extends StatelessWidget {
 
     for (i = 0; i < isSelected.length; i++) {
       if (isSelected[i]) {
+        Requests.deleteInventory(manager.inventories.inventories[i]);
         manager.inventories.inventories.removeAt(i);
         isSelected.removeAt(i);
         i = -1;

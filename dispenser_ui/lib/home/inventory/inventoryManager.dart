@@ -2,8 +2,8 @@ import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/ObjManager.dart';
 import 'package:dispenser_ui/textStyles.dart';
-import 'package:provider/provider.dart';
-import 'package:dispenser_ui/customizedwidgets/foodItems_column.dart';
+import 'package:dispenser_ui/home/inventory/inventoryItemsColumn.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class Inventory extends StatefulWidget {
   final Manager manager;
@@ -43,11 +43,9 @@ class InventoryState extends State<Inventory> {
 
   void selected(int i) {
     if (isSelected[i]) {
-      print("INDEX -> $i not selected for deletion");
       isSelected[i] = false;
     } else {
       isSelected[i] = true;
-      print("INDEX -> $i  selected for deletion");
     }
     print(isSelected);
     setState(() {});
@@ -55,6 +53,11 @@ class InventoryState extends State<Inventory> {
 
   void updateFoodItems() {
     setState(() {});
+  }
+
+  Future<void> updateInventories() async {
+    await manager.loadFoodItemsFromFile();
+    print("dengueeeeee");
   }
 
   bool open = false;

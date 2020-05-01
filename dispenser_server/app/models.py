@@ -1,9 +1,14 @@
 from app import app, db
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 
-class Home(db.Model):
+
+
+Base = declarative_base()
+
+class Home(db.Model, Base):
     schema = 'public'
     __tablename__='home'
     id = db.Column(db.Integer, autoincrement = True, primary_key = True, nullable = False)
@@ -23,7 +28,7 @@ class Home(db.Model):
                 'date_created':self.date_created,
                 'date_last_update':self.date_last_update}
 
-class Inventory(db.Model):
+class Inventory(db.Model, Base):
     schema = 'public'
     __tablename__ = 'inventory'
     id = db.Column(db.Integer, autoincrement = True, primary_key = True, nullable = False)
@@ -44,7 +49,7 @@ class Inventory(db.Model):
                 'date_created' : self.date_created.isoformat(),
                 'date_last_update': self.date_last_update.isoformat()}
 
-class Wish_List(db.Model):
+class Wish_List(db.Model, Base):
     schema = 'public'
     __tablename__ = 'wish_list'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
@@ -63,7 +68,7 @@ class Wish_List(db.Model):
             'date_created' : self.date_created.isoformat(),
             'date_last_update': self.date_last_update.isoformat()}
 
-class Food_Item(db.Model):
+class Food_Item(db.Model, Base):
     schema = 'public'
     __tablename__ = 'food_item'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable=False)
@@ -86,7 +91,7 @@ class Food_Item(db.Model):
                 'date_created' : self.date_created.isoformat(),
                 'date_last_update': self.date_last_update.isoformat()}
 
-class Note(db.Model):
+class Note(db.Model, Base):
     schema = 'public'
     __tablename__ = 'note'
     id = db.Column(db.Integer,autoincrement=True, primary_key=True, nullable = False)

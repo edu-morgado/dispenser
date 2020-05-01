@@ -7,11 +7,13 @@ part 'WishList.g.dart';
 class ObjWishList {
 
   int id;
-  String name;
+  String name;  
+  DateTime dateCreated;
+  DateTime dateLastUpdated;
   List<ObjFoodItem> foodItems = List<ObjFoodItem>();
   
 
-  ObjWishList(this.name);
+  ObjWishList(this.name, this.dateCreated, this.dateLastUpdated);
 
   @override
   String toString() {

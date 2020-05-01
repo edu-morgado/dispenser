@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
 import 'package:dispenser_ui/objects/FoodItem.dart';
+import 'package:dispenser_ui/objects/WishList.dart';
 import 'package:flutter/services.dart';
 import 'package:find_dropdown/find_dropdown.dart';
 
-import '../Request.dart';
+import 'package:dispenser_ui/Request.dart';
 
 class FoodItemColumn extends StatefulWidget {
   final Function updateParentState;
-  final dynamic repository;
-  FoodItemColumn(this.updateParentState, this.repository);
+  final ObjWishList wishlist;
+  FoodItemColumn(this.updateParentState, this.wishlist);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +21,7 @@ class FoodItemColumn extends StatefulWidget {
 
 class FoodItemColumnState extends State<FoodItemColumn> {
   num quantity = 1;
-  int openedTile = -1;
+  int openedTileIndex = -1;
   List<bool> isChecked = List<bool>();
   List<dynamic> products = [];
   List<Widget> addTilesManager = new List<Widget>();
@@ -28,89 +29,77 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameNode = FocusNode();
 
-  void updateRepository() {
-    for (int i = 0; i < widget.repository.foodItems.length; i++) {
-      ObjFoodItem foodItem = widget.repository.foodItems[i];
+  void updateWishList() {
+    for (int i = 0; i < widget.wishlist.foodItems.length; i++) {
+      ObjFoodItem foodItem = widget.wishlist.foodItems[i];
       if (products[i]['name'] != foodItem.name ||
           products[i]['quantity'] != foodItem.quantity) {
-        print("updating repository");
+        print("updating wishlist");
         foodItem.name = products[i]['name'];
         foodItem.quantity = products[i]['quantity'];
         Requests.updateFoodItem(foodItem);
       }
     }
 
-    for (int i = widget.repository.foodItems.length; i < products.length; i++) {
+    for (int i = widget.wishlist.foodItems.length; i < products.length; i++) {
       ObjFoodItem newProduct = ObjFoodItem(
           products[i]['name'],
           products[i]['quantity'],
           "categoria dengada furira",
           DateTime.now(),
           DateTime.now());
-      widget.repository.foodItems.add(newProduct);
-      Requests.createFoodItemForInventory(newProduct, widget.repository.id);
+      widget.wishlist.foodItems.add(newProduct);
+      print("WishList id is ->${widget.wishlist.id}");
+
+      Requests.createFoodItemForWishList(newProduct, widget.wishlist.id);
     }
   }
 
   void initializeAddTilesManager(BuildContext context) {
     if (addTilesManager.length == 0) {
-      addTilesManager.add(Divider(
-          thickness:
-              3)); // cute UI feature that fucks the indexes up (not best way to do probably)
-
-      for (int i = 0; i < widget.repository.foodItems.length; i++) {
+      for (int i = 0; i < widget.wishlist.foodItems.length; i++) {
         products.add({
-          'name': widget.repository.foodItems[i].name,
-          'quantity': widget.repository.foodItems[i].quantity
+          'name': widget.wishlist.foodItems[i].name,
+          'quantity': widget.wishlist.foodItems[i].quantity
         });
-        addTilesManager.add(addClosedTile(products[i], i + 1, context));
+        addTilesManager.add(addClosedTile(products[i], i, context));
       }
-
-      addTilesManager.add(Container(
-          child: ListTile(
-            onTap: () => addTileToTiles(context),
-            title: Text(
-              "Add ",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Montserrat'),
-            ),
-          ),
-          decoration: BoxDecoration(color: Colors.black12)));
     }
   }
 
   void addTileToTiles(BuildContext context) {
-    if (products.length != 0 && openedTile != -1) {
-      products[openedTile - 1] = {
+    if (products.length != 0 && openedTileIndex != -1) {
+      products[openedTileIndex] = {
         'name': _nameController.text,
         'quantity': quantity,
       };
-      updateRepository();
-      addTilesManager[openedTile] =
-          addClosedTile(products[openedTile - 1], openedTile, context);
+      updateWishList();
+      addTilesManager[openedTileIndex] =
+          addClosedTile(products[openedTileIndex], openedTileIndex, context);
     }
     //save previous countent and turns it into a closed tile (about to open a tile and its a new one)
 
     quantity = 1;
     _nameController.text = "New Product";
     products.add({'name': _nameController.text, 'quantity': quantity});
-    addTilesManager.add(addTile(context));
-    // adding a new product element for new input information, adding an ADD tile to the end of widget list
 
-    addTilesManager[addTilesManager.length - 2] = addOpenedTile(
-        products[products.length - 1], addTilesManager.length - 2, context);
+    int lastElementIndex = products.length - 1;
+
+    // adding a new product element for new input information, adding a n ADD tile to the end of widget list
+
+    addTilesManager.add(
+        addOpenedTile(products[lastElementIndex], lastElementIndex, context));
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
 
-    openedTile = addTilesManager.length - 2;
+    openedTileIndex = lastElementIndex;
     // opened tile before-than-last in widget list is now opened Tile
+    FocusScope.of(context).requestFocus(_nameNode);
     widget.updateParentState();
   }
 
   Widget addTile(BuildContext context) {
+    quantity = 1;
     return Container(
         child: ListTile(
           onTap: () => addTileToTiles(context),
@@ -145,15 +134,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             ),
             onPressed: () {
               setState(() {
-                products[openedTile - 1] = {
+                products[ownIndex] = {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
-                updateRepository();
+                updateWishList();
 
                 addTilesManager[ownIndex] =
-                    addClosedTile(products[openedTile - 1], ownIndex, context);
-                openedTile = -1;
+                    addClosedTile(products[ownIndex], ownIndex, context);
+                openedTileIndex = -1;
               });
             },
           )
@@ -214,24 +203,24 @@ class FoodItemColumnState extends State<FoodItemColumn> {
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
-          if (openedTile != -1) {
-            products[openedTile - 1] = {
+          if (openedTileIndex != -1) {
+            products[openedTileIndex] = {
               'name': _nameController.text,
               'quantity': quantity,
             };
-            updateRepository();
+            updateWishList();
 
-            addTilesManager[openedTile] =
-                addClosedTile(products[openedTile - 1], openedTile, context);
+            addTilesManager[openedTileIndex] = addClosedTile(
+                products[openedTileIndex], openedTileIndex, context);
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex - 1], newIndex, context);
-            _nameController.text = products[newIndex - 1]["name"];
-            quantity = products[newIndex - 1]["quantity"];
+                addOpenedTile(products[newIndex], newIndex, context);
+            _nameController.text = products[newIndex]["name"];
+            quantity = products[newIndex]["quantity"];
           } else {
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex - 1], newIndex, context);
+                addOpenedTile(products[newIndex], newIndex, context);
           }
-          openedTile = newIndex;
+          openedTileIndex = newIndex;
           widget.updateParentState();
         },
         child: ListTile(
@@ -253,7 +242,17 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           ),
           subtitle: Text("  Category:"),
           trailing: IconButton(
-            onPressed: () => print("need to delete it"),
+            onPressed: () {
+              print("deleting now");
+              // Remove info from products, widget from addTilesManager, remove from local storage and in data base
+              Requests.deleteFoodItem(widget.wishlist.foodItems[newIndex]);
+              widget.wishlist.foodItems.removeAt(newIndex);
+              openedTileIndex = -1;
+              setState(() {
+                addTilesManager = [];
+                products = [];
+              });
+            },
             icon: Icon(Icons.delete),
           ),
         ),
@@ -262,13 +261,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   }
 
   Widget counter(int initialValue) {
+    quantity = initialValue;
     return Counter(
       initialValue: initialValue,
       selectedValue: initialValue,
       minValue: 1,
       maxValue: 1000,
       step: 1,
-      buttonSize: 50,
       decimalPlaces: 0,
       onChanged: (value) {
         quantity = value;
@@ -281,13 +280,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     _nameController.text = name;
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
-      child: TextFormField(
+      child: TextField(
         focusNode: _nameNode,
         textInputAction: TextInputAction.done,
         controller: _nameController,
-        onEditingComplete: () {
-          //loadHomePage(context);
-        },
         decoration: new InputDecoration(
           hasFloatingPlaceholder: false,
           labelText: 'Product Name',
@@ -297,7 +293,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
-        inputFormatters: [new LengthLimitingTextInputFormatter(20)],
+        inputFormatters: [new LengthLimitingTextInputFormatter(35)],
       ),
     );
   }
@@ -305,12 +301,13 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   @override
   Widget build(BuildContext context) {
     initializeAddTilesManager(context);
-    return SafeArea(
-      child: Container(
+    return Column(children: [
+      SafeArea(
         child: ColumnBuilder(
             itemCount: addTilesManager.length,
             itemBuilder: (context, i) => addTilesManager[i]),
       ),
-    );
+      addTile(context)
+    ]);
   }
 }
