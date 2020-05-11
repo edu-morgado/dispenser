@@ -71,7 +71,6 @@ class InventoryState extends State<Inventory> {
         SizedBox(width: 75),
         Container(height: 20),
         Expanded(
-<<<<<<< HEAD
           child: LiquidPullToRefresh(
             springAnimationDurationInMilliseconds: 100,
             onRefresh: () => updateInventories(),
@@ -145,85 +144,6 @@ class InventoryState extends State<Inventory> {
                       : Container(),
                 ])),
               ),
-=======
-          child: ListView.builder(
-            itemCount: manager.inventories.inventories.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.all(5.0),
-              child: InkWell(
-                  child: Stack(alignment: Alignment.topLeft, children: [
-                index == isOpened
-                    ? Column(children: [
-                        GestureDetector(
-                          onLongPress: () => selected(index),
-                          onTap: () {
-                            setState(() {
-                              isOpened != index
-                                  ? isOpened = index
-                                  : isOpened = -1;
-                            });
-                          },
-                          child: Container(
-                            child: godfathersNameStyle(
-                                manager.inventories.inventories[index].name),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                        AnimatedContainer(
-                            width:
-                                (open) ? MediaQuery.of(context).size.width: 0,
-                            duration: Duration(
-                              milliseconds: 1000,
-                            ),
-                            curve: Curves.fastOutSlowIn,
-                            child: FoodItemColumn(updateFoodItems,
-                                manager.inventories.inventories[index]))
-                      ])
-                    : GestureDetector(
-                        onLongPress: () => selected(index),
-                        onTap: () {
-                          setState(() {
-                            open = true;
-                            isOpened != index
-                                ? isOpened = index
-                                : isOpened = -1;
-                          });
-                        },
-                        child: Container(
-                          child: godfathersNameStyle(
-                              manager.inventories.inventories[index].name),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                anySelected()
-                    ? Checkbox(
-                        value: isSelected[index],
-                        onChanged: (bool value) {
-                          selected(index);
-                        })
-                    : Container(),
-              ])),
->>>>>>> 98ec1f34f34cd04f860932d7b1376c941b45f4c1
             ),
           ),
         ),

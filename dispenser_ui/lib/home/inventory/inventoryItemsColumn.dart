@@ -1,4 +1,5 @@
 import 'package:dispenser_ui/objects/Inventory.dart';
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
@@ -61,7 +62,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
           'name': widget.inventory.foodItems[i].name,
           'quantity': widget.inventory.foodItems[i].quantity
         });
-        addTilesManager.add(addClosedTile(products[i], i , context));
+        addTilesManager.add(addClosedTile(products[i], i, context));
       }
     }
   }
@@ -86,8 +87,8 @@ class FoodItemColumnState extends State<FoodItemColumn> {
 
     // adding a new product element for new input information, adding a n ADD tile to the end of widget list
 
-    addTilesManager.add(addOpenedTile(
-        products[lastElementIndex] , lastElementIndex, context));
+    addTilesManager.add(
+        addOpenedTile(products[lastElementIndex], lastElementIndex, context));
 
     // making the before-than-last tile the opened Tile using the last element of
     // information because last tile is the add button (doesnt neeed information)
@@ -102,17 +103,14 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     return Container(
         child: ListTile(
           onTap: () => addTileToTiles(context),
-          title: Text(
+          title: Center(child:smallTextStyle(
             'Add',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                fontFamily: 'Montserrat'),
-          ),
+          ),),
         ),
         decoration: BoxDecoration(
-          color: Colors.black12,
+          color: Colors.purple[100],
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(30.0)
         ));
   }
 
@@ -133,7 +131,7 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             ),
             onPressed: () {
               setState(() {
-                products[ownIndex ] = {
+                products[ownIndex] = {
                   'name': _nameController.text,
                   'quantity': quantity,
                 };
@@ -209,10 +207,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
             };
             updateInventory();
 
-            addTilesManager[openedTileIndex] =
-                addClosedTile(products[openedTileIndex], openedTileIndex, context);
+            addTilesManager[openedTileIndex] = addClosedTile(
+                products[openedTileIndex], openedTileIndex, context);
             addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex ], newIndex, context);
+                addOpenedTile(products[newIndex], newIndex, context);
             _nameController.text = products[newIndex]["name"];
             quantity = products[newIndex]["quantity"];
           } else {
@@ -247,9 +245,10 @@ class FoodItemColumnState extends State<FoodItemColumn> {
               Requests.deleteFoodItem(widget.inventory.foodItems[newIndex]);
               widget.inventory.foodItems.removeAt(newIndex);
               openedTileIndex = -1;
-              setState(() {              
+              setState(() {
                 addTilesManager = [];
-              products = [];});
+                products = [];
+              });
             },
             icon: Icon(Icons.delete),
           ),
@@ -302,12 +301,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   @override
   Widget build(BuildContext context) {
     initializeAddTilesManager(context);
-    return SafeArea(
-      child: Container(
-        child: ColumnBuilder(
-            itemCount: addTilesManager.length,
-            itemBuilder: (context, i) => addTilesManager[i]),
+    return Column(children: <Widget>[
+      SafeArea(
+        child: Container(
+          child: ColumnBuilder(
+              itemCount: addTilesManager.length,
+              itemBuilder: (context, i) => addTilesManager[i]),
+        ),
       ),
-    );
+      addTile(context)
+    ]);
   }
 }

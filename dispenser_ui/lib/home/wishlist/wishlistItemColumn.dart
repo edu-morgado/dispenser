@@ -1,3 +1,4 @@
+import 'package:dispenser_ui/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_ui/customizedwidgets/counter.dart';
 import 'package:dispenser_ui/customizedwidgets/columnBuilder.dart';
@@ -103,17 +104,16 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     return Container(
         child: ListTile(
           onTap: () => addTileToTiles(context),
-          title: Text(
-            'Add',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                fontFamily: 'Montserrat'),
+          title: Center(
+                      child: smallTextStyle(
+              'Add',
+            ),
           ),
         ),
-        decoration: BoxDecoration(
-          color: Colors.black12,
+         decoration: BoxDecoration(
+          color: Colors.purple[100],
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(30.0)
         ));
   }
 
