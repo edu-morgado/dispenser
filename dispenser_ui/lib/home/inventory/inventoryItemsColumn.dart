@@ -302,13 +302,12 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   @override
   Widget build(BuildContext context) {
     initializeAddTilesManager(context);
-    return Column(children: [
-      SafeArea(
+    return SafeArea(
+      child: Container(
         child: ColumnBuilder(
             itemCount: addTilesManager.length,
             itemBuilder: (context, i) => addTilesManager[i]),
       ),
-      addTile(context)
-    ]);
+    );
   }
 }

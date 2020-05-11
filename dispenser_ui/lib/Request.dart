@@ -70,7 +70,9 @@ class Requests {
   static Future<dynamic> readHome(int id) async {
     http.Response response;
     try {
+      print("dengu5e");
       response = await _get(Uri.encodeFull("$serverURL/api/home/read/$id"));
+      print("dengu6e");
     } catch (SocketException) {
       print(SocketException.toString());
       print("Exception: No internet!! Route: $serverURL/api/home/read/$id");
