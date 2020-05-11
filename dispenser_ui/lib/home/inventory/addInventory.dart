@@ -8,9 +8,8 @@ import 'package:find_dropdown/find_dropdown.dart';
 import 'package:dispenser_ui/customizedwidgets/inventoryWishListTopBar.dart';
 
 class AddInventoryPage extends StatefulWidget {
-  final Function updateParent;
 
-  AddInventoryPage(this.updateParent);
+  AddInventoryPage();
 
   @override
   InventoryAddState createState() => new InventoryAddState();
@@ -129,12 +128,7 @@ class InventoryAddState extends State<AddInventoryPage> {
           FocusScope.of(context).unfocus();
           ObjInventory newInventory =
               ObjInventory(_nameController.text, ttype, DateTime.now(), DateTime.now());
-          
           manager.inventories.inventories.add(newInventory);
-          Requests.createInventory(newInventory).then((bool created) {
-            print("Inventory created? -> $created");
-          });
-          widget.updateParent();
           Navigator.of(context).pop();
         },
         child: Text(

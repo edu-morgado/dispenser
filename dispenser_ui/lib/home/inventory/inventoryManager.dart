@@ -25,6 +25,9 @@ class InventoryState extends State<Inventory> {
 
   @override
   void initState() {
+    manager.loadInventoriesFromFile().then((bool hasUpdated) {
+      if (mounted && hasUpdated) setState(() {});
+    });
     super.initState();
   }
 
@@ -64,49 +67,18 @@ class InventoryState extends State<Inventory> {
       body: Flex(direction: Axis.vertical, children: [
         TopBar(updateFoodItems, manager, context, isSelected, "Inventories"),
         Expanded(
-          child: FutureBuilder(
-            future: manager.loadInventoriesFromFile(),
-            builder: (context, snapshot) => LiquidPullToRefresh(
-              springAnimationDurationInMilliseconds: 100,
-              onRefresh: () => updateInventories(),
-              child: ListView.builder(
-                itemCount: manager.inventories.inventories.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: InkWell(
-                      child: Stack(alignment: Alignment.topLeft, children: [
-                    index == isOpened
-                        ? Column(children: [
-                            GestureDetector(
-                              onLongPress: () => selected(index),
-                              onTap: () {
-                                setState(() {
-                                  isOpened != index
-                                      ? isOpened = index
-                                      : isOpened = -1;
-                                });
-                              },
-                              child: Container(
-                                child: godfathersNameStyle(manager
-                                    .inventories.inventories[index].name),
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.15,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            FoodItemColumn(updateFoodItems,
-                                manager.inventories.inventories[index])
-                          ])
-                        : GestureDetector(
+          child: LiquidPullToRefresh(
+            springAnimationDurationInMilliseconds: 100,
+            onRefresh: () => updateInventories(),
+            child: ListView.builder(
+              itemCount: manager.inventories.inventories.length,
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.all(5.0),
+                child: InkWell(
+                    child: Stack(alignment: Alignment.topLeft, children: [
+                  index == isOpened
+                      ? Column(children: [
+                          GestureDetector(
                             onLongPress: () => selected(index),
                             onTap: () {
                               setState(() {
@@ -131,15 +103,42 @@ class InventoryState extends State<Inventory> {
                               ),
                             ),
                           ),
-                    anySelected()
-                        ? Checkbox(
-                            value: isSelected[index],
-                            onChanged: (bool value) {
-                              selected(index);
-                            })
-                        : Container(),
-                  ])),
-                ),
+                          FoodItemColumn(updateFoodItems,
+                              manager.inventories.inventories[index])
+                        ])
+                      : GestureDetector(
+                          onLongPress: () => selected(index),
+                          onTap: () {
+                            setState(() {
+                              isOpened != index
+                                  ? isOpened = index
+                                  : isOpened = -1;
+                            });
+                          },
+                          child: Container(
+                            child: godfathersNameStyle(
+                                manager.inventories.inventories[index].name),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/inventory/${manager.inventories.inventories[index].ttype}.jpeg'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                  anySelected()
+                      ? Checkbox(
+                          value: isSelected[index],
+                          onChanged: (bool value) {
+                            selected(index);
+                          })
+                      : Container(),
+                ])),
               ),
             ),
           ),
