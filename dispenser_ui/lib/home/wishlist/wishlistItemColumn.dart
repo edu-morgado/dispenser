@@ -105,16 +105,15 @@ class FoodItemColumnState extends State<FoodItemColumn> {
         child: ListTile(
           onTap: () => addTileToTiles(context),
           title: Center(
-                      child: smallTextStyle(
+            child: smallTextStyle(
               'Add',
             ),
           ),
         ),
-         decoration: BoxDecoration(
-          color: Colors.purple[100],
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(30.0)
-        ));
+        decoration: BoxDecoration(
+            color: Colors.purple[100],
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(30.0)));
   }
 
   Widget addOpenedTile(dynamic tileInfo, int ownIndex, BuildContext context) {

@@ -9,7 +9,7 @@ import 'objects/Inventory.dart';
 import 'objects/Home.dart';
 
 class Requests {
-  static final String serverURL = "https://192.168.1.4:5000";
+  static final String serverURL = "http://192.168.1.4:5000";
   static http.Client client;
 
   // Use when multiple requests necessary

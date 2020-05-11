@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +102,7 @@ class WishListAddState extends State<AddWishListPage> {
           Container(
             padding: EdgeInsets.all(16),
             child: FindDropdown(
-              items: ["Custom","Fridge", "Freezer", "Storage"],
+              items: ["Custom", "Fridge", "Freezer", "Storage"],
               label: "Type of WishList",
               onChanged: (String item) => print(item),
               selectedItem: "Custom",
@@ -126,7 +125,7 @@ class WishListAddState extends State<AddWishListPage> {
           FocusScope.of(context).unfocus();
           ObjWishList newWishList =
               ObjWishList(_nameController.text, DateTime.now(), DateTime.now());
-          
+
           manager.wishlists.wishlists.add(newWishList);
           Requests.createWishList(newWishList).then((bool created) {
             print("WishList created? -> $created");
@@ -142,15 +141,14 @@ class WishListAddState extends State<AddWishListPage> {
     );
   }
 
-   void update() {
-    setState(() {
-    });
+  void update() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final Manager manager = Provider.of<Manager>(context);
-
+    _loadData();
     initializeChoices(manager.wishlists.wishlists);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -168,36 +166,59 @@ class WishListAddState extends State<AddWishListPage> {
               ),
             ),
           ]),
-          TopBar(update, manager, context, [] , "Add new WishList"),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: nameInput(context),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.3,
-                alignment: Alignment.topLeft,
-                child: dropDownFormField()),
-          ),
-          SizedBox(height:100),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.1,
-              alignment: Alignment.topLeft,
-              child: addWishList(context, manager),
-            ),
-          ),
+          TopBar(update, manager, context, [], "Add new WishList"),
+          _changes(manager),
         ],
       ),
     );
+  }
+
+  bool loadingImage;
+
+  Future _loadData() async {
+    await new Future.delayed(new Duration(seconds: 5));
+    _dataLoaded();
+  }
+
+  void _dataLoaded() {
+    setState(() {
+      loadingImage = false;
+    });
+  }
+
+  Widget _changes(manager) {
+    if (loadingImage == false) {
+      return Column(children: [
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.1,
+            alignment: Alignment.topLeft,
+            child: nameInput(context),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Center(
+          child: Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.height * 0.3,
+              alignment: Alignment.topLeft,
+              child: dropDownFormField()),
+        ),
+        SizedBox(height: 100),
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.1,
+            alignment: Alignment.topLeft,
+            child: addWishList(context, manager),
+          ),
+        ),
+      ]);
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 }
