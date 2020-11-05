@@ -103,15 +103,16 @@ class FoodItemColumnState extends State<FoodItemColumn> {
     return Container(
         child: ListTile(
           onTap: () => addTileToTiles(context),
-          title: Center(child:smallTextStyle(
-            'Add',
-          ),),
+          title: Center(
+            child: smallTextStyle(
+              'Add',
+            ),
+          ),
         ),
         decoration: BoxDecoration(
-          color: Colors.purple[100],
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(30.0)
-        ));
+            color: Colors.purple[100],
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(30.0)));
   }
 
   Widget addOpenedTile(dynamic tileInfo, int ownIndex, BuildContext context) {
@@ -190,70 +191,88 @@ class FoodItemColumnState extends State<FoodItemColumn> {
   final formKey = new GlobalKey<FormState>();
 
   Widget addClosedTile(dynamic tileInfo, int newIndex, BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.1,
-      decoration: BoxDecoration(
-          color: Colors.purple[50],
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(30.0)),
-      alignment: Alignment.center,
-      child: InkWell(
-        onTap: () {
-          if (openedTileIndex != -1) {
-            products[openedTileIndex] = {
-              'name': _nameController.text,
-              'quantity': quantity,
-            };
-            updateInventory();
-
-            addTilesManager[openedTileIndex] = addClosedTile(
-                products[openedTileIndex], openedTileIndex, context);
-            addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex], newIndex, context);
-            _nameController.text = products[newIndex]["name"];
-            quantity = products[newIndex]["quantity"];
-          } else {
-            addTilesManager[newIndex] =
-                addOpenedTile(products[newIndex], newIndex, context);
-          }
-          openedTileIndex = newIndex;
-          widget.updateParentState();
-        },
-        child: ListTile(
-          leading: Icon(Icons.navigate_next),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                '${tileInfo['name']}      ',
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-              ),
-              Text(
-                '${tileInfo['quantity']}      ',
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-              ),
-            ],
+    return Column(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.08,
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: Colors.black38),
+                top: BorderSide(color: Colors.black38)),
           ),
-          subtitle: Text("  Category:"),
-          trailing: IconButton(
-            onPressed: () {
-              print("deleting now");
-              // Remove info from products, widget from addTilesManager, remove from local storage and in data base
-              Requests.deleteFoodItem(widget.inventory.foodItems[newIndex]);
-              widget.inventory.foodItems.removeAt(newIndex);
-              openedTileIndex = -1;
-              setState(() {
-                addTilesManager = [];
-                products = [];
-              });
+          alignment: Alignment.center,
+          child: InkWell(
+            onTap: () {
+              if (openedTileIndex != -1) {
+                products[openedTileIndex] = {
+                  'name': _nameController.text,
+                  'quantity': quantity,
+                };
+                updateInventory();
+
+                addTilesManager[openedTileIndex] = addClosedTile(
+                    products[openedTileIndex], openedTileIndex, context);
+                addTilesManager[newIndex] =
+                    addOpenedTile(products[newIndex], newIndex, context);
+                _nameController.text = products[newIndex]["name"];
+                quantity = products[newIndex]["quantity"];
+              } else {
+                addTilesManager[newIndex] =
+                    addOpenedTile(products[newIndex], newIndex, context);
+              }
+              openedTileIndex = newIndex;
+              widget.updateParentState();
             },
-            icon: Icon(Icons.delete),
+            child: ListTile(
+              leading: Icon(Icons.navigate_next),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '${tileInfo['name']}      ',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                  ),
+                  Text(
+                    '${tileInfo['quantity']}      ',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  print("deleting now");
+                  // Remove info from products, widget from addTilesManager, remove from local storage and in data base
+                  Requests.deleteFoodItem(widget.inventory.foodItems[newIndex]);
+                  widget.inventory.foodItems.removeAt(newIndex);
+                  openedTileIndex = -1;
+                  setState(() {
+                    addTilesManager = [];
+                    products = [];
+                  });
+                },
+                icon: Icon(Icons.delete),
+              ),
+            ),
           ),
         ),
-      ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.1,
+          decoration: BoxDecoration(
+              color: Colors.purple[50],
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(30.0)),
+          alignment: Alignment.center,
+          child: Text(
+            'Category',
+            textAlign: TextAlign.left,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+          ),
+        )
+      ],
     );
   }
 

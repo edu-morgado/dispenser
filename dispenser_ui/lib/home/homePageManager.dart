@@ -229,24 +229,31 @@ class TabBarPage extends State<Home> with SingleTickerProviderStateMixin {
     if (needsLogIn == true) return NoHomeIsSelected(manager, logIn);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Center(child: godfathersTextStyle("DISPENSER")),
-        backgroundColor: Colors.purple[200],
-        elevation: 20.0,
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: choices.map((Choice choice) {
-            return Tab(
-              text: choice.title,
-              icon: Icon(choice.icon),
-            );
-          }).toList(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(75.0), // here the desired height
+        child: AppBar(
+          elevation: 20.0,
+          titleSpacing: 10.0,
+          //  title: Center(child: godfathersTextStyle("DISPENSER")),
+          backgroundColor: Colors.purple[200],
+          title: TabBar(
+            controller: _tabController,
+            tabs: choices.map((Choice choice) {
+              return Tab(
+                text: choice.title,
+                icon: Icon(choice.icon),
+              );
+            }).toList(),
+          ),
         ),
       ),
       body: SafeArea(
-          child: TabBarView(
-        controller: _tabController,
-        children: tabs,
+          child: Container(
+        alignment: Alignment.bottomCenter,
+        child: TabBarView(
+          controller: _tabController,
+          children: tabs,
+        ),
       )),
       floatingActionButton: floatingButton(),
     );
@@ -291,7 +298,7 @@ class NoHomeIsSelected extends StatelessWidget {
                 .getEntireHomeInformation(
                     newHome, int.parse(homeController.text))
                 .then((bool loadedHome) {
-                  print("ola");
+              print("ola");
               if (loadedHome)
                 updateParent();
               else
